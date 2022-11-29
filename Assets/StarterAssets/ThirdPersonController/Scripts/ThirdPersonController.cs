@@ -156,6 +156,7 @@ namespace StarterAssets
         private void Update()
         {
             if (!IsOwner) return; // Checks if player is NOT owner of the server
+            
             _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
