@@ -22,7 +22,7 @@ namespace StarterAssets {
 
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
-        
+
         [Tooltip("Rotation speed of the character")]
         public float RotationSpeed = 1.0f;
 
@@ -135,7 +135,7 @@ namespace StarterAssets {
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
                 return _playerInput.currentControlScheme == "KeyboardMouse";
 #else
-				return false;
+                return false;
 #endif
             }
         }
@@ -155,7 +155,7 @@ namespace StarterAssets {
 
         private void Start()
         {
-            
+
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
 
@@ -166,11 +166,11 @@ namespace StarterAssets {
                 // this.transform.GetChild(0).transform ---> gets the PlayerCameraRoot from the player
             }
 
-            
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
             _playerInput = GetComponent<PlayerInput>();
 #else
-            Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+            Debug.LogError("Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
 
             AssignAnimationIDs();
@@ -230,7 +230,7 @@ namespace StarterAssets {
 
                 _cinemachineTargetYaw += _input.look.x * RotationSpeed * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
-                
+
                 _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
 
                 // clamp our pitch rotation
@@ -286,8 +286,8 @@ namespace StarterAssets {
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
             // Hardcoded camera movement so that the characters head doesn't appear infront of the camera
-            if (_input.sprint && IsFirstPerson) _cinemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.4f); 
-            
+            if (_input.sprint && IsFirstPerson) _cinemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.4f);
+
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
@@ -462,13 +462,43 @@ namespace StarterAssets {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
         }
-        
+
         // Quantum Commands
         //====================================================================================================================================================
+
+        [Command("Set_Move_Speed")]
+        private void SetMoveSpeed(float newValue) {
+            MoveSpeed = newValue;
+        }
+        
+        [Command("Set_Sprint_Speed")]
+        private void SetSprintSpeed(float newValue) {
+            SprintSpeed = newValue;
+        }
+
+        [Command("Set_Acceleration")]
+        private void SetSpeedChangeRate(float newValue) {
+            SpeedChangeRate = newValue;
+        }
+        
+        [Command("Set_Jump_Height")]
+        private void SetJumpHeight(float newValue) {
+            JumpHeight = newValue;
+        }
 
         [Command("Set_Gravity")]
         private void SetGravity(float newValue) {
             Gravity = newValue;
+        }
+
+        [Command("Set_Jump_Timer")]
+        private void SetJumpTimeout(float newValue) {
+            JumpTimeout = newValue;
+        }
+
+        [Command("Set_Fall_Timer")]
+        private void SetFallTimeout(float newValue) {
+            FallTimeout = newValue;
         }
     }
 }
