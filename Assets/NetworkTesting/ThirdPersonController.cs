@@ -1,6 +1,8 @@
 ﻿using Unity.Netcode;
 using Cinemachine;
 using UnityEngine;
+using QFSW.QC;
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -8,14 +10,12 @@ using UnityEngine.InputSystem;
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
 
-namespace StarterAssets
-{
+namespace StarterAssets {
     [RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
     [RequireComponent(typeof(PlayerInput))]
 #endif
-    public class ThirdPersonController : NetworkBehaviour
-    {
+    public class ThirdPersonController : NetworkBehaviour {
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
@@ -461,6 +461,14 @@ namespace StarterAssets
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
+        }
+        
+        // Quantum Commands
+        //====================================================================================================================================================
+
+        [Command("Set_Gravity")]
+        private void SetGravity(float newValue) {
+            Gravity = newValue;
         }
     }
 }
