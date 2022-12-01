@@ -117,7 +117,7 @@ namespace StarterAssets
 
         private bool _hasAnimator;
 
-        private bool IsFirstPerson = false;
+        private bool IsFirstPerson = true;
         //private bool IsThirdPerson = true;
 
         private bool IsCurrentDeviceMouse
@@ -150,9 +150,9 @@ namespace StarterAssets
             _controller = GetComponent<CharacterController>();
 
             if (IsOwner) { // Checks if you are owner of this Player -- This will run only if your the owner of the character
+                _input = GetComponent<StarterAssetsInputs>();
                 _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y; // Grabs Something related to rotation speed
                 _followCamera.m_Follow = this.transform.GetChild(0).transform; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
-                _input = GetComponent<StarterAssetsInputs>();
                 // this.transform.GetChild(0).transform ---> gets the PlayerCameraRoot from the player
             }
 
@@ -218,6 +218,7 @@ namespace StarterAssets
                 //Don't multiply mouse input by Time.deltaTime
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
+                _cinemachineTargetYaw += _input.look.x * RotationSpeed * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
                 _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
 
@@ -225,7 +226,7 @@ namespace StarterAssets
                 _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
                 // Update Cinemachine camera target pitch
-                CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+                CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0.0f);
 
                 // rotate the player left and right
                 transform.Rotate(Vector3.up * _rotationVelocity);
@@ -248,8 +249,7 @@ namespace StarterAssets
                 _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
                 // Cinemachine will follow this target
-                CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                    _cinemachineTargetYaw, 0.0f);
+                CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
             }
         }
 
