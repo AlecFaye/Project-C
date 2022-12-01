@@ -140,13 +140,14 @@ namespace StarterAssets
         private void Start()
         {
             
-            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
+            
             
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
 
             if (IsOwner) { // Checks if you are owner of this Player -- This will run only if your the owner of the character
+                _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y; // Grabs Something related to rotation speed
                 _followCamera.m_Follow = this.transform.GetChild(0).transform; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
                 // this.transform.GetChild(0).transform ---> gets the PlayerCameraRoot from the player
             }
@@ -177,6 +178,7 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
+            if (!IsOwner) return; // Checks if you are owner of this Player
             CameraRotation();
         }
 
@@ -223,6 +225,12 @@ namespace StarterAssets
             // Cinemachine will follow this target
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
+            Debug.Log("_cinemachineTargetPitch");
+            Debug.Log(_cinemachineTargetPitch);
+            Debug.Log("CameraAngleOverride");
+            Debug.Log(CameraAngleOverride);
+            Debug.Log("_cinemachineTargetYaw");
+            Debug.Log(_cinemachineTargetYaw);
         }
 
         private void Move()
