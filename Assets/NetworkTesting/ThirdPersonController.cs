@@ -466,39 +466,51 @@ namespace StarterAssets {
         // Quantum Commands
         //====================================================================================================================================================
 
-        [Command("Set_Move_Speed")]
+        [Command("Player.Set_Move_Speed")]
         private void SetMoveSpeed(float newValue) {
             MoveSpeed = newValue;
         }
         
-        [Command("Set_Sprint_Speed")]
+        [Command("Player.Set_Sprint_Speed")]
         private void SetSprintSpeed(float newValue) {
             SprintSpeed = newValue;
         }
 
-        [Command("Set_Acceleration")]
+        [Command("Player.Set_Acceleration")]
         private void SetSpeedChangeRate(float newValue) {
             SpeedChangeRate = newValue;
         }
         
-        [Command("Set_Jump_Height")]
+        [Command("Player.Set_Jump_Height")]
         private void SetJumpHeight(float newValue) {
             JumpHeight = newValue;
         }
 
-        [Command("Set_Gravity")]
+        [Command("Player.Set_Gravity")]
         private void SetGravity(float newValue) {
             Gravity = newValue;
         }
 
-        [Command("Set_Jump_Timer")]
+        [Command("Player.Set_Jump_CD_Timer")]
         private void SetJumpTimeout(float newValue) {
             JumpTimeout = newValue;
         }
 
-        [Command("Set_Fall_Timer")]
+        [Command("Player.Set_Fall_Start_Timer")]
         private void SetFallTimeout(float newValue) {
             FallTimeout = newValue;
+        }
+
+        [Command("Player.Get_All_Stats")]
+        private void GetStats() {
+            Debug.Log("Save the following via screenshot and post it once you like the movement");
+            Debug.Log("Move Speed: " + MoveSpeed);
+            Debug.Log("Sprint Speed: " + SprintSpeed);
+            Debug.Log("Acceleration: " + SpeedChangeRate);
+            Debug.Log("Jump Height: " + JumpHeight);
+            Debug.Log("Gravity: " + Gravity);
+            Debug.Log("Jump CD Timer: " + JumpTimeout);
+            Debug.Log("Fall Start Timer: " + FallTimeout);
         }
     }
 }
