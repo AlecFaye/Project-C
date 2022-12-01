@@ -22,6 +22,9 @@ namespace StarterAssets
 
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
+        
+        [Tooltip("Rotation speed of the character")]
+        public float RotationSpeed = 1.0f;
 
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
@@ -65,11 +68,17 @@ namespace StarterAssets
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject CinemachineCameraTarget;
 
-        [Tooltip("How far in degrees can you move the camera up")]
-        public float TopClamp = 70.0f;
+        [Tooltip("How far in degrees can you move the camera up (1st Person Mode)")]
+        public float First_TopClamp = 89.0f;
 
-        [Tooltip("How far in degrees can you move the camera down")]
-        public float BottomClamp = -30.0f;
+        [Tooltip("How far in degrees can you move the camera down (1st Person Mode)")]
+        public float First_BottomClamp = -89.0f;
+
+        [Tooltip("How far in degrees can you move the camera up (3rd Person Mode)")]
+        public float Third_TopClamp = 70.0f;
+
+        [Tooltip("How far in degrees can you move the camera down (3rd Person Mode)")]
+        public float Third_BottomClamp = -30.0f;
 
         [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
         public float CameraAngleOverride = 0.0f;
@@ -108,11 +117,16 @@ namespace StarterAssets
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
-        private CinemachineVirtualCamera _followCamera;
+        private GameObject _followCamera;
+        private CinemachineVirtualCamera _cinemaCamera;
+        private Cinemachine3rdPersonFollow _cinemaBody;
 
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+
+        private bool IsFirstPerson = false;
+        //private bool IsThirdPerson = true;
 
         private bool IsCurrentDeviceMouse
         {
@@ -133,7 +147,9 @@ namespace StarterAssets
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-                _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera").GetComponent<CinemachineVirtualCamera>();
+                _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera");
+                _cinemaCamera = _followCamera.GetComponent<CinemachineVirtualCamera>();
+                _cinemaBody = _followCamera.GetComponentInChildren<Cinemachine3rdPersonFollow>();
             }
         }
 
@@ -144,9 +160,9 @@ namespace StarterAssets
             _controller = GetComponent<CharacterController>();
 
             if (IsOwner) { // Checks if you are owner of this Player -- This will run only if your the owner of the character
-                _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y; // Grabs Something related to rotation speed
-                _followCamera.m_Follow = this.transform.GetChild(0).transform; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
                 _input = GetComponent<StarterAssetsInputs>();
+                _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y; // Grabs Something related to rotation speed
+                _cinemaCamera.m_Follow = this.transform.GetChild(0).transform; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
                 // this.transform.GetChild(0).transform ---> gets the PlayerCameraRoot from the player
             }
 
@@ -207,25 +223,61 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
-            // if there is an input and camera position is not fixed
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) {
+            // If Player is in 1st Person Mode
+            if (_input.look.sqrMagnitude >= _threshold && IsFirstPerson) {
+                //Don't multiply mouse input by Time.deltaTime
+                float deltaTimeMultiplier = 1.0f;
 
-                //Don't multiply mouse input by Time.deltaTime;
-                //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-                float deltaTimeMultiplier = 1.0f; // Fixed an issue where new players added would have their IsCurrentDeviceMouse equal to false so sensitivity value was extremely low causeing no movement
+                _cinemachineTargetYaw += _input.look.x * RotationSpeed * deltaTimeMultiplier;
+                _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
+                
+                _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
 
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                // clamp our pitch rotation
+                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, First_BottomClamp, First_TopClamp);
+
+                // Update Cinemachine camera target pitch
+                CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0.0f);
+
+                // rotate the player left and right
+                transform.Rotate(Vector3.up * _rotationVelocity);
             }
-            
-            
-            // clamp our rotations so our values are limited 360 degrees
-            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-            // Cinemachine will follow this target
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
+            // If not in 1st person mode run normal camera stuff
+            else {
+                // if there is an input and camera position is not fixed
+                if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) {
+                    //Don't multiply mouse input by Time.deltaTime;
+                    //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                    float deltaTimeMultiplier = 1.0f; // Fixed an issue where new players added would have their IsCurrentDeviceMouse equal to false so sensitivity value was extremely low causeing no movement
+
+                    _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
+                    _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                }
+
+                // clamp our rotations so our values are limited 360 degrees
+                _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, Third_BottomClamp, Third_TopClamp);
+
+                // Cinemachine will follow this target
+                CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
+            }
+        }
+
+        // Function used to swap between 1st person and 3rd person modes (basically edits the PlayerFollowCamera)
+        private void OnCameraSwap() {
+            if (!IsFirstPerson) { // If not in 1st person mode - sets it to true then changes settings to 1st person mode
+                IsFirstPerson = true;
+
+                _cinemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.1f);
+                _cinemaBody.CameraDistance = (0f);
+            }
+            else { // Else swaps back to 3rd person mode
+                IsFirstPerson = false;
+
+                _cinemaBody.ShoulderOffset = new Vector3(1f, 0f, 0f);
+                _cinemaBody.CameraDistance = (4f);
+            }
         }
 
         private void Move()
@@ -233,13 +285,15 @@ namespace StarterAssets
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
+            // Hardcoded camera movement so that the characters head doesn't appear infront of the camera
+            if (_input.sprint && IsFirstPerson) _cinemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.4f); 
+            
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
             if (_input.move == Vector2.zero) {
                 targetSpeed = 0.0f;
-                //Debug.Log(_input);
             }
 
             // a reference to the players current horizontal velocity
