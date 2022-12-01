@@ -119,7 +119,7 @@ namespace StarterAssets
 
         private bool _hasAnimator;
 
-        private bool IsFirstPerson = true;
+        private bool IsFirstPerson = false;
         //private bool IsThirdPerson = true;
 
         private bool IsCurrentDeviceMouse
