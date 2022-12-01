@@ -1,4 +1,5 @@
 ﻿using Unity.Netcode;
+using Cinemachine;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -107,6 +108,8 @@ namespace StarterAssets
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
+        private CinemachineVirtualCamera _followCamera;
+
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
@@ -126,26 +129,32 @@ namespace StarterAssets
 
         private void Awake()
         {
-            // get a reference to our main camera
+            // get a reference to our main camera and the player follow camera
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+                _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera").GetComponent<CinemachineVirtualCamera>();
             }
         }
 
         private void Start()
         {
-            //if (!IsOwner) return; // Checks if player is NOT owner of the server
-            
-            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
-            _input = GetComponent<StarterAssetsInputs>();
+
+            if (IsOwner) { // Checks if you are owner of this Player -- This will run only if your the owner of the character
+                _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y; // Grabs Something related to rotation speed
+                _followCamera.m_Follow = this.transform.GetChild(0).transform; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
+                _input = GetComponent<StarterAssetsInputs>();
+                // this.transform.GetChild(0).transform ---> gets the PlayerCameraRoot from the player
+            }
+
+            
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
             _playerInput = GetComponent<PlayerInput>();
 #else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+            Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
 
             AssignAnimationIDs();
@@ -157,8 +166,8 @@ namespace StarterAssets
 
         private void Update()
         {
-            if (!IsOwner) return; // Checks if player is NOT owner of the server
-            
+            if (!IsOwner) return; // Checks if you are owner of this Player
+
             _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
@@ -168,6 +177,7 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
+            if (!IsOwner) return; // Checks if you are owner of this Player
             CameraRotation();
         }
 
@@ -186,7 +196,7 @@ namespace StarterAssets
             Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
                 transform.position.z);
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-                QueryTriggerInteraction.Ignore);
+            QueryTriggerInteraction.Ignore);
 
             // update animator if using character
             if (_hasAnimator)
@@ -198,15 +208,17 @@ namespace StarterAssets
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
-            {
+            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) {
+
                 //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                float deltaTimeMultiplier = 1.0f; // Fixed an issue where new players added would have their IsCurrentDeviceMouse equal to false so sensitivity value was extremely low causeing no movement
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
             }
-
+            
+            
             // clamp our rotations so our values are limited 360 degrees
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
