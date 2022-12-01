@@ -111,7 +111,9 @@ namespace StarterAssets
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
-        private CinemachineVirtualCamera _followCamera;
+        private GameObject _followCamera;
+        private CinemachineVirtualCamera _cinemaCamera;
+        private Cinemachine3rdPersonFollow _cinemaBody;
 
         private const float _threshold = 0.01f;
 
@@ -139,7 +141,9 @@ namespace StarterAssets
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-                _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera").GetComponent<CinemachineVirtualCamera>();
+                _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera");
+                _cinemaCamera = _followCamera.GetComponent<CinemachineVirtualCamera>();
+                _cinemaBody = _followCamera.GetComponentInChildren<Cinemachine3rdPersonFollow>();
             }
         }
 
@@ -152,7 +156,7 @@ namespace StarterAssets
             if (IsOwner) { // Checks if you are owner of this Player -- This will run only if your the owner of the character
                 _input = GetComponent<StarterAssetsInputs>();
                 _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y; // Grabs Something related to rotation speed
-                _followCamera.m_Follow = this.transform.GetChild(0).transform; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
+                _cinemaCamera.m_Follow = this.transform.GetChild(0).transform; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
                 // this.transform.GetChild(0).transform ---> gets the PlayerCameraRoot from the player
             }
 
@@ -216,10 +220,11 @@ namespace StarterAssets
             // If Player is in 1st Person Mode
             if (_input.look.sqrMagnitude >= _threshold && IsFirstPerson) {
                 //Don't multiply mouse input by Time.deltaTime
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                float deltaTimeMultiplier = 1.0f;
 
                 _cinemachineTargetYaw += _input.look.x * RotationSpeed * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
+                
                 _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
 
                 // clamp our pitch rotation
@@ -250,6 +255,22 @@ namespace StarterAssets
 
                 // Cinemachine will follow this target
                 CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
+            }
+        }
+
+        // Function used to swap between 1st person and 3rd person modes (basically edits the PlayerFollowCamera)
+        private void CameraPosition() {
+            if (!IsFirstPerson) { // If not in 1st person mode - sets it to true then changes settings to 1st person mode
+                IsFirstPerson = true;
+
+                _cinemaBody.ShoulderOffset = new Vector3(0.2f, 0.25f, 0f);
+                _cinemaBody.CameraDistance = (0f);
+            }
+            else { // Else swaps back to 3rd person mode
+                IsFirstPerson = true;
+
+                _cinemaBody.ShoulderOffset = new Vector3(1f, 0f, 0f);
+                _cinemaBody.CameraDistance = (4f);
             }
         }
 
