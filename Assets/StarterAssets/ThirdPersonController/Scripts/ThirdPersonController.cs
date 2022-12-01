@@ -140,18 +140,17 @@ namespace StarterAssets
         private void Start()
         {
             
-            
-            
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
-            _input = GetComponent<StarterAssetsInputs>();
 
             if (IsOwner) { // Checks if you are owner of this Player -- This will run only if your the owner of the character
                 _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y; // Grabs Something related to rotation speed
                 _followCamera.m_Follow = this.transform.GetChild(0).transform; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
+                _input = GetComponent<StarterAssetsInputs>();
                 // this.transform.GetChild(0).transform ---> gets the PlayerCameraRoot from the player
             }
 
+            
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
             _playerInput = GetComponent<PlayerInput>();
 #else
@@ -209,15 +208,17 @@ namespace StarterAssets
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
-            {
+            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) {
+
                 //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                float deltaTimeMultiplier = 1.0f; // Fixed an issue where new players added would have their IsCurrentDeviceMouse equal to false so sensitivity value was extremely low causeing no movement
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
             }
-
+            
+            
             // clamp our rotations so our values are limited 360 degrees
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
@@ -225,12 +226,6 @@ namespace StarterAssets
             // Cinemachine will follow this target
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
-            Debug.Log("_cinemachineTargetPitch");
-            Debug.Log(_cinemachineTargetPitch);
-            Debug.Log("CameraAngleOverride");
-            Debug.Log(CameraAngleOverride);
-            Debug.Log("_cinemachineTargetYaw");
-            Debug.Log(_cinemachineTargetYaw);
         }
 
         private void Move()
