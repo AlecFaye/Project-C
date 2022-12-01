@@ -259,15 +259,15 @@ namespace StarterAssets
         }
 
         // Function used to swap between 1st person and 3rd person modes (basically edits the PlayerFollowCamera)
-        private void CameraPosition() {
+        private void OnCameraSwap() {
             if (!IsFirstPerson) { // If not in 1st person mode - sets it to true then changes settings to 1st person mode
                 IsFirstPerson = true;
 
-                _cinemaBody.ShoulderOffset = new Vector3(0.2f, 0.25f, 0f);
+                _cinemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.1f);
                 _cinemaBody.CameraDistance = (0f);
             }
             else { // Else swaps back to 3rd person mode
-                IsFirstPerson = true;
+                IsFirstPerson = false;
 
                 _cinemaBody.ShoulderOffset = new Vector3(1f, 0f, 0f);
                 _cinemaBody.CameraDistance = (4f);
@@ -279,6 +279,9 @@ namespace StarterAssets
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
+            // Hardcoded camera movement so that the characters head doesn't appear infront of the camera
+            if (_input.sprint && IsFirstPerson) _cinemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.4f); 
+            
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
