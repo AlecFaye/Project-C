@@ -68,11 +68,17 @@ namespace StarterAssets
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject CinemachineCameraTarget;
 
-        [Tooltip("How far in degrees can you move the camera up")]
-        public float TopClamp = 70.0f;
+        [Tooltip("How far in degrees can you move the camera up (1st Person Mode)")]
+        public float First_TopClamp = 89.0f;
 
-        [Tooltip("How far in degrees can you move the camera down")]
-        public float BottomClamp = -30.0f;
+        [Tooltip("How far in degrees can you move the camera down (1st Person Mode)")]
+        public float First_BottomClamp = -89.0f;
+
+        [Tooltip("How far in degrees can you move the camera up (3rd Person Mode)")]
+        public float Third_TopClamp = 70.0f;
+
+        [Tooltip("How far in degrees can you move the camera down (3rd Person Mode)")]
+        public float Third_BottomClamp = -30.0f;
 
         [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
         public float CameraAngleOverride = 0.0f;
@@ -228,7 +234,7 @@ namespace StarterAssets
                 _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
 
                 // clamp our pitch rotation
-                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, First_BottomClamp, First_TopClamp);
 
                 // Update Cinemachine camera target pitch
                 CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0.0f);
@@ -251,7 +257,7 @@ namespace StarterAssets
 
                 // clamp our rotations so our values are limited 360 degrees
                 _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, Third_BottomClamp, Third_TopClamp);
 
                 // Cinemachine will follow this target
                 CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
@@ -288,7 +294,6 @@ namespace StarterAssets
             // if there is no input, set the target speed to 0
             if (_input.move == Vector2.zero) {
                 targetSpeed = 0.0f;
-                //Debug.Log(_input);
             }
 
             // a reference to the players current horizontal velocity
