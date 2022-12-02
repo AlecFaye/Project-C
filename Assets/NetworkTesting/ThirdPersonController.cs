@@ -56,6 +56,9 @@ namespace StarterAssets {
 
         // Player Dash Stats
         [Header("Dash")]
+        [Tooltip("Trail Renderer.")]
+        [SerializeField] public GameObject TR;
+
         [Tooltip("If the character can Dash or not.")]
         public bool CanDash = true;
 
@@ -495,10 +498,9 @@ namespace StarterAssets {
                 IsDashing = true;
                 float originalGravity = Gravity;
                 Gravity = DashingGravity;
-                //setvelocity;
-                //trail stuff
+                TR.GetComponent<TrailRenderer>().emitting = true;
                 yield return new WaitForSeconds(DashingTime);
-                //trailstuff
+                TR.GetComponent<TrailRenderer>().emitting = false;
                 Gravity = originalGravity;
                 IsDashing = false;
                 yield return new WaitForSeconds(DashingCooldown);
