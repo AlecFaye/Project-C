@@ -1,4 +1,6 @@
-﻿using Unity.Netcode;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Unity.Netcode;
 using Cinemachine;
 using UnityEngine;
 using QFSW.QC;
@@ -16,6 +18,7 @@ namespace StarterAssets {
     [RequireComponent(typeof(PlayerInput))]
 #endif
     public class ThirdPersonController : NetworkBehaviour {
+        // Player Stats
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
@@ -51,6 +54,30 @@ namespace StarterAssets {
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
         public float FallTimeout = 0.15f;
 
+        // Player Dash Stats
+        [Header("Dash")]
+        [Tooltip("Trail Renderer.")]
+        [SerializeField] public GameObject TR;
+
+        [Tooltip("If the character can Dash or not.")]
+        public bool CanDash = true;
+
+        [Tooltip("If the character is Dashing or not.")]
+        public bool IsDashing = false;
+        
+        [Tooltip("Dash intial power (float).")]
+        public float DashingPower = 24f;
+
+        [Tooltip("Gravity during Dash (float).")]
+        public float DashingGravity = 0.0f;
+                
+        [Tooltip("How long the Dash goes for (float).")]
+        public float DashingTime = 0.2f;
+                
+        [Tooltip("Dash Cooldown value (float).")]
+        public float DashingCooldown = 1f;
+
+        // Player Ground Variables
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool Grounded = true;
@@ -64,6 +91,7 @@ namespace StarterAssets {
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
 
+        // Player Camera Variables
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject CinemachineCameraTarget;
@@ -292,10 +320,10 @@ namespace StarterAssets {
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (_input.move == Vector2.zero) {
-                targetSpeed = 0.0f;
-            }
-
+            if (_input.move == Vector2.zero && !IsDashing) targetSpeed = 0.0f;
+            
+            if (IsDashing) targetSpeed = DashingPower; 
+            
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
@@ -462,6 +490,24 @@ namespace StarterAssets {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
         }
+
+        private IEnumerator OnDash()
+        {
+            if (CanDash && !IsDashing){
+                CanDash = false;
+                IsDashing = true;
+                float originalGravity = Gravity;
+                Gravity = DashingGravity;
+                TR.GetComponent<TrailRenderer>().emitting = true;
+                yield return new WaitForSeconds(DashingTime);
+                TR.GetComponent<TrailRenderer>().emitting = false;
+                Gravity = originalGravity;
+                IsDashing = false;
+                yield return new WaitForSeconds(DashingCooldown);
+                CanDash = true;
+            }
+        }
+
 
         // Quantum Commands
         //====================================================================================================================================================

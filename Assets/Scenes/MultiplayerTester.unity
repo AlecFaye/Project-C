@@ -1405,7 +1405,9 @@ MonoBehaviour:
     Space - Jump
 
     Left Shift -
-    Sprint
+    Dash
+
+    Left CTRL - Sprint
 
     V - Swap Camera POV'
   m_isRightToLeft: 0
