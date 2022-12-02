@@ -487,19 +487,20 @@ namespace StarterAssets {
 
         private IEnumerator OnDash()
         {
-            Debug.Log("Dash");
-            CanDash = false;
-            IsDashing = true;
-            float originalGravity = Gravity;            
-            Gravity = 0.0f;
-            //setvelocity;
-            //trail stuff
-            yield return new WaitForSeconds(DashingTime);
-            //trailstuff
-            Gravity = originalGravity;
-            IsDashing = false;
-            yield return new WaitForSeconds(DashingCooldown);
-            CanDash = true;
+            if (CanDash && !IsDashing){
+                CanDash = false;
+                IsDashing = true;
+                float originalGravity = Gravity;
+                Gravity = 0.0f;
+                //setvelocity;
+                //trail stuff
+                yield return new WaitForSeconds(DashingTime);
+                //trailstuff
+                Gravity = originalGravity;
+                IsDashing = false;
+                yield return new WaitForSeconds(DashingCooldown);
+                CanDash = true;
+            }
         }
 
 
