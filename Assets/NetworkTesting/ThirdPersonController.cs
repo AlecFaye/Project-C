@@ -1,4 +1,6 @@
-﻿using Unity.Netcode;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Unity.Netcode;
 using Cinemachine;
 using UnityEngine;
 using QFSW.QC;
@@ -55,7 +57,7 @@ namespace StarterAssets {
         // Player Dash Stats
         [Header("Dash")]
         [Tooltip("If the character can Dash or not.")]
-        public bool canDash = true;
+        public bool CanDash = true;
 
         [Tooltip("If the character is Dashing or not.")]
         public bool IsDashing = false;
@@ -312,10 +314,10 @@ namespace StarterAssets {
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (_input.move == Vector2.zero) {
-                targetSpeed = 0.0f;
-            }
-
+            if (_input.move == Vector2.zero && !IsDashing) targetSpeed = 0.0f;
+            
+            if (IsDashing) targetSpeed = DashingPower; 
+            
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
@@ -483,9 +485,21 @@ namespace StarterAssets {
             }
         }
 
-        private IEnumerator Dash()
+        private IEnumerator OnDash()
         {
-
+            Debug.Log("Dash");
+            CanDash = false;
+            IsDashing = true;
+            float originalGravity = Gravity;            
+            Gravity = 0.0f;
+            //setvelocity;
+            //trail stuff
+            yield return new WaitForSeconds(DashingTime);
+            //trailstuff
+            Gravity = originalGravity;
+            IsDashing = false;
+            yield return new WaitForSeconds(DashingCooldown);
+            CanDash = true;
         }
 
 
