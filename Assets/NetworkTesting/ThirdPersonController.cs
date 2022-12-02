@@ -64,6 +64,9 @@ namespace StarterAssets {
         
         [Tooltip("Dash intial power (float).")]
         public float DashingPower = 24f;
+
+        [Tooltip("Gravity during Dash (float).")]
+        public float DashingGravity = 0.0f;
                 
         [Tooltip("How long the Dash goes for (float).")]
         public float DashingTime = 0.2f;
@@ -491,7 +494,7 @@ namespace StarterAssets {
                 CanDash = false;
                 IsDashing = true;
                 float originalGravity = Gravity;
-                Gravity = 0.0f;
+                Gravity = DashingGravity;
                 //setvelocity;
                 //trail stuff
                 yield return new WaitForSeconds(DashingTime);
