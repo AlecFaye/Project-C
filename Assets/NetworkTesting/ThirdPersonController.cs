@@ -16,6 +16,7 @@ namespace StarterAssets {
     [RequireComponent(typeof(PlayerInput))]
 #endif
     public class ThirdPersonController : NetworkBehaviour {
+        // Player Stats
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
@@ -51,6 +52,24 @@ namespace StarterAssets {
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
         public float FallTimeout = 0.15f;
 
+        // Player Dash Stats
+        [Header("Dash")]
+        [Tooltip("If the character can Dash or not.")]
+        public bool canDash = true;
+
+        [Tooltip("If the character is Dashing or not.")]
+        public bool IsDashing = false;
+        
+        [Tooltip("Dash intial power (float).")]
+        public float DashingPower = 24f;
+                
+        [Tooltip("How long the Dash goes for (float).")]
+        public float DashingTime = 0.2f;
+                
+        [Tooltip("Dash Cooldown value (float).")]
+        public float DashingCooldown = 1f;
+
+        // Player Ground Variables
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool Grounded = true;
@@ -64,6 +83,7 @@ namespace StarterAssets {
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
 
+        // Player Camera Variables
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject CinemachineCameraTarget;
@@ -462,6 +482,12 @@ namespace StarterAssets {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
         }
+
+        private IEnumerator Dash()
+        {
+
+        }
+
 
         // Quantum Commands
         //====================================================================================================================================================
