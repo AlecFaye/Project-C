@@ -76,6 +76,20 @@ namespace StarterAssets {
                 
         [Tooltip("Dash Cooldown value (float).")]
         public float DashingCooldown = 1f;
+        
+        // Player Attack Stats
+        [Header("Attack")]
+        [Tooltip("If the character can Attack or not.")]
+        public bool CanAttack = true;
+
+        [Tooltip("If the character is Attacking or not.")]
+        public bool IsAttacking = false;
+        
+        [Tooltip("How long the Attack goes for (float).")]
+        public float AttackingTime = 0.2f;
+                
+        [Tooltip("Attack Cooldown value (float).")]
+        public float AttackingCooldown = 1f;
 
         // Player Ground Variables
         [Header("Player Grounded")]
@@ -505,6 +519,20 @@ namespace StarterAssets {
                 IsDashing = false;
                 yield return new WaitForSeconds(DashingCooldown);
                 CanDash = true;
+            }
+        }
+
+        private IEnumerator OnAttack()
+        {
+            if (CanAttack && !IsAttacking){
+                CanAttack = false;
+                IsAttacking = true;
+                //TR.GetComponent<TrailRenderer>().emitting = true;
+                yield return new WaitForSeconds(AttackingTime);
+                //TR.GetComponent<TrailRenderer>().emitting = false;
+                IsAttacking = false;
+                yield return new WaitForSeconds(AttackingCooldown);
+                CanAttack = true;
             }
         }
 
