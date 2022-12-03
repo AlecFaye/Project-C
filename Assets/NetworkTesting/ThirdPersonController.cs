@@ -524,12 +524,11 @@ namespace StarterAssets {
 
         private IEnumerator OnAttack()
         {
-            if (CanAttack && !IsAttacking){
+            if (CanAttack && !IsAttacking && Grounded){
                 CanAttack = false;
                 IsAttacking = true;
-                //TR.GetComponent<TrailRenderer>().emitting = true;
+                _animator.SetTrigger("Attack");
                 yield return new WaitForSeconds(AttackingTime);
-                //TR.GetComponent<TrailRenderer>().emitting = false;
                 IsAttacking = false;
                 yield return new WaitForSeconds(AttackingCooldown);
                 CanAttack = true;

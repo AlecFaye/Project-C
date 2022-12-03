@@ -65,24 +65,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6f38b110d0d0d9a47b00e219489e083b, type: 3}
       propertyPath: m_Name
-      value: MyDonut
+      value: Donut
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f38b110d0d0d9a47b00e219489e083b, type: 3}
---- !u!1 &8966040268266466056 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6f38b110d0d0d9a47b00e219489e083b, type: 3}
-  m_PrefabInstance: {fileID: 8119057533107426905}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3475750158417595666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8966040268266466056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86de5dc5af85bef4f9d6231fee6b9cbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
