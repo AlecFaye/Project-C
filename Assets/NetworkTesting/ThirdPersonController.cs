@@ -485,7 +485,7 @@ namespace StarterAssets {
 
         private IEnumerator OnDash()
         {
-            if (CanDash && !IsDashing){
+            if (CanDash && !IsDashing && IsOwner){
                 CanDash = false;
                 IsDashing = true;
                 float originalGravity = Gravity;
@@ -502,7 +502,7 @@ namespace StarterAssets {
 
         private IEnumerator OnAttack()
         {
-            if (CanAttack && !IsAttacking && Grounded){
+            if (CanAttack && !IsAttacking && Grounded && IsOwner){
                 CanAttack = false;
                 IsAttacking = true;
                 _animator.SetTrigger("Attack");
