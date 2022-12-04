@@ -265,45 +265,23 @@ namespace StarterAssets {
 
         private void CameraRotation()
         {
-            // If Player is in 1st Person Mode
-            if (_input.look.sqrMagnitude >= _threshold && IsFirstPerson) {
-                //Don't multiply mouse input by Time.deltaTime
-                float deltaTimeMultiplier = 1.0f;
+            // if there is an input and camera position is not fixed
+            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) {
+                //Don't multiply mouse input by Time.deltaTime;
+                //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                float deltaTimeMultiplier = 1.0f; // Fixed an issue where new players added would have their IsCurrentDeviceMouse equal to false so sensitivity value was extremely low causeing no movement
 
-                _cinemachineTargetYaw += _input.look.x * RotationSpeed * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
-
-                _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
-
-                // clamp our pitch rotation
-                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, First_BottomClamp, First_TopClamp);
-
-                // Update Cinemachine camera target pitch
-                CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0.0f);
-
-                // rotate the player left and right
-                transform.Rotate(Vector3.up * _rotationVelocity);
+                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
+                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
             }
 
-            // If not in 1st person mode run normal camera stuff
-            else {
-                // if there is an input and camera position is not fixed
-                if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) {
-                    //Don't multiply mouse input by Time.deltaTime;
-                    //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-                    float deltaTimeMultiplier = 1.0f; // Fixed an issue where new players added would have their IsCurrentDeviceMouse equal to false so sensitivity value was extremely low causeing no movement
+            // clamp our rotations so our values are limited 360 degrees
+            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, Third_BottomClamp, Third_TopClamp);
 
-                    _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                    _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
-                }
-
-                // clamp our rotations so our values are limited 360 degrees
-                _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, Third_BottomClamp, Third_TopClamp);
-
-                // Cinemachine will follow this target
-                CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
-            }
+            // Cinemachine will follow this target
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
+            
         }
 
         // Function used to swap between 1st person and 3rd person modes (basically edits the PlayerFollowCamera)
@@ -528,6 +506,7 @@ namespace StarterAssets {
                 CanAttack = false;
                 IsAttacking = true;
                 _animator.SetTrigger("Attack");
+                transform.rotation = Quaternion.Euler(0.0f, _cinemachineTargetYaw, 0.0f); // Rotates the player to where the camera is facing (only on y axis)
                 yield return new WaitForSeconds(AttackingTime);
                 IsAttacking = false;
                 yield return new WaitForSeconds(AttackingCooldown);
