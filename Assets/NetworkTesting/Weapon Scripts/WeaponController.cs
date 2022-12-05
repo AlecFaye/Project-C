@@ -7,7 +7,7 @@ using StarterAssets;
 //namespace WeaponController{
     public class WeaponController : MonoBehaviour
     {
-        public ThirdPersonController player;
+        public ThirdPersonController player; // Refrences the player it's attatched too
                 
         // Player Attack Stats
         [Header("Attack")]
