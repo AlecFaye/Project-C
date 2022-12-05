@@ -45,6 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b0948f952ab8742a04174856a01197, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 7987426414551469118}
+  CanAttack: 1
+  IsAttacking: 0
+  AttackingTime: 0.8
+  AttackingCooldown: 1
 --- !u!1 &7368794223040343742
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,6 +249,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Axe
       objectReference: {fileID: 0}
+    - target: {fileID: 5672816845989134354, guid: 49c3c5f84e75eac439500d5f1fd8a8c5, type: 3}
+      propertyPath: wp
+      value: 
+      objectReference: {fileID: 6595214371002474586}
     - target: {fileID: 5672816845989134354, guid: 49c3c5f84e75eac439500d5f1fd8a8c5, type: 3}
       propertyPath: player
       value: 

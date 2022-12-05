@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using StarterAssets;
+//using WeaponController;
 
 public class CollisionDetection : MonoBehaviour
 {
-    public ThirdPersonController player;
+    public WeaponController wp;
 
     private void OnTriggerEnter(Collider other) {
-        if (other.tag == "Enemy" && player.IsAttacking) other.GetComponent<CollisionDetected>().Hit();
+        if (other.tag == "Enemy" && wp.GetComponent<WeaponController>().IsAttacking) other.GetComponent<CollisionDetected>().Hit();
     }
 
 }
