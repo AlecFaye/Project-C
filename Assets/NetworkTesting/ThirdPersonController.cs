@@ -77,20 +77,6 @@ namespace StarterAssets {
         [Tooltip("Dash Cooldown value (float).")]
         public float DashingCooldown = 1f;
         
-        // Player Attack Stats
-        [Header("Attack")]
-        [Tooltip("If the character can Attack or not.")]
-        public bool CanAttack = true;
-
-        [Tooltip("If the character is Attacking or not.")]
-        public bool IsAttacking = false;
-        
-        [Tooltip("How long the Attack goes for (float).")]
-        public float AttackingTime = 0.2f;
-                
-        [Tooltip("Attack Cooldown value (float).")]
-        public float AttackingCooldown = 1f;
-
         // Player Ground Variables
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
@@ -154,7 +140,7 @@ namespace StarterAssets {
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
 #endif
-        private Animator _animator;
+        public Animator _animator; // change to private and fix errors later
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
@@ -485,7 +471,7 @@ namespace StarterAssets {
 
         private IEnumerator OnDash()
         {
-            if (CanDash && !IsDashing){
+            if (CanDash && !IsDashing && IsOwner){
                 CanDash = false;
                 IsDashing = true;
                 float originalGravity = Gravity;
@@ -499,21 +485,6 @@ namespace StarterAssets {
                 CanDash = true;
             }
         }
-
-        private IEnumerator OnAttack()
-        {
-            if (CanAttack && !IsAttacking && Grounded){
-                CanAttack = false;
-                IsAttacking = true;
-                _animator.SetTrigger("Attack");
-                transform.rotation = Quaternion.Euler(0.0f, _cinemachineTargetYaw, 0.0f); // Rotates the player to where the camera is facing (only on y axis)
-                yield return new WaitForSeconds(AttackingTime);
-                IsAttacking = false;
-                yield return new WaitForSeconds(AttackingCooldown);
-                CanAttack = true;
-            }
-        }
-
 
         // Quantum Commands
         //====================================================================================================================================================
