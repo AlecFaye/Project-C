@@ -23,6 +23,8 @@ using StarterAssets;
         [Tooltip("Attack Cooldown value (float).")]
         public float AttackingCooldown = 1f;
 
+        public List<Collider> enemiesHitList = new List<Collider>(); // Makes a list to keep track of which enemies were hit (enemies added by the CollisionDetection Script on weapons)
+
 
         private IEnumerator OnAttack() 
         {
@@ -34,6 +36,9 @@ using StarterAssets;
                 yield return new WaitForSeconds(AttackingTime);
                 IsAttacking = false;
                 yield return new WaitForSeconds(AttackingCooldown);
+                Debug.Log("Enemy list Before Reset: " + enemiesHitList);
+                enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
+                Debug.Log("Enemy list After Reset: " + enemiesHitList);
                 CanAttack = true;
             }
         }
