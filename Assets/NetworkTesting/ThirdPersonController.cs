@@ -86,7 +86,7 @@ namespace StarterAssets {
         public bool IsAttacking = false;
         
         [Tooltip("How long the Attack goes for (float).")]
-        public float AttackingTime = 0.2f;
+        public float AttackingTime = 0.8f;
                 
         [Tooltip("Attack Cooldown value (float).")]
         public float AttackingCooldown = 1f;
