@@ -9,5 +9,7 @@ public class CollisionDetected : MonoBehaviour
     // Triggers when Collision Detection script detectst the enemy 
     public void Hit(){
         _animator.SetTrigger("Hit");
+        DamagePopup.Create(transform.position, 10);
+
     }
 }
