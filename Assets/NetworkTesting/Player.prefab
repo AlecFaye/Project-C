@@ -50,6 +50,7 @@ MonoBehaviour:
   IsAttacking: 0
   AttackingTime: 0.8
   AttackingCooldown: 1
+  enemiesHitList: []
 --- !u!1 &7368794223040343742
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,6 +258,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 7987426414551469118}
+    - target: {fileID: 5672816845989134354, guid: 49c3c5f84e75eac439500d5f1fd8a8c5, type: 3}
+      propertyPath: weaponController
+      value: 
+      objectReference: {fileID: 6595214371002474586}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49c3c5f84e75eac439500d5f1fd8a8c5, type: 3}
 --- !u!4 &6809220520365246914 stripped

@@ -10,13 +10,12 @@ public class CollisionDetection : MonoBehaviour
 
     //checks if any Box Collider has entered this objects == Other refers to the other object being collided with
     private void OnTriggerEnter(Collider other) {
-        for (var enemy = 0; enemy < weaponController.enemiesHitList.Length; enemy++) if (other == enemy) return; // FIX THIS
-
-        // Checks if it collided with an enemy ====== Checks if the player should be attacking rn (done in weapon controller)
-        if (other.tag == "Enemy" && weaponController.GetComponent<WeaponController>().IsAttacking) {
+        // Checks if it collided with an enemy ====== Checks if the player should be attacking rn (done in weapon controller) ====== Checks if the enemy was already hit by this attack
+        if (other.tag == "Enemy" && weaponController.GetComponent<WeaponController>().IsAttacking && !weaponController.enemiesHitList.Contains(other)) {
             other.GetComponent<CollisionDetected>().Hit(); // Runs the funtion "Hit" in the other objects CollisionDetected script
             weaponController.enemiesHitList.Add(other); // Adds current enemy to enemiesHitList to keep track of
-            Debug.Log("Enemy list After enemy hit: " + weaponController.enemiesHitList);
+            
+            //Debug.Log("Enemy list after being added: " + weaponController.enemiesHitList);
         }
     }
 

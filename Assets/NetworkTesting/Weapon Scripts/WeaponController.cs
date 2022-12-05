@@ -35,10 +35,10 @@ using StarterAssets;
                 //player.transform.rotation = Quaternion.Euler(0.0f, player._cinemachineTargetYaw, 0.0f); // Rotates the player to where the camera is facing (only on y axis)
                 yield return new WaitForSeconds(AttackingTime);
                 IsAttacking = false;
+                //Debug.Log("Enemy list Before Reset: " + enemiesHitList);
                 yield return new WaitForSeconds(AttackingCooldown);
-                Debug.Log("Enemy list Before Reset: " + enemiesHitList);
                 enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
-                Debug.Log("Enemy list After Reset: " + enemiesHitList);
+                //Debug.Log("Enemy list After Reset: " + enemiesHitList);
                 CanAttack = true;
             }
         }
