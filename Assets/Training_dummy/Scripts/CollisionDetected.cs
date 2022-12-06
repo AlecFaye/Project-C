@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class CollisionDetected : MonoBehaviour
 {
-    public Animator _animator;
+    [SerializeField] Animator animator;
+    [SerializeField] private Enemy enemy;
 
-    // Triggers when Collision Detection script detectst the enemy 
-    public void Hit(){
-        _animator.SetTrigger("Hit");
+    // Triggers when CollisionDetection script detects the enemy 
+    public void Hit(float damageDealt = 10.0f, int damageType = 0) {
+        if (enemy) 
+            enemy.TakeDamage(damageDealt, damageType);
+
+        if (animator)
+            animator.SetTrigger("Hit");
     }
 }
