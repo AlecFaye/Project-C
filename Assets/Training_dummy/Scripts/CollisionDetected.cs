@@ -11,8 +11,8 @@ public class CollisionDetected : MonoBehaviour
     [SerializeField] private Transform damagePopupSpawn;
 
     // Triggers when CollisionDetection script detects the enemy 
-    public void Hit(float damageDealt = 1.0f, Weapon.WeaponType weaponType) {
-        Debug.Log("Damage Value: " + damageValue + " | Weapon Type: " + weaponType);
+    public void Hit(float damageDealt, Weapon.WeaponType weaponType) {
+        Debug.Log("Damage Value: " + damageDealt + " | Weapon Type: " + weaponType);
         if (enemy) 
             enemy.TakeDamage(damageDealt, weaponType);
 
