@@ -1852,6 +1852,7 @@ MonoBehaviour:
   weaknessDamageMultiplier: 1.5
   attackDamage: 0
   attackSpeed: 0
+  damagePopupSpawn: {fileID: 0}
 --- !u!114 &1316210203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1866,7 +1867,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   enemy: {fileID: 1316210202}
-  damagePopupSpawn: {fileID: 0}
 --- !u!1001 &1363366695
 PrefabInstance:
   m_ObjectHideFlags: 0

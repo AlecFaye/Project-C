@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    enum WeaknessType { None, PickAxe, Axe, Bow, Tome }
     enum ArmourType { VeryLow, Low, Medium, High, VeryHigh }
 
     readonly Dictionary<ArmourType, float> armourDamageReduction = new()
@@ -28,12 +27,21 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int attackDamage;
     [SerializeField] private float attackSpeed;
 
+    [SerializeField] private Transform damagePopupSpawn;
+
     public void TakeDamage(float damageTaken, Weapon.WeaponType damageType) 
     {
         damageTaken *= damageType == weaknessType ? weaknessDamageMultiplier : 1.0f;
         damageTaken *= (1 - armourDamageReduction[armourType]);
-        
+
+        SpawnDamagePopup(damageTaken);
+
         Mathf.Clamp(currentHealth - damageTaken, 0, maxHealth);
+    }
+
+    private void SpawnDamagePopup(float damage)
+    {
+        DamagePopup.Create(damagePopupSpawn.position, damage);
     }
 
     private void OnTriggerEnter(Collider other)

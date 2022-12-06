@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class CollisionDetected : MonoBehaviour
 {
-    [SerializeField] private Weapon pfWeapon;
-    
     [SerializeField] private Animator animator;
     [SerializeField] private Enemy enemy;
-    [SerializeField] private Transform damagePopupSpawn;
 
     // Triggers when CollisionDetection script detects the enemy 
     public void Hit(float damageDealt, Weapon.WeaponType weaponType) {
@@ -18,8 +15,5 @@ public class CollisionDetected : MonoBehaviour
 
         if (animator)
             animator.SetTrigger("Hit");
-
-        if (damagePopupSpawn)
-            DamagePopup.Create(damagePopupSpawn.position, damageDealt);
     }
 }
