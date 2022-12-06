@@ -226,9 +226,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70638908042a7cf4f9f74ee093de14ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
   animator: {fileID: 5615497917579445399}
   enemy: {fileID: 4535621108508523271}
+  damagePopupSpawn: {fileID: 0}
 --- !u!114 &4535621108508523271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,10 +249,6 @@ MonoBehaviour:
   weaknessDamageMultiplier: 1.5
   attackDamage: 0
   attackSpeed: 0
-=======
-  _animator: {fileID: 5615497917579445399}
-  _damagePopupSpawn: {fileID: 1694451278768356906}
->>>>>>> main
 --- !u!1 &6774080502169825540
 GameObject:
   m_ObjectHideFlags: 0
