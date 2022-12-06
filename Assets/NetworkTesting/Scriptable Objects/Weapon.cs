@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Weapon", menuName = "New Weapon")]
 public class Weapon : ScriptableObject
 {
-    public enum DamageType
+    public enum WeaponType
     {
         None,
         Axe,
@@ -23,9 +23,9 @@ public class Weapon : ScriptableObject
     
     public Transform weaponModel;
 
-    public int damageValue;
+    public float damageValue;
 
-    public DamageType damageType;
+    public WeaponType weaponType;
 
 
 }

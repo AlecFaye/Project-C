@@ -16,4 +16,4 @@ MonoBehaviour:
   description: This is the Base for an Axe
   weaponModel: {fileID: 1633200510079718948, guid: 49c3c5f84e75eac439500d5f1fd8a8c5, type: 3}
   damageValue: 0
-  damageType: 1
+  weaponType: 1

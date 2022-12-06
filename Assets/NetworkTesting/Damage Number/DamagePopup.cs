@@ -6,7 +6,7 @@ using TMPro;
 public class DamagePopup : MonoBehaviour
 {
     // Should be called when an enemy gets hit -> should recieve position of where to put it and amount of damage to display
-    public static DamagePopup Create(Vector3 position, int damageValue) {
+    public static DamagePopup Create(Vector3 position, float damageValue) {
         Vector3 updatedPosition = position + new Vector3(Random.Range(-1f,1f), 0f, 0f); // Adds a bit of variance to the spawn location of the Damage Popup
         Transform damagePopupTransform = Instantiate(GameAssets.i.pfDamagePopup, updatedPosition, Quaternion.identity); // Will Create the popup object (just the floating text)
         
@@ -30,7 +30,7 @@ public class DamagePopup : MonoBehaviour
     }
 
     // Sets the value of the text in the damage popup prefab
-    public void Setup(int DamageValue){
+    public void Setup(float DamageValue){
         TextMesh.SetText(DamageValue.ToString()); // Sets the text to the Damage Value
         TextColor = TextMesh.color; // Sets the colour variable to be used later
         DisapearTimer = DISAPEAR_TIMER_MAX;
