@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: -3952528346259943697}
   - component: {fileID: 5077760772506657177}
   - component: {fileID: 1499302027411368184}
+  - component: {fileID: 4535621108508523271}
   m_Layer: 0
   m_Name: training_dummy
   m_TagString: Enemy
@@ -225,8 +226,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70638908042a7cf4f9f74ee093de14ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 5615497917579445399}
-  _damagePopupSpawn: {fileID: 1694451278768356906}
+  animator: {fileID: 5615497917579445399}
+  enemy: {fileID: 4535621108508523271}
+  damagePopupSpawn: {fileID: 0}
+--- !u!114 &4535621108508523271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4697017240656324050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb97b2c19fcae847b6e9afca3062455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 200
+  currentHealth: 200
+  armourType: 2
+  weaknessType: 1
+  movementSpeed: 50
+  weaknessDamageMultiplier: 1.5
+  attackDamage: 0
+  attackSpeed: 0
 --- !u!1 &6774080502169825540
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class CollisionDetected : MonoBehaviour
 {
-    public Animator _animator;
-    public Transform _damagePopupSpawn;
+    [SerializeField] private Animator animator;
+    [SerializeField] private Enemy enemy;
+    [SerializeField] private Transform damagePopupSpawn;
 
-    // Triggers when Collision Detection script detectst the enemy 
-    public void Hit(){
-        _animator.SetTrigger("Hit");
-        DamagePopup.Create(_damagePopupSpawn.position, 10); // Creates the popup using the paramaters for (Transform position, int DamageValue)
+    // Triggers when CollisionDetection script detects the enemy 
+    public void Hit(float damageDealt = 10.0f, int damageType = 0) {
+        if (enemy) 
+            enemy.TakeDamage(damageDealt, damageType);
+
+        if (animator)
+            animator.SetTrigger("Hit");
+
+        if (damagePopupSpawn)
+            DamagePopup.Create(damagePopupSpawn.position, 10);
     }
 }
