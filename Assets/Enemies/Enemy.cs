@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] [Range(1, 200)] private float currentHealth = 1;
 
     [SerializeField] private ArmourType armourType = ArmourType.Medium;
-    [SerializeField] private WeaknessType weaknessType = WeaknessType.PickAxe;
+    [SerializeField] private Weapon.WeaponType weaknessType = Weapon.WeaponType.Pickaxe;
 
     [SerializeField] [Range(25, 150)] private float movementSpeed = 50.0f;
     [SerializeField] [Range(1, 5)] private float weaknessDamageMultiplier = 1.5f;
@@ -28,9 +28,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int attackDamage;
     [SerializeField] private float attackSpeed;
 
-    public void TakeDamage(float damageTaken = 10.0f, int damageType = (int)WeaknessType.PickAxe) 
+    public void TakeDamage(float damageTaken, Weapon.WeaponType damageType) 
     {
-        damageTaken *= damageType == (int) weaknessType ? weaknessDamageMultiplier : 1.0f;
+        damageTaken *= damageType == weaknessType ? weaknessDamageMultiplier : 1.0f;
         damageTaken *= (1 - armourDamageReduction[armourType]);
         
         Mathf.Clamp(currentHealth - damageTaken, 0, maxHealth);

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CollisionDetection : MonoBehaviour
 {
+
+    public Weapon weapon;
+    
     public WeaponController weaponController;
 
     private void OnTriggerEnter(Collider other) {
@@ -14,7 +17,7 @@ public class CollisionDetection : MonoBehaviour
 
             if (collisionDetected)
             {
-                collisionDetected.Hit(10.0f, 0); // Runs the funtion "Hit" in the other objects CollisionDetected script
+                collisionDetected.Hit(weapon.damageValue, weapon.weaponType); // Runs the funtion "Hit" in the other objects CollisionDetected script
                 weaponController.enemiesHitList.Add(other); // Adds current enemy to enemiesHitList to keep track of
             }
 
