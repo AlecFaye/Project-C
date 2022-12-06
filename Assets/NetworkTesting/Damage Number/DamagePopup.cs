@@ -39,6 +39,8 @@ public class DamagePopup : MonoBehaviour
     }
 
     private void Update() {
+        transform.rotation = Camera.main.transform.rotation; // This Billboards the text to always face the camera
+
         transform.position += MoveVector * Time.deltaTime;
         MoveVector -= MoveVector * 8f * Time.deltaTime;
         
