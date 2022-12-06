@@ -48,8 +48,8 @@ MonoBehaviour:
   player: {fileID: 7987426414551469118}
   CanAttack: 1
   IsAttacking: 0
-  AttackingTime: 0.8
-  AttackingCooldown: 1
+  AttackingTime: 0.6
+  AttackingCooldown: 0.7
   enemiesHitList: []
 --- !u!1 &7368794223040343742
 GameObject:
