@@ -33,6 +33,37 @@ Transform:
   m_Father: {fileID: 8033125610158513919}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2007722982092712398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1694451278768356906}
+  m_Layer: 0
+  m_Name: DamagePopupSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1694451278768356906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007722982092712398}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.727, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5360683131785772904}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2217982354390685929
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,6 +161,7 @@ Transform:
   m_Children:
   - {fileID: 8033125610158513919}
   - {fileID: 334251544987690374}
+  - {fileID: 1694451278768356906}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -194,6 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70638908042a7cf4f9f74ee093de14ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   animator: {fileID: 5615497917579445399}
   enemy: {fileID: 4535621108508523271}
 --- !u!114 &4535621108508523271
@@ -216,6 +249,10 @@ MonoBehaviour:
   weaknessDamageMultiplier: 1.5
   attackDamage: 0
   attackSpeed: 0
+=======
+  _animator: {fileID: 5615497917579445399}
+  _damagePopupSpawn: {fileID: 1694451278768356906}
+>>>>>>> main
 --- !u!1 &6774080502169825540
 GameObject:
   m_ObjectHideFlags: 0
