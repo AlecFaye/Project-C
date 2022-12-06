@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class CollisionDetected : MonoBehaviour
 {
-    public Weapon pfWeapon;
+    [SerializeField] private Weapon pfWeapon;
+    
+    [SerializeField] private Animator animator;
+    [SerializeField] private Enemy enemy;
+    [SerializeField] private Transform damagePopupSpawn;
 
-    public Animator _animator;
-    public Transform _damagePopupSpawn;
+    // Triggers when CollisionDetection script detects the enemy 
+    public void Hit(float damageDealt = 1.0f, Weapon.WeaponType weaponType) {
+        Debug.Log("Damage Value: " + damageValue + " | Weapon Type: " + weaponType);
+        if (enemy) 
+            enemy.TakeDamage(damageDealt, weaponType);
 
-    // Triggers when Collision Detection script detects the enemy (Gets the player's weapon stats [Damage, Weapon Type]) 
-    public void Hit(float damageValue, Weapon.WeaponType weaponType) {
-        //Debug.Log("Damage Value: " + damageValue + " | Weapon Type: " + weaponType);
-        _animator.SetTrigger("Hit"); // Sets the trigger "Hit" in the animation controller so that it plays the hit animation
-        DamagePopup.Create(_damagePopupSpawn.position, damageValue); // Creates the popup using the paramaters for (Transform position, int DamageValue)
+        if (animator)
+            animator.SetTrigger("Hit");
+
+        if (damagePopupSpawn)
+            DamagePopup.Create(damagePopupSpawn.position, damageDealt);
     }
 }
