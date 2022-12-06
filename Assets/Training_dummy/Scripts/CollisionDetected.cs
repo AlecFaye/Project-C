@@ -9,9 +9,9 @@ public class CollisionDetected : MonoBehaviour
     public Animator _animator;
     public Transform _damagePopupSpawn;
 
-    // Triggers when Collision Detection script detectst the enemy 
+    // Triggers when Collision Detection script detects the enemy (Gets the player's weapon stats [Damage, Weapon Type]) 
     public void Hit(float damageValue, Weapon.WeaponType weaponType) {
-        Debug.Log("Damage Value: " + damageValue + " | Weapon Type: " + weaponType);
+        //Debug.Log("Damage Value: " + damageValue + " | Weapon Type: " + weaponType);
         _animator.SetTrigger("Hit"); // Sets the trigger "Hit" in the animation controller so that it plays the hit animation
         DamagePopup.Create(_damagePopupSpawn.position, damageValue); // Creates the popup using the paramaters for (Transform position, int DamageValue)
     }
