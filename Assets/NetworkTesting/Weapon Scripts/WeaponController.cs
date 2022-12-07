@@ -37,15 +37,10 @@ public class WeaponController : MonoBehaviour
         foreach (Transform weapon in Hotbar)
         {
             if  (weapon != null) {
-                Transform tempWeapon = Instantiate(weapon, Vector3.zero, Quaternion.identity);
-                tempWeapon.transform.SetParent(this.transform);
-                tempWeapon.transform.localPosition = new Vector3(0.04f, -0.1f, 0.2f);
-                Debug.Log("Weapon Spawn Rotation: " + tempWeapon.transform.rotation);
-                tempWeapon.transform.localRotation = Quaternion.Euler(0f, 180f, 90f);
-                Debug.Log("Weapon Post Rotation: " + tempWeapon.transform.rotation);
-                Debug.Log("Weapon Post Rotation X: " + tempWeapon.transform.rotation.x);
-                Debug.Log("Weapon Post Rotation Y: " + tempWeapon.transform.rotation.y);
-                Debug.Log("Weapon Post Rotation Z: " + tempWeapon.transform.rotation.z);
+                Transform tempWeapon = Instantiate(weapon, Vector3.zero, Quaternion.identity); // Creates the weapon in the hotbar slot
+                tempWeapon.transform.SetParent(this.transform); // Sets this gameobject to the parent of the 
+                tempWeapon.transform.localPosition = new Vector3(0.04f, -0.1f, 0.2f); // Sets position to hand
+                tempWeapon.transform.localRotation = Quaternion.Euler(0f, 180f, 90f); // Sets rotation to hand
             }
         }
 
