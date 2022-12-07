@@ -4,33 +4,25 @@ using UnityEngine;
 using StarterAssets;
 using QFSW.QC;
 using Unity.VisualScripting;
+using UnityEngine.InputSystem;
 
 
 //namespace WeaponController{
 public class WeaponController : MonoBehaviour
-    {
-        public ThirdPersonController player; // Refrences the player it's attatched too
+{
+    public ThirdPersonController player; // Refrences the player it's attatched too
 
-        [SerializeField] private Weapon[] Hotbar;
+    [SerializeField] private Weapon[] Hotbar;
 
-        private int selectedWeapon = 0;
+    private int selectedWeapon = 0;
 
-        // Player Attack Stats
-        [Header("Attack")]
-        [Tooltip("If the character can Attack or not.")]
-        public bool CanAttack = true;
+    // Stats -> Get overwritten
+    private bool CanAttack;
+    public bool IsAttacking; // Is public to be called by other functions
+    private float AttackingTime;
+    private float AttackingCooldown;
 
-        [Tooltip("If the character is Attacking or not.")]
-        public bool IsAttacking = false;
-        
-        [Tooltip("How long the Attack goes for (float).")]
-        public float AttackingTime = 0.8f;
-                
-        [Tooltip("Attack Cooldown value (float).")]
-        public float AttackingCooldown = 1f;
-
-        public List<Collider> enemiesHitList = new List<Collider>(); // Makes a list to keep track of which enemies were hit (enemies added by the CollisionDetection Script on weapons)
-
+    public List<Collider> enemiesHitList = new List<Collider>(); // Makes a list to keep track of which enemies were hit (enemies added by the CollisionDetection Script on weapons)
 
     private void Start()
     {
@@ -53,8 +45,14 @@ public class WeaponController : MonoBehaviour
         foreach (Transform weapon in transform)
         {
             if (i == selectedWeapon)
+            {
                 weapon.gameObject.SetActive(true);
-            else 
+                CanAttack = Hotbar[selectedWeapon].CanAttack;
+                IsAttacking = Hotbar[selectedWeapon].IsAttacking;
+                AttackingTime = Hotbar[selectedWeapon].AttackingTime;
+                AttackingCooldown = Hotbar[selectedWeapon].AttackingCooldown;
+            }
+            else
                 weapon.gameObject.SetActive(false);
             i++;
         }
@@ -65,7 +63,8 @@ public class WeaponController : MonoBehaviour
             if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner){
                 CanAttack = false;
                 IsAttacking = true;
-                player._animator.SetTrigger("Attack");
+                Hotbar[selectedWeapon].Attack(); // Will call the currently selected weapon's attack animation
+                //player._animator.SetTrigger("Attack"); // Being cut out to test new attack system
                 //player.transform.rotation = Quaternion.Euler(0.0f, player._cinemachineTargetYaw, 0.0f); // Rotates the player to where the camera is facing (only on y axis)
                 yield return new WaitForSeconds(AttackingTime);
                 IsAttacking = false;
@@ -75,40 +74,40 @@ public class WeaponController : MonoBehaviour
             }
         }
 
-        private void OnHotbar1()
-        {
-            if (player.IsOwner){
-                selectedWeapon = 0;
-                SelectWeapon();
-                Debug.Log(Hotbar[selectedWeapon].weaponName);
-            }
+    private void OnHotbar1()
+    {
+        if (player.IsOwner){
+            selectedWeapon = 0;
+            SelectWeapon();
+            Debug.Log(Hotbar[selectedWeapon].weaponName);
         }
-
-        private void OnHotbar2()
-        {
-            if (player.IsOwner){
-                selectedWeapon = 1;
-                SelectWeapon();
-                Debug.Log(Hotbar[selectedWeapon].weaponName);
-            }
-        }
-        
-        private void OnHotbar3()
-        {
-            if (player.IsOwner){
-                selectedWeapon = 2;
-                SelectWeapon();
-                Debug.Log(Hotbar[selectedWeapon].weaponName);
-            }
-        }
-    
-        private void OnHotbar4()
-        {
-            if (player.IsOwner){
-                selectedWeapon = 3;
-                SelectWeapon();
-                Debug.Log(Hotbar[selectedWeapon].weaponName);
-            }
-        }
-
     }
+
+    private void OnHotbar2()
+    {
+        if (player.IsOwner){
+            selectedWeapon = 1;
+            SelectWeapon();
+            Debug.Log(Hotbar[selectedWeapon].weaponName);
+        }
+    }
+        
+    private void OnHotbar3()
+    {
+        if (player.IsOwner){
+            selectedWeapon = 2;
+            SelectWeapon();
+            Debug.Log(Hotbar[selectedWeapon].weaponName);
+        }
+    }
+    
+    private void OnHotbar4()
+    {
+        if (player.IsOwner){
+            selectedWeapon = 3;
+            SelectWeapon();
+            Debug.Log(Hotbar[selectedWeapon].weaponName);
+        }
+    }
+
+}

@@ -69,6 +69,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Aim",
+                    "type": "Button",
+                    "id": "efdc8dd4-3304-4188-b50a-ae9444bafad0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Hotbar1",
                     "type": "Button",
                     "id": "e21dc4c8-84f4-4300-baf8-76db7f72c32c",
@@ -291,17 +300,6 @@
                 },
                 {
                     "name": "",
-                    "id": "c65644f1-2fda-439b-938d-8aa99486ae00",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "2209d75a-763d-43eb-8453-b5a582b2c3bc",
                     "path": "<Keyboard>/1",
                     "interactions": "",
@@ -363,6 +361,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Hotbar6",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "847f8cf3-3bdf-44be-8373-37be9cbf7616",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7f72398a-5118-42e4-947c-4b05a3dc0e0c",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

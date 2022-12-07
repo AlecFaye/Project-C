@@ -4,6 +4,7 @@ using Unity.Netcode;
 using Cinemachine;
 using UnityEngine;
 using QFSW.QC;
+using Unity.Services.Lobbies.Models;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -114,6 +115,9 @@ namespace StarterAssets {
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        [Tooltip("Checks if the player is Aiming or not")]
+        private bool IsAiming = false;
+
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -154,7 +158,6 @@ namespace StarterAssets {
         private bool _hasAnimator;
 
         private bool IsFirstPerson = false;
-        //private bool IsThirdPerson = true;
 
         private bool IsCurrentDeviceMouse
         {
@@ -483,6 +486,25 @@ namespace StarterAssets {
                 IsDashing = false;
                 yield return new WaitForSeconds(DashingCooldown);
                 CanDash = true;
+            }
+        }
+
+        public void OnAim()
+        {
+            if (!IsAiming)
+            {
+                IsAiming = true;
+                _cinemaBody.ShoulderOffset = new Vector3(2.5f, 0f, 0f);
+                _cinemaBody.CameraDistance = (2f);
+                _animator.SetTrigger("Aim");
+                _animator.SetBool("Aiming", true);
+            }
+            else
+            {
+                IsAiming = false;
+                _cinemaBody.ShoulderOffset = new Vector3(1f, 0f, 0f);
+                _cinemaBody.CameraDistance = (5f);
+                _animator.SetBool("Aiming", false);
             }
         }
 
