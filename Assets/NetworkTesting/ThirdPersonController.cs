@@ -95,7 +95,7 @@ namespace StarterAssets {
         // Player Camera Variables
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-        public GameObject CinemachineCameraTarget;
+        [SerializeField] private Transform cameraRoot;
 
         [Tooltip("How far in degrees can you move the camera up (1st Person Mode)")]
         public float First_TopClamp = 89.0f;
@@ -149,7 +149,6 @@ namespace StarterAssets {
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
-        private GameObject _followCamera;
         private CinemachineVirtualCamera _cinemaCamera;
         private Cinemachine3rdPersonFollow _cinemaBody;
 
@@ -178,7 +177,10 @@ namespace StarterAssets {
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-                _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera");
+
+                GameObject _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera");
+                
+
                 _cinemaCamera = _followCamera.GetComponent<CinemachineVirtualCamera>();
                 _cinemaBody = _followCamera.GetComponentInChildren<Cinemachine3rdPersonFollow>();
             }
@@ -192,9 +194,8 @@ namespace StarterAssets {
 
             if (IsOwner) { // Checks if you are owner of this Player -- This will run only if your the owner of the character
                 _input = GetComponent<StarterAssetsInputs>();
-                _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y; // Grabs Something related to rotation speed
-                _cinemaCamera.m_Follow = this.transform.GetChild(0).transform; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
-                // this.transform.GetChild(0).transform ---> gets the PlayerCameraRoot from the player
+                _cinemachineTargetYaw = cameraRoot.rotation.eulerAngles.y; // Grabs Something related to rotation speed
+                _cinemaCamera.m_Follow = cameraRoot; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
             }
 
 
@@ -269,7 +270,7 @@ namespace StarterAssets {
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, Third_BottomClamp, Third_TopClamp);
 
             // Cinemachine will follow this target
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
+            cameraRoot.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
             
         }
 

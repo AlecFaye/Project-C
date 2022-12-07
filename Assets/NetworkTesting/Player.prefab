@@ -52,10 +52,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 54bff555f7b93c44dba4f55107aac954, type: 2}
   - {fileID: 0}
   - {fileID: 0}
-  CanAttack: 1
   IsAttacking: 0
-  AttackingTime: 0.6
-  AttackingCooldown: 0.7
   enemiesHitList: []
 --- !u!1 &6712820590810972425
 GameObject:
@@ -367,6 +364,10 @@ PrefabInstance:
       propertyPath: DashingCooldown
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4416926081852918490, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      propertyPath: CinemachineCameraTarget
+      value: 
+      objectReference: {fileID: 2319091252179268969}
     - target: {fileID: 4416926081852918493, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       propertyPath: m_DefaultControlScheme
       value: 
@@ -414,6 +415,10 @@ PrefabInstance:
     - target: {fileID: 8322255484584408707, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338988566280778634, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      propertyPath: m_Name
+      value: CameraRoot
       objectReference: {fileID: 0}
     - target: {fileID: 8519642851085155206, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       propertyPath: m_LocalRotation.w
@@ -493,6 +498,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+--- !u!4 &2319091252179268969 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8338988566280778637, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+  m_PrefabInstance: {fileID: 6022747425434355428}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2603819355763679831 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8626512282341172403, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
@@ -558,6 +568,12 @@ MonoBehaviour:
     TransitionDuration: 0.25
     TriggerNameHash: 1080829965
     TransitionIndex: 0
+  - Layer: 1
+    OriginatingState: 753088835
+    DestinationState: -999270597
+    TransitionDuration: 0.25
+    TriggerNameHash: 153482222
+    TransitionIndex: 1
   m_Animator: {fileID: 3707296443420380405}
 --- !u!114 &5804064882660954445
 MonoBehaviour:
