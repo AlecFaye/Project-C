@@ -9,11 +9,11 @@ public class Weapon : ScriptableObject
 {
     public enum WeaponType
     {
-        None,
-        Axe,
-        Bow,
-        Pickaxe,
-        Tome
+        NONE,
+        AXE,
+        BOW,
+        PICKAXE,
+        TOME
     }
 
     public string weaponName;
@@ -27,5 +27,26 @@ public class Weapon : ScriptableObject
 
     public WeaponType weaponType;
 
+    public void Attack(WeaponType weaponChosen)
+    {
+        switch (weaponChosen)
+        {
+            case WeaponType.NONE:
+               Debug.Log("Wait stop should be NONE");
+               break;
+            case WeaponType.AXE:
+               Debug.Log("Attack with an AXE");
+               break;
+            case WeaponType.BOW:
+               Debug.Log("Attack with a BOW");
+               break;
+            case WeaponType.PICKAXE:
+               Debug.Log("Attack with a PICKAXE");
+               break;
+            case WeaponType.TOME:
+               Debug.Log("Attack with a TOME");
+               break;
+        }
+    }
 
 }

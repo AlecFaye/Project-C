@@ -26,8 +26,6 @@ public class CollisionDetection : MonoBehaviour
                 collisionDetected.Hit(weapon.damageValue, weapon.weaponType); // Runs the funtion "Hit" in the other objects CollisionDetected script
                 weaponController.enemiesHitList.Add(other); // Adds current enemy to enemiesHitList to keep track of
             }
-
-            //Debug.Log("Enemy list after being added: " + weaponController.enemiesHitList);
         }
     }
 }

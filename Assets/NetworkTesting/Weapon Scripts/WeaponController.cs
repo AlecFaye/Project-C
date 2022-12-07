@@ -78,18 +78,18 @@ public class WeaponController : MonoBehaviour
         private void OnHotbar1()
         {
             if (player.IsOwner){
-                Debug.Log("Yeet 1");
                 selectedWeapon = 0;
                 SelectWeapon();
+                Debug.Log(Hotbar[selectedWeapon].weaponName);
             }
         }
 
         private void OnHotbar2()
         {
             if (player.IsOwner){
-                Debug.Log("Yeet 2");
-            selectedWeapon = 1;
+                selectedWeapon = 1;
                 SelectWeapon();
+                Debug.Log(Hotbar[selectedWeapon].weaponName);
             }
         }
         
@@ -98,6 +98,7 @@ public class WeaponController : MonoBehaviour
             if (player.IsOwner){
                 selectedWeapon = 2;
                 SelectWeapon();
+                Debug.Log(Hotbar[selectedWeapon].weaponName);
             }
         }
     
@@ -106,6 +107,7 @@ public class WeaponController : MonoBehaviour
             if (player.IsOwner){
                 selectedWeapon = 3;
                 SelectWeapon();
+                Debug.Log(Hotbar[selectedWeapon].weaponName);
             }
         }
 
