@@ -345,6 +345,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4416926081852918490, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      propertyPath: cameraRoot
+      value: 
+      objectReference: {fileID: 2319091252179268969}
+    - target: {fileID: 4416926081852918490, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       propertyPath: DashingTime
       value: 0.2
       objectReference: {fileID: 0}

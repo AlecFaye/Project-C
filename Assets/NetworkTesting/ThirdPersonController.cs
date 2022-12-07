@@ -149,8 +149,8 @@ namespace StarterAssets {
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
-        private CinemachineVirtualCamera _cinemaCamera;
-        private Cinemachine3rdPersonFollow _cinemaBody;
+        private CinemachineVirtualCamera _followCamera;
+        private CinemachineVirtualCamera _aimCamera;
 
         private const float _threshold = 0.01f;
 
@@ -177,25 +177,23 @@ namespace StarterAssets {
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-
-                GameObject _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera");
+                                
+                _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera").GetComponent<CinemachineVirtualCamera>();
                 
-
-                _cinemaCamera = _followCamera.GetComponent<CinemachineVirtualCamera>();
-                _cinemaBody = _followCamera.GetComponentInChildren<Cinemachine3rdPersonFollow>();
+                _aimCamera = GameObject.FindGameObjectWithTag("PlayerAimCamera").GetComponent<CinemachineVirtualCamera>();
             }
         }
 
         private void Start()
         {
-
-            _hasAnimator = TryGetComponent(out _animator);
-            _controller = GetComponent<CharacterController>();
-
             if (IsOwner) { // Checks if you are owner of this Player -- This will run only if your the owner of the character
+                _hasAnimator = TryGetComponent(out _animator);
+                _controller = GetComponent<CharacterController>();
                 _input = GetComponent<StarterAssetsInputs>();
                 _cinemachineTargetYaw = cameraRoot.rotation.eulerAngles.y; // Grabs Something related to rotation speed
-                _cinemaCamera.m_Follow = cameraRoot; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
+                
+                _followCamera.m_Follow = cameraRoot; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
+                _aimCamera.m_Follow = cameraRoot; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
             }
 
 
@@ -231,6 +229,7 @@ namespace StarterAssets {
 
         private void AssignAnimationIDs()
         {
+            if (!IsOwner) return; // Checks if you are owner of this Player
             _animIDSpeed = Animator.StringToHash("Speed");
             _animIDGrounded = Animator.StringToHash("Grounded");
             _animIDJump = Animator.StringToHash("Jump");
@@ -279,14 +278,14 @@ namespace StarterAssets {
             if (!IsFirstPerson) { // If not in 1st person mode - sets it to true then changes settings to 1st person mode
                 IsFirstPerson = true;
 
-                _cinemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.1f);
-                _cinemaBody.CameraDistance = (0f);
+                //_inemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.1f);
+                //_inemaBody.CameraDistance = (0f);
             }
             else { // Else swaps back to 3rd person mode
                 IsFirstPerson = false;
 
-                _cinemaBody.ShoulderOffset = new Vector3(1f, 0f, 0f);
-                _cinemaBody.CameraDistance = (4f);
+                //_inemaBody.ShoulderOffset = new Vector3(1f, 0f, 0f);
+                //_inemaBody.CameraDistance = (4f);
             }
         }
 
@@ -294,9 +293,6 @@ namespace StarterAssets {
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
-
-            // Hardcoded camera movement so that the characters head doesn't appear infront of the camera
-            if (_input.sprint && IsFirstPerson) _cinemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.4f);
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -455,6 +451,8 @@ namespace StarterAssets {
 
         private void OnFootstep(AnimationEvent animationEvent)
         {
+            if (!IsOwner) return; // Checks if you are owner of this Player
+
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 if (FootstepAudioClips.Length > 0)
@@ -467,6 +465,8 @@ namespace StarterAssets {
 
         private void OnLand(AnimationEvent animationEvent)
         {
+            if (!IsOwner) return; // Checks if you are owner of this Player
+
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
@@ -495,18 +495,15 @@ namespace StarterAssets {
             if (!IsAiming)
             {
                 IsAiming = true;
-                _cinemaBody.ShoulderOffset = new Vector3(2.5f, 0f, 0f);
-                _cinemaBody.CameraDistance = (2f);
                 _animator.SetTrigger("Aim");
-                _animator.SetBool("Aiming", true);
             }
             else
-            {
                 IsAiming = false;
-                _cinemaBody.ShoulderOffset = new Vector3(1f, 0f, 0f);
-                _cinemaBody.CameraDistance = (5f);
-                _animator.SetBool("Aiming", false);
-            }
+
+            _animator.SetBool("Aiming", IsAiming);
+            _aimCamera.gameObject.SetActive(IsAiming);
+            _followCamera.gameObject.SetActive(!IsAiming);
+
         }
 
         // Quantum Commands
