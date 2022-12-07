@@ -46,10 +46,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 7987426414551469118}
   Hotbar:
-  - {fileID: 1633200510079718948, guid: 49c3c5f84e75eac439500d5f1fd8a8c5, type: 3}
-  - {fileID: 9098756699284334129, guid: 70f0f4fd7130f9041a0f87a95e7cf5e0, type: 3}
-  - {fileID: 3466798489770083881, guid: 252a1e040b474f247a49589e9e32ec6c, type: 3}
-  - {fileID: 6384868770470048133, guid: be6c13abe6ec3974289b4075d684e83a, type: 3}
+  - {fileID: 11400000, guid: ade7439ef67604f40b849e505b3c6399, type: 2}
+  - {fileID: 11400000, guid: 3d525c4f7856cc54f8cead48a227dbc2, type: 2}
+  - {fileID: 11400000, guid: 76115dd882159704fa65e435c39bbe90, type: 2}
+  - {fileID: 11400000, guid: 54bff555f7b93c44dba4f55107aac954, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   CanAttack: 1
