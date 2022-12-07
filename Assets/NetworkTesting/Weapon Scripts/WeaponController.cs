@@ -11,7 +11,7 @@ public class WeaponController : MonoBehaviour
     {
         public ThirdPersonController player; // Refrences the player it's attatched too
 
-        [SerializeField] private Transform[] Hotbar;
+        [SerializeField] private Weapon[] Hotbar;
 
         private int selectedWeapon = 0;
 
@@ -34,10 +34,10 @@ public class WeaponController : MonoBehaviour
 
     private void Start()
     {
-        foreach (Transform weapon in Hotbar)
+        foreach (Weapon weapon in Hotbar)
         {
             if  (weapon != null) {
-                Transform tempWeapon = Instantiate(weapon, Vector3.zero, Quaternion.identity); // Creates the weapon in the hotbar slot
+                Transform tempWeapon = Instantiate(weapon.weaponModel, Vector3.zero, Quaternion.identity); // Creates the weapon in the hotbar slot
                 tempWeapon.transform.SetParent(this.transform); // Sets this gameobject to the parent of the 
                 tempWeapon.transform.localPosition = new Vector3(0.04f, -0.1f, 0.2f); // Sets position to hand
                 tempWeapon.transform.localRotation = Quaternion.Euler(0f, 180f, 90f); // Sets rotation to hand
