@@ -92,5 +92,21 @@ public class WeaponController : MonoBehaviour
                 SelectWeapon();
             }
         }
+        
+        private void OnHotbar3()
+        {
+            if (player.IsOwner){
+                selectedWeapon = 2;
+                SelectWeapon();
+            }
+        }
+    
+        private void OnHotbar4()
+        {
+            if (player.IsOwner){
+                selectedWeapon = 3;
+                SelectWeapon();
+            }
+        }
 
     }

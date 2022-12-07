@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cf2a6a74806cc44a8bf28b7cba100da, type: 3}
-  m_Name: BasePickaxe
+  m_Name: BaseTome
   m_EditorClassIdentifier: 
-  weaponName: Base Pickaxe
-  description: This is the Base for a Pickaxe
-  weaponModel: {fileID: 9098756699284334129, guid: 70f0f4fd7130f9041a0f87a95e7cf5e0, type: 3}
+  weaponName: Base Tome
+  description: This is the Base for a Tome
+  weaponModel: {fileID: 6384868770470048133, guid: be6c13abe6ec3974289b4075d684e83a, type: 3}
   damageValue: 0
-  weaponType: 3
+  weaponType: 4
