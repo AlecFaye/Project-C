@@ -229,7 +229,6 @@ MonoBehaviour:
   pfWeapon: {fileID: 0}
   animator: {fileID: 5615497917579445399}
   enemy: {fileID: 4535621108508523271}
-  damagePopupSpawn: {fileID: 1694451278768356906}
 --- !u!114 &4535621108508523271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,6 +249,7 @@ MonoBehaviour:
   weaknessDamageMultiplier: 1.5
   attackDamage: 0
   attackSpeed: 0
+  damagePopupSpawn: {fileID: 1694451278768356906}
 --- !u!1 &6774080502169825540
 GameObject:
   m_ObjectHideFlags: 0

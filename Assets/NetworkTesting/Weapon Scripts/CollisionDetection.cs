@@ -9,6 +9,12 @@ public class CollisionDetection : MonoBehaviour
     
     public WeaponController weaponController;
 
+    private void Start() // Used to setup the parent of the fucntion
+    {
+        if (weaponController == null)
+            weaponController = this.transform.parent.GetComponent<WeaponController>();
+    }
+
     private void OnTriggerEnter(Collider other) {
         // Checks if it collided with an enemy ====== Checks if the player should be attacking rn(done in weapon controller) ====== Checks if the enemy was already hit by this attack
         if (other.CompareTag("Enemy") && weaponController.GetComponent<WeaponController>().IsAttacking && !weaponController.enemiesHitList.Contains(other))
