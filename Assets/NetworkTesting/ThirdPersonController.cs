@@ -115,8 +115,20 @@ namespace StarterAssets {
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        // Player Aim Variables
+        [Header("Aim Variables")]
         [Tooltip("Checks if the player is Aiming or not")]
         private bool IsAiming = false;
+    
+        [Tooltip("Screen Centre Point Getter")]
+        private Vector2 screenCentrePoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+
+        [Tooltip("Mouse World Position Getter")]
+        private Vector3 mouseWorldPosition = Vector3.zero;
+
+        [Tooltip("Layer Mask for aiming")]
+        [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
+
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -216,6 +228,8 @@ namespace StarterAssets {
 
             _hasAnimator = TryGetComponent(out _animator);
 
+            RaycastMouse();
+
             JumpAndGravity();
             GroundedCheck();
             Move();
@@ -273,8 +287,25 @@ namespace StarterAssets {
             
         }
 
+        private void RaycastMouse()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(screenCentrePoint);
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask)) {
+                mouseWorldPosition = raycastHit.point;
+            }
+
+            if (IsAiming) {
+                Vector3 worldAimTarget = mouseWorldPosition;
+                worldAimTarget.y = transform.position.y;
+                Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+
+                transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
+            }
+        }
+
         // Function used to swap between 1st person and 3rd person modes (basically edits the PlayerFollowCamera)
-        private void OnCameraSwap() {
+        private void OnCameraSwap()
+        {
             if (!IsFirstPerson) { // If not in 1st person mode - sets it to true then changes settings to 1st person mode
                 IsFirstPerson = true;
 
@@ -340,8 +371,9 @@ namespace StarterAssets {
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
 
-                // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                if (!IsAiming) 
+                    // rotate to face input direction relative to camera position
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
 
