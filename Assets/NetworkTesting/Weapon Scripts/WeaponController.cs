@@ -29,14 +29,20 @@ public class WeaponController : MonoBehaviour
         foreach (Weapon weapon in Hotbar)
         {
             if  (weapon != null) {
-                Transform tempWeapon = Instantiate(weapon.weaponModel, Vector3.zero, Quaternion.identity); // Creates the weapon in the hotbar slot
-                tempWeapon.transform.SetParent(this.transform); // Sets this gameobject to the parent of the 
-                tempWeapon.transform.localPosition = new Vector3(0.04f, -0.1f, 0.2f); // Sets position to hand
-                tempWeapon.transform.localRotation = Quaternion.Euler(0f, 180f, 90f); // Sets rotation to hand
+                CreateWeapon(weapon);
             }
         }
 
         SelectWeapon();
+    }
+
+    private void CreateWeapon(Weapon weapon)
+    {
+        Transform tempWeapon = Instantiate(weapon.weaponModel, Vector3.zero, Quaternion.identity); // Creates the weapon in the hotbar slot
+        tempWeapon.transform.SetParent(this.transform); // Sets this gameobject to the parent of the 
+        tempWeapon.transform.localPosition = new Vector3(0.034f, -0.046f, 0.2f); // Sets position to hand
+        tempWeapon.transform.localRotation = Quaternion.Euler(15f, -90f, 100f); // Sets rotation to hand
+        weapon._player = player;
     }
 
     private void SelectWeapon()

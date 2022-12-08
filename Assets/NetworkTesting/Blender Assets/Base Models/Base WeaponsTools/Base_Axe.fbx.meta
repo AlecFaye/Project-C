@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: 02bfb1ae32af225459e2354e9cee2e46
+guid: 6ebab666f170ff04fa87fda718f45250
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: DeerTexture
-    second: {fileID: 2800000, guid: a028c39af2ffa4545b4b1de72783c916, type: 3}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

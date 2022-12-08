@@ -14,6 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Base Pickaxe
   description: This is the Base for a Pickaxe
-  weaponModel: {fileID: 9098756699284334129, guid: 70f0f4fd7130f9041a0f87a95e7cf5e0, type: 3}
+  inventorySprite: {fileID: 0}
+  weaponModel: {fileID: 7197912442079774620, guid: 9a39a60708e685a4ea999a559273dee0, type: 3}
   damageValue: 0
   weaponType: 3
+  CanAttack: 1
+  IsAttacking: 0
+  AttackingTime: 0.8
+  AttackingCooldown: 1
+  _player: {fileID: 0}

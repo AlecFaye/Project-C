@@ -14,6 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Base Bow
   description: This is the Base for a Bow
-  weaponModel: {fileID: 3466798489770083881, guid: 252a1e040b474f247a49589e9e32ec6c, type: 3}
+  inventorySprite: {fileID: 0}
+  weaponModel: {fileID: 7197912442079774620, guid: 9a39a60708e685a4ea999a559273dee0, type: 3}
   damageValue: 0
   weaponType: 2
+  CanAttack: 1
+  IsAttacking: 0
+  AttackingTime: 0.8
+  AttackingCooldown: 1
+  _player: {fileID: 0}

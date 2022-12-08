@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using StarterAssets;
 
 //public class Weapon : using UnityEngine;
 
@@ -40,7 +42,7 @@ public class Weapon : ScriptableObject
     [Tooltip("Attack Cooldown value (float).")]
     public float AttackingCooldown = 1f;
 
-
+    [DoNotSerialize] public ThirdPersonController _player;
 
     public void Attack()
     {
@@ -50,7 +52,7 @@ public class Weapon : ScriptableObject
                Debug.Log("Wait stop should be NONE");
                break;
             case WeaponType.Axe:
-               Debug.Log("Attack with an AXE");
+               _player._animator.SetTrigger("Axe Attack");
                break;
             case WeaponType.Bow:
                Debug.Log("Attack with a BOW");
