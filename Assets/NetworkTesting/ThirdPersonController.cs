@@ -287,6 +287,7 @@ namespace StarterAssets {
             
         }
 
+        // Function Used for getting position of players mouse
         private void RaycastMouse()
         {
             Ray ray = Camera.main.ScreenPointToRay(screenCentrePoint);

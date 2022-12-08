@@ -5,6 +5,7 @@ using StarterAssets;
 using QFSW.QC;
 using Unity.VisualScripting;
 using UnityEngine.InputSystem;
+using static Weapon;
 
 
 //namespace WeaponController{
@@ -16,13 +17,17 @@ public class WeaponController : MonoBehaviour
 
     private int selectedWeapon = 0;
 
+    // Makes a list to keep track of which enemies were hit (enemies added by the CollisionDetection Script on weapons)
+    public List<Collider> enemiesHitList = new List<Collider>();
+
     // Stats -> Get overwritten
     private bool CanAttack;
     public bool IsAttacking; // Is public to be called by other functions
     private float AttackingTime;
     private float AttackingCooldown;
 
-    public List<Collider> enemiesHitList = new List<Collider>(); // Makes a list to keep track of which enemies were hit (enemies added by the CollisionDetection Script on weapons)
+    // Used to check if player should be charging their attack
+    private bool IsChannalingAttack = false;
 
     private void Start()
     {
@@ -34,6 +39,11 @@ public class WeaponController : MonoBehaviour
         }
 
         SelectWeapon();
+    }
+
+    private void Update()
+    {
+        ChannalAttack();
     }
 
     private void CreateWeapon(Weapon weapon)
@@ -64,25 +74,100 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    private IEnumerator OnAttack() 
-        {
-            if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner){
-                CanAttack = false;
-                IsAttacking = true;
-                Hotbar[selectedWeapon].Attack(); // Will call the currently selected weapon's attack animation
-                //player._animator.SetTrigger("Attack"); // Being cut out to test new attack system
-                //player.transform.rotation = Quaternion.Euler(0.0f, player._cinemachineTargetYaw, 0.0f); // Rotates the player to where the camera is facing (only on y axis)
-                yield return new WaitForSeconds(AttackingTime);
-                IsAttacking = false;
-                yield return new WaitForSeconds(AttackingCooldown);
-                enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
-                CanAttack = true;
+    public void OnAttack()
+    {
+        if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner) {
+            switch (Hotbar[selectedWeapon].weaponType) {
+                case WeaponType.None:
+                    Debug.Log("Wait stop should be NONE");
+                    break;
+                case WeaponType.Axe:
+                    Debug.Log("Execute the Attack: " + Hotbar[selectedWeapon].weaponType);
+                    StartCoroutine(AxeAttack());
+                    Debug.Log("Started the Attack: " + Hotbar[selectedWeapon].weaponType); 
+                    break;
+                case WeaponType.Bow:
+                    if (!IsChannalingAttack) IsChannalingAttack = true;
+                    else {
+                        IsChannalingAttack = false;
+                        StartCoroutine(BowAttack());
+                    }
+                    break;
+                case WeaponType.Pickaxe:
+                    StartCoroutine(PickaxeAttack());
+                    break;
+                case WeaponType.Tome:
+                    if (!IsChannalingAttack) IsChannalingAttack = true;
+                    else IsChannalingAttack = false;
+                    break;
             }
         }
+    }
+
+    private void ChannalAttack() {
+        // Checks if weapon is Bow -> will charge Bow Damage
+        if (IsChannalingAttack && Hotbar[selectedWeapon].weaponType == WeaponType.Bow)
+        {
+            Debug.Log("Charge Bow");
+        }
+        // Checks if weapon is Tome -> will Damage while weapon is Tome
+        if (IsChannalingAttack && Hotbar[selectedWeapon].weaponType == WeaponType.Tome)
+        {
+            Debug.Log("Charge Tome");
+            StartCoroutine(TomeAttack());
+        }
+    }
+
+    private IEnumerator AxeAttack() {
+        Debug.Log("Execute the Axe Attack");
+        CanAttack = false;
+        IsAttacking = true;
+        player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
+        yield return new WaitForSeconds(AttackingTime);
+        IsAttacking = false;
+        yield return new WaitForSeconds(AttackingCooldown);
+        enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
+        CanAttack = true;
+    }
+
+    private IEnumerator BowAttack() {
+        Debug.Log("Execute the Bow Attack");
+        CanAttack = false;
+        IsAttacking = true;
+        player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
+        yield return new WaitForSeconds(AttackingTime);
+        IsAttacking = false;
+        yield return new WaitForSeconds(AttackingCooldown);
+        enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
+        CanAttack = true;
+    }
+    private IEnumerator PickaxeAttack() {
+        Debug.Log("Execute the Pickaxe Attack");
+        CanAttack = false;
+        IsAttacking = true;
+        player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
+        yield return new WaitForSeconds(AttackingTime);
+        IsAttacking = false;
+        yield return new WaitForSeconds(AttackingCooldown);
+        enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
+        CanAttack = true;
+    }
+    private IEnumerator TomeAttack() {
+        Debug.Log("Execute the Tome Attack");
+        CanAttack = false;
+        IsAttacking = true;
+        player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
+        yield return new WaitForSeconds(AttackingTime);
+        IsAttacking = false;
+        yield return new WaitForSeconds(AttackingCooldown);
+        enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
+        CanAttack = true;
+    }
+
 
     private void OnHotbar1()
     {
-        if (player.IsOwner){
+        if (player.IsOwner && CanAttack) {
             selectedWeapon = 0;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
@@ -91,7 +176,7 @@ public class WeaponController : MonoBehaviour
 
     private void OnHotbar2()
     {
-        if (player.IsOwner){
+        if (player.IsOwner && CanAttack) {
             selectedWeapon = 1;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
@@ -100,7 +185,7 @@ public class WeaponController : MonoBehaviour
         
     private void OnHotbar3()
     {
-        if (player.IsOwner){
+        if (player.IsOwner && CanAttack) {
             selectedWeapon = 2;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
@@ -109,7 +194,7 @@ public class WeaponController : MonoBehaviour
     
     private void OnHotbar4()
     {
-        if (player.IsOwner){
+        if (player.IsOwner && CanAttack){
             selectedWeapon = 3;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
