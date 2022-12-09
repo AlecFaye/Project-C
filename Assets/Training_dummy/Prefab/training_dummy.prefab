@@ -251,7 +251,10 @@ MonoBehaviour:
   attackDamage: 0
   attackSpeed: 0
   damagePopupSpawn: {fileID: 1694451278768356906}
+<<<<<<< HEAD
   isDead: 0
+=======
+>>>>>>> main
 --- !u!1 &6774080502169825540
 GameObject:
   m_ObjectHideFlags: 0
