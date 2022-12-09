@@ -142,7 +142,7 @@ GameObject:
   - component: {fileID: 4535621108508523271}
   m_Layer: 0
   m_Name: training_dummy
-  m_TagString: Enemy
+  m_TagString: TrainingDummy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -226,7 +226,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70638908042a7cf4f9f74ee093de14ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pfWeapon: {fileID: 0}
   animator: {fileID: 5615497917579445399}
   enemy: {fileID: 4535621108508523271}
 --- !u!114 &4535621108508523271
@@ -241,6 +240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb97b2c19fcae847b6e9afca3062455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyNavMesh: {fileID: 0}
+  animator: {fileID: 0}
   maxHealth: 200
   currentHealth: 200
   armourType: 2
@@ -250,6 +251,10 @@ MonoBehaviour:
   attackDamage: 0
   attackSpeed: 0
   damagePopupSpawn: {fileID: 1694451278768356906}
+<<<<<<< HEAD
+  isDead: 0
+=======
+>>>>>>> main
 --- !u!1 &6774080502169825540
 GameObject:
   m_ObjectHideFlags: 0

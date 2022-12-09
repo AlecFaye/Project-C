@@ -8,6 +8,7 @@ TagManager:
   - CinemachineTarget
   - Enemy
   - PlayerAimCamera
+  - TrainingDummy
   layers:
   - Default
   - TransparentFX
