@@ -103,7 +103,7 @@ public class WeaponController : MonoBehaviour
                     StartCoroutine(PickaxeAttack());
                 break;
             case WeaponType.Tome:
-                if (!IsChannelingAttack) 
+                if (!IsChannelingAttack)
                     IsChannelingAttack = true;
                 else 
                     IsChannelingAttack = false;
