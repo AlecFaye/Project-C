@@ -17,7 +17,7 @@ MonoBehaviour:
   weaponName: Base Tome
   description: This is the Base for a Tome
   inventorySprite: {fileID: 0}
-  weaponModel: {fileID: 7197912442079774620, guid: 9a39a60708e685a4ea999a559273dee0, type: 3}
+  weaponModel: {fileID: 2667027181740135718, guid: 6c731cdfbf36e66418631104f20bd22e, type: 3}
   CanAttack: 1
   IsAttacking: 0
   attackingTime: 0.1

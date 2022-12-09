@@ -160,10 +160,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 7987426414551469118}
   Hotbar:
-  - {fileID: 11400000, guid: ade7439ef67604f40b849e505b3c6399, type: 2}
+  - {fileID: 11400000, guid: 54bff555f7b93c44dba4f55107aac954, type: 2}
   - {fileID: 11400000, guid: 3d525c4f7856cc54f8cead48a227dbc2, type: 2}
   - {fileID: 11400000, guid: 76115dd882159704fa65e435c39bbe90, type: 2}
-  - {fileID: 11400000, guid: 54bff555f7b93c44dba4f55107aac954, type: 2}
+  - {fileID: 11400000, guid: ade7439ef67604f40b849e505b3c6399, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   enemiesHitList: []

@@ -17,7 +17,7 @@ MonoBehaviour:
   weaponName: Base Bow
   description: This is the Base for a Bow
   inventorySprite: {fileID: 0}
-  weaponModel: {fileID: 7197912442079774620, guid: 9a39a60708e685a4ea999a559273dee0, type: 3}
+  weaponModel: {fileID: 2382075212467369068, guid: b6edddb6e3c518b47b6a79ab56ab884b, type: 3}
   CanAttack: 1
   IsAttacking: 0
   attackingTime: 0.1

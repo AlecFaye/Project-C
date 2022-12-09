@@ -1,10 +1,7 @@
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using StarterAssets;
-using QFSW.QC;
-using Unity.VisualScripting;
-using UnityEngine.InputSystem;
 using static Weapon;
 
 
@@ -39,7 +36,8 @@ public class WeaponController : MonoBehaviour
     {
         foreach (Weapon weapon in Hotbar)
         {
-            if  (weapon != null) {
+            if (weapon != null)
+            {
                 CreateWeapon(weapon);
             }
         }
@@ -77,9 +75,11 @@ public class WeaponController : MonoBehaviour
         }
     }
 
+    #region On Attack Input
     public void OnAttack()
     {
-        switch (Hotbar[selectedWeapon].weaponType) {
+        switch (Hotbar[selectedWeapon].weaponType)
+        {
             case WeaponType.None:
                 Debug.Log("Wait stop should be NONE");
                 break;
@@ -90,12 +90,14 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case WeaponType.Bow:
-                if (!IsChannelingAttack) {
+                if (!IsChannelingAttack)
+                {
                     IsChannelingAttack = true;
                     currentBowCharge = 0;
-                    InvokeRepeating("BowCharge", 0f, (1f / currentWeapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (sec/BowChargeRate)
+                    InvokeRepeating("BowCharge", 0f, (1f / currentWeapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
                 }
-                else {
+                else
+                {
                     IsChannelingAttack = false;
                     CancelInvoke("BowCharge");
                     if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
@@ -109,13 +111,15 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case WeaponType.Tome:
-                if (!IsChannelingAttack) {
+                if (!IsChannelingAttack)
+                {
                     IsChannelingAttack = true;
                     tomeChargedFor = 0;
                     CancelInvoke("TomeCharge");
-                    InvokeRepeating("TomeDrain", (1f / currentWeapon.chargeLostRate), (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeDrain(), once when the normal attack time should trigger, then once every (1 sec/TomeChargeRate)
+                    InvokeRepeating("TomeDrain", 0, (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeDrain(), instantly once, then once every (1 sec/TomeChargeRate)
                 }
-                else {
+                else
+                {
                     IsChannelingAttack = false;
                     CancelInvoke("TomeDrain");
                     InvokeRepeating("TomeCharge", 0f, (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeCharge(), instantly once, then once every (1 sec/TomeChargeRate)
@@ -123,41 +127,52 @@ public class WeaponController : MonoBehaviour
                 CanAttack = !IsChannelingAttack;
                 IsAttacking = IsChannelingAttack;
                 break;
-        }   
+        }
     }
+    #endregion
 
-    private void BowCharge() {
+    #region Charge Functions
+    private void BowCharge()
+    {
         currentBowCharge++;
         if (currentBowCharge > currentWeapon.Max_Charge) currentBowCharge = currentWeapon.Max_Charge;
         //Debug.Log("Current bow charge: " + currentBowCharge);
     }
 
-    private void TomeDrain() {
+    private void TomeDrain()
+    {
         currentTomeCharge--;
         tomeChargedFor++;
         //Debug.Log("Current tome charge: " + currentTomeCharge);
         //Debug.Log("Current tome charged for: " + tomeChargedFor);
-        if (tomeChargedFor % 5 == 0){
+        if (tomeChargedFor % 5 == 0)
+        {
             tomeChargedFor = 0;
-            StartCoroutine(TomeAttack());
+            if (player.Grounded && player.IsOwner)
+                StartCoroutine(TomeAttack());
         }
-        if (currentTomeCharge < 0) {
+        if (currentTomeCharge < 0)
+        {
             currentTomeCharge = 0;
             //Debug.Log("Out of Energy");
         }
     }
 
-    private void TomeCharge() {
+    private void TomeCharge()
+    {
         currentTomeCharge++;
-        if (currentTomeCharge >= currentWeapon.Max_Held_Charge) { 
+        if (currentTomeCharge >= currentWeapon.Max_Held_Charge)
+        {
             currentTomeCharge = currentWeapon.Max_Held_Charge;
             CancelInvoke("TomeCharge");
         }
         //Debug.Log("Current tome charge: " + currentTomeCharge);
     }
+    #endregion
 
     #region Weapon Attack Functions
-    private IEnumerator AxeAttack() {
+    private IEnumerator AxeAttack()
+    {
         Debug.Log("Execute the Axe Attack");
         CanAttack = false;
         IsAttacking = true;
@@ -168,7 +183,8 @@ public class WeaponController : MonoBehaviour
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
-    private IEnumerator BowAttack(float chargeValue) {
+    private IEnumerator BowAttack(float chargeValue)
+    {
         Debug.Log("Execute the Bow Attack");
         CanAttack = false;
         IsAttacking = true;
@@ -176,19 +192,20 @@ public class WeaponController : MonoBehaviour
         Vector3 aimDir = (player.mouseWorldPosition - player._projectileSpawn.position).normalized;
         Transform tempArrow = Instantiate(currentWeapon._arrowType.arrowModel, player._projectileSpawn.position, Quaternion.LookRotation(aimDir, Vector3.up));
         tempArrow.GetComponent<ArrowFunction>().Create(
-            currentWeapon._arrowType.travelSpeed * (currentBowCharge/100), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
-            (currentWeapon._arrowType.damageValue + (currentWeapon.damageValue * (currentBowCharge/100))) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
+            currentWeapon._arrowType.travelSpeed * (currentBowCharge / 100), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
+            (currentWeapon._arrowType.damageValue + (currentWeapon.damageValue * (currentBowCharge / 100))) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
             );
-        
+
         //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
-        
+
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
         yield return new WaitForSeconds(AttackingCooldown);
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
-    private IEnumerator PickaxeAttack() {
+    private IEnumerator PickaxeAttack()
+    {
         Debug.Log("Execute the Pickaxe Attack");
         CanAttack = false;
         IsAttacking = true;
@@ -199,9 +216,10 @@ public class WeaponController : MonoBehaviour
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
-    private IEnumerator TomeAttack() {
+    private IEnumerator TomeAttack()
+    {
         Debug.Log("Execute the Tome Attack");
-        
+
         //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
@@ -214,7 +232,8 @@ public class WeaponController : MonoBehaviour
     #region Hotbar Inputs
     private void OnHotbar1()
     {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack) {
+        if (player.IsOwner && CanAttack && !IsChannelingAttack)
+        {
             selectedWeapon = 0;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
@@ -223,25 +242,28 @@ public class WeaponController : MonoBehaviour
 
     private void OnHotbar2()
     {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack) {
+        if (player.IsOwner && CanAttack && !IsChannelingAttack)
+        {
             selectedWeapon = 1;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
         }
     }
-        
+
     private void OnHotbar3()
     {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack) {
+        if (player.IsOwner && CanAttack && !IsChannelingAttack)
+        {
             selectedWeapon = 2;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
         }
     }
-    
+
     private void OnHotbar4()
     {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack){
+        if (player.IsOwner && CanAttack && !IsChannelingAttack)
+        {
             selectedWeapon = 3;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
