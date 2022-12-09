@@ -78,36 +78,37 @@ public class WeaponController : MonoBehaviour
 
     public void OnAttack()
     {
-        if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner) {
-            switch (Hotbar[selectedWeapon].weaponType) {
-                case WeaponType.None:
-                    Debug.Log("Wait stop should be NONE");
-                    break;
-                case WeaponType.Axe:
+        switch (Hotbar[selectedWeapon].weaponType) {
+            case WeaponType.None:
+                Debug.Log("Wait stop should be NONE");
+                break;
+            case WeaponType.Axe:
+                if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
                     StartCoroutine(AxeAttack());
-                    break;
-                case WeaponType.Bow:
-                    if (!IsChannelingAttack) {
-                        IsChannelingAttack = true;
-                        currentCharge = 0;
-                    }
-                    else
-                    {
-                        IsChannelingAttack = false;
-                        StartCoroutine(BowAttack(currentCharge));
-                    }
-                    break;
-                case WeaponType.Pickaxe:
+                break;
+            case WeaponType.Bow:
+                if (!IsChannelingAttack) {
+                    IsChannelingAttack = true;
+                    currentCharge = 0;
+                }
+                else
+                {
+                    IsChannelingAttack = false;
+                    if (!CanAttack && IsAttacking && !player.Grounded && !player.IsOwner) return;
+                    StartCoroutine(BowAttack(currentCharge));
+                }
+                break;
+            case WeaponType.Pickaxe:
+                if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
                     StartCoroutine(PickaxeAttack());
-                    break;
-                case WeaponType.Tome:
-                    if (!IsChannelingAttack) 
-                        IsChannelingAttack = true;
-                    else 
-                        IsChannelingAttack = false;
-                    break;
-            }
-        }
+                break;
+            case WeaponType.Tome:
+                if (!IsChannelingAttack) 
+                    IsChannelingAttack = true;
+                else 
+                    IsChannelingAttack = false;
+                break;
+        }   
     }
 
     private void ChannelAttack() {
@@ -115,7 +116,12 @@ public class WeaponController : MonoBehaviour
         // Checks if weapon is Bow -> will charge Bow Damage
         if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Bow)
         {
-            currentCharge += currentWeapon.chargeGainedRate * Time.deltaTime;
+            if (currentCharge < currentWeapon.Max_Charge)
+                currentCharge += currentWeapon.chargeGainedRate * 10f * Time.deltaTime;
+            else
+            {
+                currentCharge = currentWeapon.Max_Charge;
+            }
             Debug.Log(currentCharge);
         }
         // Checks if weapon is Tome -> will Damage while weapon is Tome
