@@ -17,6 +17,8 @@ public class WeaponController : MonoBehaviour
 
     private int selectedWeapon = 0;
 
+    private Weapon currentWeapon;
+
     // Makes a list to keep track of which enemies were hit (enemies added by the CollisionDetection Script on weapons)
     public List<Collider> enemiesHitList = new List<Collider>();
 
@@ -28,7 +30,9 @@ public class WeaponController : MonoBehaviour
 
     // Channel Variables
     private bool IsChannelingAttack = false; // Used to check if player should be charging their attack
-    private float currentCharge;
+    private float currentBowCharge = 0;
+    private float currentTomeCharge = 100;
+    private float tomeChargedFor = 0;
 
 
     private void Start()
@@ -41,11 +45,6 @@ public class WeaponController : MonoBehaviour
         }
 
         SelectWeapon();
-    }
-
-    private void Update()
-    {
-        ChannelAttack();
     }
 
     private void CreateWeapon(Weapon weapon)
@@ -69,6 +68,8 @@ public class WeaponController : MonoBehaviour
                 IsAttacking = Hotbar[selectedWeapon].IsAttacking;
                 AttackingTime = Hotbar[selectedWeapon].attackingTime;
                 AttackingCooldown = Hotbar[selectedWeapon].attackingCooldown;
+
+                currentWeapon = Hotbar[selectedWeapon];
             }
             else
                 weapon.gameObject.SetActive(false);
@@ -91,12 +92,14 @@ public class WeaponController : MonoBehaviour
             case WeaponType.Bow:
                 if (!IsChannelingAttack) {
                     IsChannelingAttack = true;
-                    currentCharge = 0;
+                    currentBowCharge = 0;
+                    InvokeRepeating("BowCharge", 0f, (1f / currentWeapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (sec/BowChargeRate)
                 }
                 else {
                     IsChannelingAttack = false;
+                    CancelInvoke("BowCharge");
                     if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
-                        StartCoroutine(BowAttack(currentCharge));
+                        StartCoroutine(BowAttack(currentBowCharge));
                 }
                 break;
 
@@ -106,36 +109,54 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case WeaponType.Tome:
-                if (!IsChannelingAttack)
+                if (!IsChannelingAttack) {
                     IsChannelingAttack = true;
-                else 
+                    tomeChargedFor = 0;
+                    CancelInvoke("TomeCharge");
+                    InvokeRepeating("TomeDrain", (1f / currentWeapon.chargeLostRate), (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeDrain(), once when the normal attack time should trigger, then once every (1 sec/TomeChargeRate)
+                }
+                else {
                     IsChannelingAttack = false;
+                    CancelInvoke("TomeDrain");
+                    InvokeRepeating("TomeCharge", 0f, (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeCharge(), instantly once, then once every (1 sec/TomeChargeRate)
+                }
+                CanAttack = !IsChannelingAttack;
+                IsAttacking = IsChannelingAttack;
                 break;
         }   
     }
 
-    private void ChannelAttack() {
-        Weapon currentWeapon = Hotbar[selectedWeapon];
-        // Checks if weapon is Bow -> will charge Bow Damage
-        if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Bow) {
-            if (currentCharge < currentWeapon.Max_Charge)
-                currentCharge += currentWeapon.chargeGainedRate * 10f * Time.deltaTime;
-            else {
-                currentCharge = currentWeapon.Max_Charge;
-            }
-            //Debug.Log(currentCharge);
-        }
-
-        // Checks if weapon is Tome -> will Damage while weapon is Tome
-        if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome && currentCharge > 0f) {
-            
-
-                TomeAttack();
-        }
-        
+    private void BowCharge() {
+        currentBowCharge++;
+        if (currentBowCharge > currentWeapon.Max_Charge) currentBowCharge = currentWeapon.Max_Charge;
+        //Debug.Log("Current bow charge: " + currentBowCharge);
     }
 
-    #region Execute Attack Functions
+    private void TomeDrain() {
+        currentTomeCharge--;
+        tomeChargedFor++;
+        //Debug.Log("Current tome charge: " + currentTomeCharge);
+        //Debug.Log("Current tome charged for: " + tomeChargedFor);
+        if (tomeChargedFor % 5 == 0){
+            tomeChargedFor = 0;
+            StartCoroutine(TomeAttack());
+        }
+        if (currentTomeCharge < 0) {
+            currentTomeCharge = 0;
+            //Debug.Log("Out of Energy");
+        }
+    }
+
+    private void TomeCharge() {
+        currentTomeCharge++;
+        if (currentTomeCharge >= currentWeapon.Max_Held_Charge) { 
+            currentTomeCharge = currentWeapon.Max_Held_Charge;
+            CancelInvoke("TomeCharge");
+        }
+        //Debug.Log("Current tome charge: " + currentTomeCharge);
+    }
+
+    #region Weapon Attack Functions
     private IEnumerator AxeAttack() {
         Debug.Log("Execute the Axe Attack");
         CanAttack = false;
@@ -152,13 +173,11 @@ public class WeaponController : MonoBehaviour
         CanAttack = false;
         IsAttacking = true;
 
-        Weapon currentWeapon = Hotbar[selectedWeapon];
-
         Vector3 aimDir = (player.mouseWorldPosition - player._projectileSpawn.position).normalized;
         Transform tempArrow = Instantiate(currentWeapon._arrowType.arrowModel, player._projectileSpawn.position, Quaternion.LookRotation(aimDir, Vector3.up));
         tempArrow.GetComponent<ArrowFunction>().Create(
-            currentWeapon._arrowType.travelSpeed * (currentCharge/100), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
-            (currentWeapon._arrowType.damageValue + (currentWeapon.damageValue * (currentCharge/100))) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
+            currentWeapon._arrowType.travelSpeed * (currentBowCharge/100), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
+            (currentWeapon._arrowType.damageValue + (currentWeapon.damageValue * (currentBowCharge/100))) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
             );
         
         //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
@@ -182,9 +201,8 @@ public class WeaponController : MonoBehaviour
     }
     private IEnumerator TomeAttack() {
         Debug.Log("Execute the Tome Attack");
-        CanAttack = false;
-        IsAttacking = true;
-        player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
+        
+        //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
         yield return new WaitForSeconds(AttackingCooldown);

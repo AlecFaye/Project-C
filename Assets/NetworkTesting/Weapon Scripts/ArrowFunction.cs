@@ -18,7 +18,7 @@ public class ArrowFunction : MonoBehaviour
         arrowRigidbody = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         // Will set rotation and position based on anchor when added
     }

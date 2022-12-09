@@ -27,7 +27,7 @@ MonoBehaviour:
   cutLevel: 0
   Max_Charge: 100
   currentCharge: 0
-  chargeGainedRate: 5
+  chargeGainedRate: 25
   _arrowType: {fileID: 11400000, guid: adb07f8fce9fff847814ad5bfd31aec6, type: 2}
   mineLevel: 0
   Max_Held_Charge: 0
