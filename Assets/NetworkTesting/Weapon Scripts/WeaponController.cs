@@ -149,10 +149,15 @@ public class WeaponController : MonoBehaviour
         Debug.Log("Execute the Bow Attack");
         CanAttack = false;
         IsAttacking = true;
-        
+
+        Weapon currentWeapon = Hotbar[selectedWeapon];
+
         Vector3 aimDir = (player.mouseWorldPosition - player._projectileSpawn.position).normalized;
-        Transform tempArrow = Instantiate(Hotbar[selectedWeapon]._arrowType.arrowModel, player._projectileSpawn.position, Quaternion.LookRotation(aimDir, Vector3.up));
-        tempArrow.GetComponent<ArrowFunction>().Create(30f * (currentCharge/100), Hotbar[selectedWeapon].damageValue * (currentCharge/100)); // Input Proper Speed here
+        Transform tempArrow = Instantiate(currentWeapon._arrowType.arrowModel, player._projectileSpawn.position, Quaternion.LookRotation(aimDir, Vector3.up));
+        tempArrow.GetComponent<ArrowFunction>().Create(
+            currentWeapon._arrowType.travelSpeed * (currentCharge/100), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
+            (currentWeapon._arrowType.damageValue + (currentWeapon.damageValue * (currentCharge/100))) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
+            );
         
         //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
         

@@ -22,12 +22,14 @@ MonoBehaviour:
   IsAttacking: 0
   attackingTime: 0.8
   attackingCooldown: 1
-  damageValue: 0
+  damageValue: 1
   attackSpeed: 0
   cutLevel: 0
   Max_Charge: 0
+  currentCharge: 0
   chargeGainedRate: 0
   _arrowType: {fileID: 0}
   mineLevel: 0
   Max_Held_Charge: 0
+  currentHeldCharge: 0
   chargeLostRate: 0

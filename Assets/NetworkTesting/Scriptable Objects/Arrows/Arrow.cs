@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Arrow", menuName = "New Arrow")]
@@ -13,4 +14,5 @@ public class Arrow : ScriptableObject
     public float damageValue;
 
     public float travelSpeed;
+
 }

@@ -17,4 +17,4 @@ MonoBehaviour:
   inventorySprite: {fileID: 0}
   arrowModel: {fileID: 476452509363970687, guid: f0cda3c1f999aaf46bddebbf60b38f46, type: 3}
   damageValue: 1
-  travelSpeed: 1
+  travelSpeed: 150

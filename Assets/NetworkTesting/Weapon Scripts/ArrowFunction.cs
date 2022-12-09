@@ -7,6 +7,8 @@ public class ArrowFunction : MonoBehaviour
 {
     private Rigidbody arrowRigidbody;
 
+    public float damageValue;
+
     private void Awake()
     {
         arrowRigidbody = GetComponent<Rigidbody>();
@@ -14,15 +16,14 @@ public class ArrowFunction : MonoBehaviour
 
     public void Create(float speed, float damage)
     {
-        //damage += Arrow Damage
-        Debug.Log("Arrow damage: " + damage);
+        damageValue = damage;
         arrowRigidbody.velocity = transform.forward * speed;
-        
     }
 
     private IEnumerator OnTriggerEnter(Collider other)
     {
         if (other.tag != "Player" && other.tag != "Item") {
+            Debug.Log("Arrow damage: " + damageValue);
             arrowRigidbody.velocity = Vector3.zero;
             transform.SetParent(other.transform);
             yield return new WaitForSeconds(5);
