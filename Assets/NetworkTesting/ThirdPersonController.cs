@@ -120,10 +120,6 @@ namespace StarterAssets {
         [Tooltip("Checks if the player is Aiming or not")]
         [SerializeField] private bool IsAiming = false;
     
-        [Tooltip("Screen Centre Point Getter")]
-        [SerializeField] private Vector2 screenCentrePoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
-
-        [Tooltip("Mouse World Position Getter")]
         public Vector3 mouseWorldPosition = Vector3.zero;
 
         [Tooltip("Layer Mask for aiming")]
@@ -172,6 +168,9 @@ namespace StarterAssets {
         private bool _hasAnimator;
 
         private bool IsFirstPerson = false;
+
+        public Transform DebugTransform;
+
 
         private bool IsCurrentDeviceMouse
         {
@@ -293,8 +292,12 @@ namespace StarterAssets {
         // Function Used for getting position of players mouse
         private void RaycastMouse()
         {
+            Vector2 screenCentrePoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+
             Ray ray = Camera.main.ScreenPointToRay(screenCentrePoint);
+
             if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask)) {
+                DebugTransform.position = raycastHit.point;
                 mouseWorldPosition = raycastHit.point;
             }
 

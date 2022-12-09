@@ -122,7 +122,7 @@ public class WeaponController : MonoBehaviour
             {
                 currentCharge = currentWeapon.Max_Charge;
             }
-            Debug.Log(currentCharge);
+            //Debug.Log(currentCharge);
         }
         // Checks if weapon is Tome -> will Damage while weapon is Tome
         if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome)
@@ -149,10 +149,13 @@ public class WeaponController : MonoBehaviour
         Debug.Log("Execute the Bow Attack");
         CanAttack = false;
         IsAttacking = true;
+        
         Vector3 aimDir = (player.mouseWorldPosition - player._projectileSpawn.position).normalized;
         Transform tempArrow = Instantiate(Hotbar[selectedWeapon]._arrowType.arrowModel, player._projectileSpawn.position, Quaternion.LookRotation(aimDir, Vector3.up));
-        tempArrow.GetComponent<ArrowFunction>().Create(10f, Hotbar[selectedWeapon].damageValue * (currentCharge/100)); // Input Proper Speed here
+        tempArrow.GetComponent<ArrowFunction>().Create(30f * (currentCharge/100), Hotbar[selectedWeapon].damageValue * (currentCharge/100)); // Input Proper Speed here
+        
         //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
+        
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
         yield return new WaitForSeconds(AttackingCooldown);

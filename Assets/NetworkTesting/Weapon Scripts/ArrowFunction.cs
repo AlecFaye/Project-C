@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class ArrowFunction : MonoBehaviour
@@ -21,7 +22,11 @@ public class ArrowFunction : MonoBehaviour
 
     private IEnumerator OnTriggerEnter(Collider other)
     {
-        yield return new WaitForSeconds(10);
-        Destroy(this);
+        if (other.tag != "Player") {
+            arrowRigidbody.velocity = Vector3.zero;
+            transform.SetParent(other.transform);
+            yield return new WaitForSeconds(5);
+            Destroy(gameObject);
+        }
     }
 }
