@@ -12,14 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cf2a6a74806cc44a8bf28b7cba100da, type: 3}
   m_Name: BaseTome
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  weaponType: 4
   weaponName: Base Tome
   description: This is the Base for a Tome
   inventorySprite: {fileID: 0}
   weaponModel: {fileID: 7197912442079774620, guid: 9a39a60708e685a4ea999a559273dee0, type: 3}
-  damageValue: 0
-  weaponType: 4
   CanAttack: 1
   IsAttacking: 0
-  AttackingTime: 0.8
-  AttackingCooldown: 1
-  _player: {fileID: 0}
+  attackingTime: 0.8
+  attackingCooldown: 1
+  damageValue: 0
+  attackSpeed: 0
+  cutLevel: 0
+  Max_Charge: 0
+  currentCharge: 0
+  chargeGainedRate: 0
+  _arrowType: {fileID: 0}
+  mineLevel: 0
+  Max_Held_Charge: 100
+  currentHeldCharge: 100
+  chargeLostRate: 5

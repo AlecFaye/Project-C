@@ -26,8 +26,10 @@ public class WeaponController : MonoBehaviour
     private float AttackingTime;
     private float AttackingCooldown;
 
-    // Used to check if player should be charging their attack
-    private bool IsChannalingAttack = false;
+    // Channel Variables
+    private bool IsChannelingAttack = false; // Used to check if player should be charging their attack
+    private float currentCharge;
+
 
     private void Start()
     {
@@ -43,7 +45,7 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
-        ChannalAttack();
+        ChannelAttack();
     }
 
     private void CreateWeapon(Weapon weapon)
@@ -65,8 +67,8 @@ public class WeaponController : MonoBehaviour
                 weapon.gameObject.SetActive(true);
                 CanAttack = Hotbar[selectedWeapon].CanAttack;
                 IsAttacking = Hotbar[selectedWeapon].IsAttacking;
-                AttackingTime = Hotbar[selectedWeapon].AttackingTime;
-                AttackingCooldown = Hotbar[selectedWeapon].AttackingCooldown;
+                AttackingTime = Hotbar[selectedWeapon].attackingTime;
+                AttackingCooldown = Hotbar[selectedWeapon].attackingCooldown;
             }
             else
                 weapon.gameObject.SetActive(false);
@@ -82,42 +84,49 @@ public class WeaponController : MonoBehaviour
                     Debug.Log("Wait stop should be NONE");
                     break;
                 case WeaponType.Axe:
-                    Debug.Log("Execute the Attack: " + Hotbar[selectedWeapon].weaponType);
                     StartCoroutine(AxeAttack());
-                    Debug.Log("Started the Attack: " + Hotbar[selectedWeapon].weaponType); 
                     break;
                 case WeaponType.Bow:
-                    if (!IsChannalingAttack) IsChannalingAttack = true;
-                    else {
-                        IsChannalingAttack = false;
-                        StartCoroutine(BowAttack());
+                    if (!IsChannelingAttack) {
+                        IsChannelingAttack = true;
+                        currentCharge = 0;
+                    }
+                    else
+                    {
+                        IsChannelingAttack = false;
+                        StartCoroutine(BowAttack(currentCharge));
                     }
                     break;
                 case WeaponType.Pickaxe:
                     StartCoroutine(PickaxeAttack());
                     break;
                 case WeaponType.Tome:
-                    if (!IsChannalingAttack) IsChannalingAttack = true;
-                    else IsChannalingAttack = false;
+                    if (!IsChannelingAttack) 
+                        IsChannelingAttack = true;
+                    else 
+                        IsChannelingAttack = false;
                     break;
             }
         }
     }
 
-    private void ChannalAttack() {
+    private void ChannelAttack() {
+        Weapon currentWeapon = Hotbar[selectedWeapon];
         // Checks if weapon is Bow -> will charge Bow Damage
-        if (IsChannalingAttack && Hotbar[selectedWeapon].weaponType == WeaponType.Bow)
+        if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Bow)
         {
-            Debug.Log("Charge Bow");
+            currentCharge += currentWeapon.chargeGainedRate * Time.deltaTime;
+            Debug.Log(currentCharge);
         }
         // Checks if weapon is Tome -> will Damage while weapon is Tome
-        if (IsChannalingAttack && Hotbar[selectedWeapon].weaponType == WeaponType.Tome)
+        if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome)
         {
             Debug.Log("Charge Tome");
-            StartCoroutine(TomeAttack());
+            TomeAttack();
         }
     }
 
+    #region Execute Attack Functions
     private IEnumerator AxeAttack() {
         Debug.Log("Execute the Axe Attack");
         CanAttack = false;
@@ -130,11 +139,12 @@ public class WeaponController : MonoBehaviour
         CanAttack = true;
     }
 
-    private IEnumerator BowAttack() {
+    private IEnumerator BowAttack(float chargeValue) {
         Debug.Log("Execute the Bow Attack");
         CanAttack = false;
         IsAttacking = true;
-        player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
+        Debug.Log("You charged your Attack to: " + chargeValue);
+        //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
         yield return new WaitForSeconds(AttackingCooldown);
@@ -163,11 +173,12 @@ public class WeaponController : MonoBehaviour
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
+    #endregion
 
-
+    #region Hotbar Inputs
     private void OnHotbar1()
     {
-        if (player.IsOwner && CanAttack) {
+        if (player.IsOwner && CanAttack && !IsChannelingAttack) {
             selectedWeapon = 0;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
@@ -176,7 +187,7 @@ public class WeaponController : MonoBehaviour
 
     private void OnHotbar2()
     {
-        if (player.IsOwner && CanAttack) {
+        if (player.IsOwner && CanAttack && !IsChannelingAttack) {
             selectedWeapon = 1;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
@@ -185,7 +196,7 @@ public class WeaponController : MonoBehaviour
         
     private void OnHotbar3()
     {
-        if (player.IsOwner && CanAttack) {
+        if (player.IsOwner && CanAttack && !IsChannelingAttack) {
             selectedWeapon = 2;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
@@ -194,11 +205,11 @@ public class WeaponController : MonoBehaviour
     
     private void OnHotbar4()
     {
-        if (player.IsOwner && CanAttack){
+        if (player.IsOwner && CanAttack && !IsChannelingAttack){
             selectedWeapon = 3;
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
         }
     }
-
+    #endregion
 }
