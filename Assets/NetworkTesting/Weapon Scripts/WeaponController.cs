@@ -82,26 +82,29 @@ public class WeaponController : MonoBehaviour
             case WeaponType.None:
                 Debug.Log("Wait stop should be NONE");
                 break;
+
             case WeaponType.Axe:
                 if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
                     StartCoroutine(AxeAttack());
                 break;
+
             case WeaponType.Bow:
                 if (!IsChannelingAttack) {
                     IsChannelingAttack = true;
                     currentCharge = 0;
                 }
-                else
-                {
+                else {
                     IsChannelingAttack = false;
-                    if (!CanAttack && IsAttacking && !player.Grounded && !player.IsOwner) return;
-                    StartCoroutine(BowAttack(currentCharge));
+                    if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
+                        StartCoroutine(BowAttack(currentCharge));
                 }
                 break;
+
             case WeaponType.Pickaxe:
                 if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
                     StartCoroutine(PickaxeAttack());
                 break;
+
             case WeaponType.Tome:
                 if (!IsChannelingAttack)
                     IsChannelingAttack = true;
@@ -114,22 +117,22 @@ public class WeaponController : MonoBehaviour
     private void ChannelAttack() {
         Weapon currentWeapon = Hotbar[selectedWeapon];
         // Checks if weapon is Bow -> will charge Bow Damage
-        if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Bow)
-        {
+        if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Bow) {
             if (currentCharge < currentWeapon.Max_Charge)
                 currentCharge += currentWeapon.chargeGainedRate * 10f * Time.deltaTime;
-            else
-            {
+            else {
                 currentCharge = currentWeapon.Max_Charge;
             }
             //Debug.Log(currentCharge);
         }
+
         // Checks if weapon is Tome -> will Damage while weapon is Tome
-        if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome)
-        {
-            Debug.Log("Charge Tome");
-            TomeAttack();
+        if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome && currentCharge > 0f) {
+            
+
+                TomeAttack();
         }
+        
     }
 
     #region Execute Attack Functions
@@ -144,7 +147,6 @@ public class WeaponController : MonoBehaviour
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
-
     private IEnumerator BowAttack(float chargeValue) {
         Debug.Log("Execute the Bow Attack");
         CanAttack = false;

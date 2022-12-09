@@ -20,8 +20,8 @@ MonoBehaviour:
   weaponModel: {fileID: 7197912442079774620, guid: b77867408f3bc7b4ca0b969ed9960f16, type: 3}
   CanAttack: 1
   IsAttacking: 0
-  attackingTime: 0.8
-  attackingCooldown: 1
+  attackingTime: 1.6
+  attackingCooldown: 2
   damageValue: 1
   attackSpeed: 0
   cutLevel: 0
