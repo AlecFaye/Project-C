@@ -14,7 +14,10 @@ public class Deer : Enemy
 
     [SerializeField] private NavMeshAgent navMeshAgent;
     [SerializeField] private SphereCollider playerDetector;
-    
+
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
+
     private readonly float distanceToRunAway = 10.0f;
 
     private Vector3 unawareDetectorPosition = new(0, 0, 1.5f);
@@ -84,6 +87,7 @@ public class Deer : Enemy
         }
     }
 
+    #region State Functions
     private void Idle()
     {
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
@@ -109,6 +113,7 @@ public class Deer : Enemy
             navMeshAgent.SetDestination(GetRandomLocation());
         }
 
+        navMeshAgent.speed = walkSpeed;
         idleTimer -= Time.deltaTime;
 
         if (HasReachedDestination() || idleTimer < 0.0f)
@@ -137,6 +142,8 @@ public class Deer : Enemy
 
     private void Run()
     {
+        navMeshAgent.speed = runSpeed;
+
         if (!isPlayerInRange)
         {
             if (HasReachedDestination())
@@ -148,6 +155,7 @@ public class Deer : Enemy
             }
         }
     }
+    #endregion
 
     private void RunAwayFromPlayer(Vector3 destination)
     {
@@ -187,7 +195,7 @@ public class Deer : Enemy
         currentState = (EnemyState)Random.Range(0, 2 + 1);
     }
 
-    Vector3 GetRandomLocation()
+    private Vector3 GetRandomLocation()
     {
         NavMeshTriangulation navMeshData = NavMesh.CalculateTriangulation();
 

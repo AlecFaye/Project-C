@@ -2366,6 +2366,14 @@ PrefabInstance:
       propertyPath: movePositionTransform
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3795537640404581610, guid: a75589f09117d9b4a87785d3cb75d8d8, type: 3}
+      propertyPath: runSpeed
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3795537640404581610, guid: a75589f09117d9b4a87785d3cb75d8d8, type: 3}
+      propertyPath: walkSpeed
+      value: 3.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7926748589461009586, guid: a75589f09117d9b4a87785d3cb75d8d8, type: 3}
       propertyPath: m_RootOrder
       value: 0
