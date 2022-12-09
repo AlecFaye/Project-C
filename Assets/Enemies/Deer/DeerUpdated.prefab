@@ -2073,7 +2073,8 @@ MonoBehaviour:
   isDead: 0
   navMeshAgent: {fileID: 7828942975611927192}
   playerDetector: {fileID: 1813015111359773368}
-  distanceToRunAway: 10
+  walkSpeed: 3.5
+  runSpeed: 7.5
 --- !u!114 &1392335600370967290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2086,6 +2087,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70638908042a7cf4f9f74ee093de14ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pfWeapon: {fileID: 0}
   animator: {fileID: 8017317324417952356}
   enemy: {fileID: 3795537640404581610}
 --- !u!195 &7828942975611927192
