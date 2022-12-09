@@ -7,7 +7,8 @@ TagManager:
   - PlayerFollowCamera
   - CinemachineTarget
   - Enemy
-  - TrainingDummy
+  - PlayerAimCamera
+  - Item
   layers:
   - Default
   - TransparentFX

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7f6c57cdc5332c4cbd704d040ee6e1c, type: 3}
+  m_Name: BaseArrow
+  m_EditorClassIdentifier: 
+  arrowName: Base Arrow
+  description: This is a Base Arrow
+  inventorySprite: {fileID: 0}
+  arrowModel: {fileID: 476452509363970687, guid: f0cda3c1f999aaf46bddebbf60b38f46, type: 3}
+  damageValue: 1
+  travelSpeed: 150

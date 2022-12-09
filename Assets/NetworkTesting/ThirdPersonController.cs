@@ -4,6 +4,7 @@ using Unity.Netcode;
 using Cinemachine;
 using UnityEngine;
 using QFSW.QC;
+using Unity.Services.Lobbies.Models;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -94,7 +95,7 @@ namespace StarterAssets {
         // Player Camera Variables
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-        public GameObject CinemachineCameraTarget;
+        [SerializeField] private Transform cameraRoot;
 
         [Tooltip("How far in degrees can you move the camera up (1st Person Mode)")]
         public float First_TopClamp = 89.0f;
@@ -113,6 +114,20 @@ namespace StarterAssets {
 
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
+
+        // Player Aim Variables
+        [Header("Aim Variables")]
+        [Tooltip("Checks if the player is Aiming or not")]
+        [SerializeField] private bool IsAiming = false;
+    
+        public Vector3 mouseWorldPosition = Vector3.zero;
+
+        [Tooltip("Layer Mask for aiming")]
+        [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
+
+        [Tooltip("Where the projectiles will spawn")]
+        public Transform _projectileSpawn;
+
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -145,16 +160,17 @@ namespace StarterAssets {
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
-        private GameObject _followCamera;
-        private CinemachineVirtualCamera _cinemaCamera;
-        private Cinemachine3rdPersonFollow _cinemaBody;
+        private CinemachineVirtualCamera _followCamera;
+        private CinemachineVirtualCamera _aimCamera;
 
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
 
         private bool IsFirstPerson = false;
-        //private bool IsThirdPerson = true;
+
+        public Transform DebugTransform;
+
 
         private bool IsCurrentDeviceMouse
         {
@@ -175,23 +191,23 @@ namespace StarterAssets {
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-                _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera");
-                _cinemaCamera = _followCamera.GetComponent<CinemachineVirtualCamera>();
-                _cinemaBody = _followCamera.GetComponentInChildren<Cinemachine3rdPersonFollow>();
+                                
+                _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera").GetComponent<CinemachineVirtualCamera>();
+                
+                _aimCamera = GameObject.FindGameObjectWithTag("PlayerAimCamera").GetComponent<CinemachineVirtualCamera>();
             }
         }
 
         private void Start()
         {
-
-            _hasAnimator = TryGetComponent(out _animator);
-            _controller = GetComponent<CharacterController>();
-
             if (IsOwner) { // Checks if you are owner of this Player -- This will run only if your the owner of the character
+                _hasAnimator = TryGetComponent(out _animator);
+                _controller = GetComponent<CharacterController>();
                 _input = GetComponent<StarterAssetsInputs>();
-                _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y; // Grabs Something related to rotation speed
-                _cinemaCamera.m_Follow = this.transform.GetChild(0).transform; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
-                // this.transform.GetChild(0).transform ---> gets the PlayerCameraRoot from the player
+                _cinemachineTargetYaw = cameraRoot.rotation.eulerAngles.y; // Grabs Something related to rotation speed
+                
+                _followCamera.m_Follow = cameraRoot; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
+                _aimCamera.m_Follow = cameraRoot; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
             }
 
 
@@ -214,6 +230,8 @@ namespace StarterAssets {
 
             _hasAnimator = TryGetComponent(out _animator);
 
+            RaycastMouse();
+
             JumpAndGravity();
             GroundedCheck();
             Move();
@@ -227,6 +245,7 @@ namespace StarterAssets {
 
         private void AssignAnimationIDs()
         {
+            if (!IsOwner) return; // Checks if you are owner of this Player
             _animIDSpeed = Animator.StringToHash("Speed");
             _animIDGrounded = Animator.StringToHash("Grounded");
             _animIDJump = Animator.StringToHash("Jump");
@@ -266,23 +285,45 @@ namespace StarterAssets {
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, Third_BottomClamp, Third_TopClamp);
 
             // Cinemachine will follow this target
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
+            cameraRoot.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
             
         }
 
+        // Function Used for getting position of players mouse
+        private void RaycastMouse()
+        {
+            Vector2 screenCentrePoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+
+            Ray ray = Camera.main.ScreenPointToRay(screenCentrePoint);
+
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask)) {
+                DebugTransform.position = raycastHit.point;
+                mouseWorldPosition = raycastHit.point;
+            }
+
+            if (IsAiming) {
+                Vector3 worldAimTarget = mouseWorldPosition;
+                worldAimTarget.y = transform.position.y;
+                Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+
+                transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
+            }
+        }
+
         // Function used to swap between 1st person and 3rd person modes (basically edits the PlayerFollowCamera)
-        private void OnCameraSwap() {
+        private void OnCameraSwap()
+        {
             if (!IsFirstPerson) { // If not in 1st person mode - sets it to true then changes settings to 1st person mode
                 IsFirstPerson = true;
 
-                _cinemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.1f);
-                _cinemaBody.CameraDistance = (0f);
+                //_inemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.1f);
+                //_inemaBody.CameraDistance = (0f);
             }
             else { // Else swaps back to 3rd person mode
                 IsFirstPerson = false;
 
-                _cinemaBody.ShoulderOffset = new Vector3(1f, 0f, 0f);
-                _cinemaBody.CameraDistance = (4f);
+                //_inemaBody.ShoulderOffset = new Vector3(1f, 0f, 0f);
+                //_inemaBody.CameraDistance = (4f);
             }
         }
 
@@ -290,9 +331,6 @@ namespace StarterAssets {
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
-
-            // Hardcoded camera movement so that the characters head doesn't appear infront of the camera
-            if (_input.sprint && IsFirstPerson) _cinemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.4f);
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -335,13 +373,13 @@ namespace StarterAssets {
             // if there is a move input rotate player when the player is moving
             if (_input.move != Vector2.zero)
             {
-                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                  _mainCamera.transform.eulerAngles.y;
+                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
 
-                // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                if (!IsAiming) 
+                    // rotate to face input direction relative to camera position
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
 
@@ -451,6 +489,8 @@ namespace StarterAssets {
 
         private void OnFootstep(AnimationEvent animationEvent)
         {
+            if (!IsOwner) return; // Checks if you are owner of this Player
+
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 if (FootstepAudioClips.Length > 0)
@@ -463,6 +503,8 @@ namespace StarterAssets {
 
         private void OnLand(AnimationEvent animationEvent)
         {
+            if (!IsOwner) return; // Checks if you are owner of this Player
+
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
@@ -486,9 +528,23 @@ namespace StarterAssets {
             }
         }
 
-        // Quantum Commands
-        //====================================================================================================================================================
+        public void OnAim()
+        {
+            if (!IsAiming)
+            {
+                IsAiming = true;
+                _animator.SetTrigger("Aim");
+            }
+            else
+                IsAiming = false;
 
+            _animator.SetBool("Aiming", IsAiming);
+            _aimCamera.gameObject.SetActive(IsAiming);
+            _followCamera.gameObject.SetActive(!IsAiming);
+
+        }
+
+        #region Quantum Commands
         [Command("Player.Set_Move_Speed")]
         private void SetMoveSpeed(float newValue) {
             MoveSpeed = newValue;
@@ -535,5 +591,6 @@ namespace StarterAssets {
             Debug.Log("Jump CD Timer: " + JumpTimeout);
             Debug.Log("Fall Start Timer: " + FallTimeout);
         }
+        #endregion
     }
 }
