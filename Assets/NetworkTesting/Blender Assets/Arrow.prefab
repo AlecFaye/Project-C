@@ -9,9 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 476452509363970687}
+  - component: {fileID: 1389380344430370730}
   - component: {fileID: 3293515974215638626}
+  - component: {fileID: 2233682346053688820}
   m_Layer: 2
-  m_Name: Donut
+  m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,6 +35,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1389380344430370730
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880679454569847953}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!65 &3293515974215638626
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -46,6 +64,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.18522567, y: 0.0796977, z: 0.1680468}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2233682346053688820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880679454569847953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bdc74f33ab9cfd4ea842ab71938b4ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6400893625242055075
 PrefabInstance:
   m_ObjectHideFlags: 0

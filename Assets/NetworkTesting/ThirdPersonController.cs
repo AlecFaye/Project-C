@@ -118,16 +118,19 @@ namespace StarterAssets {
         // Player Aim Variables
         [Header("Aim Variables")]
         [Tooltip("Checks if the player is Aiming or not")]
-        private bool IsAiming = false;
+        [SerializeField] private bool IsAiming = false;
     
         [Tooltip("Screen Centre Point Getter")]
-        private Vector2 screenCentrePoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        [SerializeField] private Vector2 screenCentrePoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
 
         [Tooltip("Mouse World Position Getter")]
-        private Vector3 mouseWorldPosition = Vector3.zero;
+        public Vector3 mouseWorldPosition = Vector3.zero;
 
         [Tooltip("Layer Mask for aiming")]
         [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
+
+        [Tooltip("Where the projectiles will spawn")]
+        public Transform _projectileSpawn;
 
 
         // cinemachine
@@ -538,9 +541,7 @@ namespace StarterAssets {
 
         }
 
-        // Quantum Commands
-        //====================================================================================================================================================
-
+        #region Quantum Commands
         [Command("Player.Set_Move_Speed")]
         private void SetMoveSpeed(float newValue) {
             MoveSpeed = newValue;
@@ -587,5 +588,6 @@ namespace StarterAssets {
             Debug.Log("Jump CD Timer: " + JumpTimeout);
             Debug.Log("Fall Start Timer: " + FallTimeout);
         }
+        #endregion
     }
 }
