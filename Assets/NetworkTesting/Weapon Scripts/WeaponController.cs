@@ -48,11 +48,8 @@ public class WeaponController : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        //Debug.Log("Player projectile Spawn: " + player._projectileSpawn.position);
-        //Debug.Log("Player Mouse: " + player.mouseWorldPosition);
         if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome) {
            lineRenderer.SetPositions(new Vector3[] { player._projectileSpawn.position, player.mouseWorldPosition});
-
         }
     }
     private void CreateWeapon(Weapon weapon)
