@@ -47,7 +47,7 @@ public class WeaponController : MonoBehaviour
         SelectWeapon();
     }
 
-    private void FixedUpdate() {
+    private void Update() {
         if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome) {
            lineRenderer.SetPositions(new Vector3[] { player._projectileSpawn.position, player.mouseWorldPosition});
         }
@@ -131,6 +131,7 @@ public class WeaponController : MonoBehaviour
                 else
                 {
                     IsChannelingAttack = false;
+                    lineRenderer.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
                     CancelInvoke("TomeDrain");
                     InvokeRepeating("TomeCharge", 0f, (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeCharge(), instantly once, then once every (1 sec/TomeChargeRate)
                 }
