@@ -31,6 +31,8 @@ public class WeaponController : MonoBehaviour
     private float currentTomeCharge = 100;
     private float tomeChargedFor = 0;
 
+    [SerializeField] private LineRenderer lineRenderer;
+
 
     private void Start()
     {
@@ -45,6 +47,14 @@ public class WeaponController : MonoBehaviour
         SelectWeapon();
     }
 
+    private void FixedUpdate() {
+        //Debug.Log("Player projectile Spawn: " + player._projectileSpawn.position);
+        //Debug.Log("Player Mouse: " + player.mouseWorldPosition);
+        if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome) {
+           lineRenderer.SetPositions(new Vector3[] { player._projectileSpawn.position, player.mouseWorldPosition});
+
+        }
+    }
     private void CreateWeapon(Weapon weapon)
     {
         Transform tempWeapon = Instantiate(weapon.weaponModel, Vector3.zero, Quaternion.identity); // Creates the weapon in the hotbar slot
@@ -57,17 +67,18 @@ public class WeaponController : MonoBehaviour
     private void SelectWeapon()
     {
         int i = 0;
-        foreach (Transform weapon in transform)
+        foreach (Transform weapon in this.transform)
         {
             if (i == selectedWeapon)
             {
                 weapon.gameObject.SetActive(true);
-                CanAttack = Hotbar[selectedWeapon].CanAttack;
-                IsAttacking = Hotbar[selectedWeapon].IsAttacking;
-                AttackingTime = Hotbar[selectedWeapon].attackingTime;
-                AttackingCooldown = Hotbar[selectedWeapon].attackingCooldown;
-
                 currentWeapon = Hotbar[selectedWeapon];
+                Transform currentWeaponObject = weapon;
+
+                CanAttack = currentWeapon.CanAttack;
+                IsAttacking = currentWeapon.IsAttacking;
+                AttackingTime = currentWeapon.attackingTime;
+                AttackingCooldown = currentWeapon.attackingCooldown;
             }
             else
                 weapon.gameObject.SetActive(false);
@@ -117,6 +128,8 @@ public class WeaponController : MonoBehaviour
                     tomeChargedFor = 0;
                     CancelInvoke("TomeCharge");
                     InvokeRepeating("TomeDrain", 0, (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeDrain(), instantly once, then once every (1 sec/TomeChargeRate)
+
+                    //currentWeapon.weaponModel.GetComponent<TomeBeamFunction>().Create(player._projectileSpawn.position); // Sets beam base at projectile spawn
                 }
                 else
                 {

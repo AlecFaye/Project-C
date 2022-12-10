@@ -36,7 +36,7 @@ public class ArrowFunction : MonoBehaviour
             if (other.tag != "Player" && other.tag != "Item")
             {
                 IsTarget = false;
-                Debug.Log("Arrow damage: " + damageValue);
+                //Debug.Log("Arrow damage: " + damageValue);
                 arrowRigidbody.velocity = Vector3.zero;
                 transform.SetParent(other.transform);
 
