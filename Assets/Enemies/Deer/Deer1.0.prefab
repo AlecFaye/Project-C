@@ -1865,15 +1865,16 @@ GameObject:
   - component: {fileID: 8017317324417952356}
   - component: {fileID: 8065111012117769886}
   - component: {fileID: 8013582284737096728}
-  - component: {fileID: 8036159754619663414}
-  - component: {fileID: 3795537640404581610}
-  - component: {fileID: 1392335600370967290}
+  - component: {fileID: 4080168725934241342}
   - component: {fileID: 7828942975611927192}
-  - component: {fileID: 1813015111359773368}
-  - component: {fileID: 5030302420266548136}
-  m_Layer: 0
-  m_Name: DeerUpdated
-  m_TagString: Enemy
+  - component: {fileID: 1392335600370967290}
+  - component: {fileID: 6436172925075518779}
+  - component: {fileID: 7646705840927912351}
+  - component: {fileID: 7180954480817514971}
+  - component: {fileID: 3547661019507704100}
+  m_Layer: 7
+  m_Name: Deer1.0
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2030,7 +2031,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &8036159754619663414
+--- !u!114 &4080168725934241342
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2042,39 +2043,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ca804d6b18f6d4db4ebe14203336f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animalSound: {fileID: 0}
+  animalSound: {fileID: 8300000, guid: 9f5591bf0410147a3ab3dd80de160b1b, type: 3}
   walking: {fileID: 8300000, guid: b8d66fbf2a4c44b208b86bdcaf684983, type: 3}
-  eating: {fileID: 8300000, guid: 39081a8f8fcfc43319c8f687e415712a, type: 3}
-  running: {fileID: 0}
+  eating: {fileID: 0}
+  running: {fileID: 8300000, guid: b8d66fbf2a4c44b208b86bdcaf684983, type: 3}
   attacking: {fileID: 0}
   death: {fileID: 0}
   sleeping: {fileID: 0}
---- !u!114 &3795537640404581610
-MonoBehaviour:
+--- !u!195 &7828942975611927192
+NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7932520119218870018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 157f588e9de283d4c85e9d798008d975, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 8017317324417952356}
-  maxHealth: 1
-  currentHealth: 1
-  armourType: 0
-  weaknessType: 2
-  weaknessDamageMultiplier: 1.5
-  attackDamage: 0
-  attackSpeed: 0
-  damagePopupSpawn: {fileID: 726330808718695171}
-  isDead: 0
-  navMeshAgent: {fileID: 7828942975611927192}
-  playerDetector: {fileID: 1813015111359773368}
-  walkSpeed: 3.5
-  runSpeed: 7.5
+  m_Enabled: 0
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 7.5
+  m_Acceleration: 12
+  avoidancePriority: 50
+  m_AngularSpeed: 200
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: -0.04
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!114 &1392335600370967290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2089,44 +2086,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pfWeapon: {fileID: 0}
   animator: {fileID: 8017317324417952356}
-  enemy: {fileID: 3795537640404581610}
---- !u!195 &7828942975611927192
-NavMeshAgent:
+  enemy: {fileID: 0}
+--- !u!114 &6436172925075518779
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7932520119218870018}
   m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 7.5
-  m_Acceleration: 12
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: -0.04
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!135 &1813015111359773368
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ac0514647e218499480eee9cbeb0f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateRate: 0.1
+--- !u!114 &7646705840927912351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7932520119218870018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb97b2c19fcae847b6e9afca3062455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movement: {fileID: 6436172925075518779}
+  animator: {fileID: 8017317324417952356}
+  agent: {fileID: 7828942975611927192}
+  enemyScriptableObject: {fileID: 11400000, guid: 968f29f8fd2bc654485883917f69e0af, type: 2}
+  attackRadius: {fileID: 3547661019507704100}
+  currentHealth: 1
+  maxHealth: 1
+  armourType: 2
+  weaknessTypes: 03000000
+  weaknessDamageMultiplier: 1.5
+  attackDamage: 0
+  attackDelay: 0
+  damagePopupSpawn: {fileID: 726330808718695171}
+--- !u!135 &7180954480817514971
 SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7932520119218870018}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 5
-  m_Center: {x: 0, y: 0, z: 2.5}
---- !u!65 &5030302420266548136
-BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2136,8 +2136,23 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.5, y: 2, z: 2}
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3547661019507704100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7932520119218870018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c7897fe295db7e4da56c5de40170403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sphereCollider: {fileID: 7180954480817514971}
+  damage: 10
+  attackDelay: 0.5
 --- !u!1001 &3963383755658533873
 PrefabInstance:
   m_ObjectHideFlags: 0

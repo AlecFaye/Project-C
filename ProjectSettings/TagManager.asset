@@ -6,7 +6,6 @@ TagManager:
   tags:
   - PlayerFollowCamera
   - CinemachineTarget
-  - Enemy
   - TrainingDummy
   layers:
   - Default
@@ -15,10 +14,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - EnemyAttackRadius
+  - EnemyBullet
   - 
   - 
   - 
