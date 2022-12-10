@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CollisionDetected : MonoBehaviour
 {
-    [SerializeField] private Weapon pfWeapon;
+    private Weapon pfWeapon;
     //[SerializeField] private Weapon.WeaponType weaponType = Weapon.WeaponType;
     
 
@@ -16,6 +16,7 @@ public class CollisionDetected : MonoBehaviour
 
         if (enemy)
             enemy.TakeDamage(damageDealt, weaponType);
+
     }
 }
 

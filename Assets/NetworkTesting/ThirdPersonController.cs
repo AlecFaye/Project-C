@@ -169,7 +169,10 @@ namespace StarterAssets {
 
         private bool IsFirstPerson = false;
 
-        public Transform DebugTransform;
+        // Debug Transforms
+        public Transform DebugTransform; 
+        
+        public Transform WeaponContoller;
 
 
         private bool IsCurrentDeviceMouse
@@ -307,23 +310,6 @@ namespace StarterAssets {
                 Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
 
                 transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
-            }
-        }
-
-        // Function used to swap between 1st person and 3rd person modes (basically edits the PlayerFollowCamera)
-        private void OnCameraSwap()
-        {
-            if (!IsFirstPerson) { // If not in 1st person mode - sets it to true then changes settings to 1st person mode
-                IsFirstPerson = true;
-
-                //_inemaBody.ShoulderOffset = new Vector3(0f, 0.15f, 0.1f);
-                //_inemaBody.CameraDistance = (0f);
-            }
-            else { // Else swaps back to 3rd person mode
-                IsFirstPerson = false;
-
-                //_inemaBody.ShoulderOffset = new Vector3(1f, 0f, 0f);
-                //_inemaBody.CameraDistance = (4f);
             }
         }
 
@@ -533,7 +519,7 @@ namespace StarterAssets {
             if (!IsAiming)
             {
                 IsAiming = true;
-                _animator.SetTrigger("Aim");
+                //_animator.SetTrigger("Aim");
             }
             else
                 IsAiming = false;
