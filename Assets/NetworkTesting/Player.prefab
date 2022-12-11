@@ -169,6 +169,7 @@ MonoBehaviour:
   enemiesHitList: []
   IsAttacking: 0
   lineRenderer: {fileID: 8439985757110308094}
+  beamHitbox: {fileID: 1096016805814542382, guid: b6d0d382e86eb45418a1cfc90ee9e814, type: 3}
 --- !u!1 &6712820590810972425
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,7 +211,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6050097655470985609}
   - component: {fileID: 8439985757110308094}
-  m_Layer: 0
+  - component: {fileID: 3052329698358216071}
+  - component: {fileID: 1353911796758145049}
+  m_Layer: 2
   m_Name: LineRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,13 +287,22 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.11971855
+        value: 0.30096436
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0.13107076
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -331,6 +343,34 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!64 &3052329698358216071
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6968059397588910500}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
+--- !u!114 &1353911796758145049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6968059397588910500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e126bbccdf06c49a74ba47f47b6a2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon: {fileID: 0}
+  weaponController: {fileID: 6595214371002474586}
 --- !u!1 &7368794223040343742
 GameObject:
   m_ObjectHideFlags: 0

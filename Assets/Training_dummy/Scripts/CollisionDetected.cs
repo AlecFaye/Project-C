@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class CollisionDetected : MonoBehaviour
 {
-    private Weapon pfWeapon;
-    //[SerializeField] private Weapon.WeaponType weaponType = Weapon.WeaponType;
-    
-
     [SerializeField] private Enemy enemy;
 
     // Triggers when CollisionDetection script detects the enemy 
@@ -16,6 +12,10 @@ public class CollisionDetected : MonoBehaviour
 
         if (enemy)
             enemy.TakeDamage(damageDealt, weaponType);
+
+        if (this.gameObject.tag == "Enemy") {
+            Debug.Log(damageDealt);
+        }
 
     }
 }

@@ -33,6 +33,7 @@ public class WeaponController : MonoBehaviour
     private float tomeChargedFor = 0;
 
     [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private Transform beamHitbox;
 
 
     private void Start()
@@ -98,14 +99,12 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case WeaponType.Bow:
-                if (!IsChannelingAttack)
-                {
+                if (!IsChannelingAttack) {
                     IsChannelingAttack = true;
                     currentBowCharge = 0;
                     InvokeRepeating("BowCharge", 0f, (1f / currentWeapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
                 }
-                else
-                {
+                else {
                     IsChannelingAttack = false;
                     CancelInvoke("BowCharge");
                     if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
@@ -119,17 +118,16 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case WeaponType.Tome:
-                if (!IsChannelingAttack)
-                {
+                if (!IsChannelingAttack) {
+                    lineRenderer.GetComponent<CollisionDetection>().weapon = currentWeapon;
+                    
                     IsChannelingAttack = true;
                     tomeChargedFor = 0;
+                    
                     CancelInvoke("TomeCharge");
                     InvokeRepeating("TomeDrain", 0, (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeDrain(), instantly once, then once every (1 sec/TomeChargeRate)
-
-                    //currentWeapon.weaponModel.GetComponent<TomeBeamFunction>().Create(player._projectileSpawn.position); // Sets beam base at projectile spawn
                 }
-                else
-                {
+                else {
                     IsChannelingAttack = false;
                     lineRenderer.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
                     CancelInvoke("TomeDrain");
@@ -202,7 +200,7 @@ public class WeaponController : MonoBehaviour
 
         Vector3 aimDir = (player.mouseWorldPosition - player._projectileSpawn.position).normalized;
         Transform tempArrow = Instantiate(currentWeapon._arrowType.arrowModel, player._projectileSpawn.position, Quaternion.LookRotation(aimDir, Vector3.up));
-        tempArrow.GetComponent<ArrowFunction>().Create(
+        tempArrow.GetComponent<BeamFunction>().Create(
             currentWeapon._arrowType.travelSpeed * (currentBowCharge / 100), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
             (currentWeapon._arrowType.damageValue + (currentWeapon.damageValue * (currentBowCharge / 100))) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
             );
@@ -227,9 +225,23 @@ public class WeaponController : MonoBehaviour
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
-    private IEnumerator TomeAttack()
-    {
+    private IEnumerator TomeAttack() {
         Debug.Log("Execute the Tome Attack");
+        Vector3 point0 = player._projectileSpawn.position;
+        Vector3 point1 = player.mouseWorldPosition;
+
+
+        //RaycastHit[] raycastHits = Physics.RaycastAll(player._projectileSpawn.position, (player._projectileSpawn.position - player.mouseWorldPosition).normalized, Vector3.Distance(player._projectileSpawn.position, player.mouseWorldPosition));
+        Vector3 aimDir = (point1 - point0).normalized;
+        Transform tempBeam = Instantiate(beamHitbox, point0, Quaternion.LookRotation(aimDir, Vector3.up));
+
+        tempBeam.position = Vector3.Lerp(point0, point1, 0.5f);
+        tempBeam.localScale = new Vector3(1f, 1f, Vector3.Distance(point0, point1) * 5f);
+
+        //tempArrow.GetComponent<BeamFunction>().Create(
+        //    currentWeapon._arrowType.travelSpeed * (currentBowCharge / 100), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
+        //    (currentWeapon._arrowType.damageValue + (currentWeapon.damageValue * (currentBowCharge / 100))) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
+        //    );
 
         //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
         yield return new WaitForSeconds(AttackingTime);

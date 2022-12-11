@@ -167,8 +167,6 @@ namespace StarterAssets {
 
         private bool _hasAnimator;
 
-        private bool IsFirstPerson = false;
-
         // Debug Transforms
         public Transform DebugTransform; 
         

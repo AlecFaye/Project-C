@@ -399,7 +399,7 @@ GameObject:
   - component: {fileID: 2650818998789002924}
   m_Layer: 0
   m_Name: HandPostiion
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
