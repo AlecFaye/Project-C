@@ -1,6 +1,7 @@
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Weapon;
 
@@ -54,10 +55,9 @@ public class WeaponController : MonoBehaviour
     }
     private void CreateWeapon(Weapon weapon)
     {
-        Transform tempWeapon = Instantiate(weapon.weaponModel, Vector3.zero, Quaternion.identity); // Creates the weapon in the hotbar slot
+        Transform tempWeapon = Instantiate(weapon.weaponModel, this.transform.position, Quaternion.identity); // Creates the weapon in the hotbar slot
         tempWeapon.transform.SetParent(this.transform); // Sets this gameobject to the parent of the 
-        tempWeapon.transform.localPosition = new Vector3(0.034f, -0.046f, 0.2f); // Sets position to hand
-        tempWeapon.transform.localRotation = Quaternion.Euler(15f, -90f, 100f); // Sets rotation to hand
+        tempWeapon.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f); // Sets rotation to hand
         weapon._player = player;
     }
 
@@ -241,44 +241,18 @@ public class WeaponController : MonoBehaviour
     #endregion
 
     #region Hotbar Inputs
-    private void OnHotbar1()
-    {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack)
-        {
-            selectedWeapon = 0;
-            SelectWeapon();
-            Debug.Log(Hotbar[selectedWeapon].weaponName);
-        }
-    }
 
-    private void OnHotbar2()
-    {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack)
-        {
-            selectedWeapon = 1;
+    private void SwitchHotBar(int hotbarNum) {
+        if (player.IsOwner && CanAttack && !IsChannelingAttack) {
+            selectedWeapon = hotbarNum - 1; // - 1 for arrary starting at 0
             SelectWeapon();
             Debug.Log(Hotbar[selectedWeapon].weaponName);
         }
     }
-
-    private void OnHotbar3()
-    {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack)
-        {
-            selectedWeapon = 2;
-            SelectWeapon();
-            Debug.Log(Hotbar[selectedWeapon].weaponName);
-        }
-    }
-
-    private void OnHotbar4()
-    {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack)
-        {
-            selectedWeapon = 3;
-            SelectWeapon();
-            Debug.Log(Hotbar[selectedWeapon].weaponName);
-        }
-    }
+    private void OnHotbar1() { SwitchHotBar(1); }
+    private void OnHotbar2() { SwitchHotBar(2); }
+    private void OnHotbar3() { SwitchHotBar(3); }
+    private void OnHotbar4() { SwitchHotBar(4); }
+    private void OnHotbar5() { SwitchHotBar(5); }
     #endregion
 }
