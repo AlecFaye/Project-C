@@ -31,6 +31,7 @@ public class ArrowFunction : MonoBehaviour
 
     private IEnumerator OnTriggerEnter(Collider other)
     {
+        Debug.Log("Arrow Hit");
         if (!IsTarget)
         {
             if (other.tag != "Player" && other.tag != "Item")
