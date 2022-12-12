@@ -32,33 +32,25 @@ public class ArrowFunction : MonoBehaviour
     private IEnumerator OnTriggerEnter(Collider other)
     {
         Debug.Log("Arrow Hit");
-        if (!IsTarget)
-        {
-            if (other.tag != "Player" && other.tag != "Item")
-            {
-                IsTarget = false;
-                //Debug.Log("Arrow damage: " + damageValue);
-                arrowRigidbody.velocity = Vector3.zero;
-                transform.SetParent(other.transform);
+        if (other.CompareTag("Enemy") && !IsTarget) {
+            CollisionDetected collisionDetected = other.GetComponent<CollisionDetected>();
 
-                CreateAnchor(other);
+            CreateAnchor(other);
 
-                // Triggers if the enemy has the enemy tag
-                if (other.CompareTag("Enemy")) {
-                    CollisionDetected collisionDetected = other.GetComponent<CollisionDetected>();
+            // Triggers if the enemy has the enemy tag
+            if (collisionDetected)
+                collisionDetected.Hit(damageValue, Weapon.WeaponType.Bow); // Runs the funtion "Hit" in the other objects CollisionDetected script
 
-                    if (collisionDetected)
-                        collisionDetected.Hit(damageValue, Weapon.WeaponType.Bow); // Runs the funtion "Hit" in the other objects CollisionDetected script
-                }
-
-                yield return new WaitForSeconds(5);
-                Destroy(gameObject);
-            }
+            yield return new WaitForSeconds(5);
+            Destroy(gameObject);
         }
+        
     }
 
     // Will be used to attach arrow to target
     private void CreateAnchor(Collider other) {
-        //other.gameObject
+        IsTarget = false;
+        arrowRigidbody.velocity = Vector3.zero;
+        transform.SetParent(other.transform);
     }
 }

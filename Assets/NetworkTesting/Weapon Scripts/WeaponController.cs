@@ -119,11 +119,8 @@ public class WeaponController : MonoBehaviour
 
             case WeaponType.Tome:
                 if (!IsChannelingAttack) {
-                    lineRenderer.GetComponent<CollisionDetection>().weapon = currentWeapon;
-                    
                     IsChannelingAttack = true;
                     tomeChargedFor = 0;
-                    
                     CancelInvoke("TomeCharge");
                     InvokeRepeating("TomeDrain", 0, (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeDrain(), instantly once, then once every (1 sec/TomeChargeRate)
                 }
@@ -182,7 +179,7 @@ public class WeaponController : MonoBehaviour
     #region Weapon Attack Functions
     private IEnumerator AxeAttack()
     {
-        Debug.Log("Execute the Axe Attack");
+        //Debug.Log("Execute the Axe Attack");
         CanAttack = false;
         IsAttacking = true;
         player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
@@ -194,7 +191,7 @@ public class WeaponController : MonoBehaviour
     }
     private IEnumerator BowAttack(float chargeValue)
     {
-        Debug.Log("Execute the Bow Attack");
+        //Debug.Log("Execute the Bow Attack");
         CanAttack = false;
         IsAttacking = true;
 
@@ -215,7 +212,7 @@ public class WeaponController : MonoBehaviour
     }
     private IEnumerator PickaxeAttack()
     {
-        Debug.Log("Execute the Pickaxe Attack");
+        //Debug.Log("Execute the Pickaxe Attack");
         CanAttack = false;
         IsAttacking = true;
         player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
@@ -226,28 +223,20 @@ public class WeaponController : MonoBehaviour
         CanAttack = true;
     }
     private IEnumerator TomeAttack() {
-        Debug.Log("Execute the Tome Attack");
+        //Debug.Log("Execute the Tome Attack");
         Vector3 point0 = player._projectileSpawn.position;
         Vector3 point1 = player.mouseWorldPosition;
-
-
-        //RaycastHit[] raycastHits = Physics.RaycastAll(player._projectileSpawn.position, (player._projectileSpawn.position - player.mouseWorldPosition).normalized, Vector3.Distance(player._projectileSpawn.position, player.mouseWorldPosition));
         Vector3 aimDir = (point1 - point0).normalized;
         Transform tempBeam = Instantiate(beamHitbox, point0, Quaternion.LookRotation(aimDir, Vector3.up));
-
+        
+        tempBeam.GetComponent<BeamFunction>().StartCoroutine("Create", currentWeapon.damageValue);
         tempBeam.position = Vector3.Lerp(point0, point1, 0.5f);
-        tempBeam.localScale = new Vector3(1f, 1f, Vector3.Distance(point0, point1) * 5f);
-
-        //tempArrow.GetComponent<BeamFunction>().Create(
-        //    currentWeapon._arrowType.travelSpeed * (currentBowCharge / 100), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
-        //    (currentWeapon._arrowType.damageValue + (currentWeapon.damageValue * (currentBowCharge / 100))) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
-        //    );
+        tempBeam.localScale = new Vector3(0.1f, 0.1f, Vector3.Distance(point0, point1));
 
         //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
         yield return new WaitForSeconds(AttackingCooldown);
-        enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
     #endregion
@@ -258,7 +247,7 @@ public class WeaponController : MonoBehaviour
         if (player.IsOwner && CanAttack && !IsChannelingAttack) {
             selectedWeapon = hotbarNum - 1; // - 1 for arrary starting at 0
             SelectWeapon();
-            Debug.Log(Hotbar[selectedWeapon].weaponName);
+            //Debug.Log(Hotbar[selectedWeapon].weaponName);
         }
     }
     private void OnHotbar1() { SwitchHotBar(1); }

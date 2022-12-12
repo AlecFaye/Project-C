@@ -169,7 +169,7 @@ MonoBehaviour:
   enemiesHitList: []
   IsAttacking: 0
   lineRenderer: {fileID: 8439985757110308094}
-  beamHitbox: {fileID: 1096016805814542382, guid: b6d0d382e86eb45418a1cfc90ee9e814, type: 3}
+  beamHitbox: {fileID: 3378389754504443402, guid: 847937ec3d6d3354bafae8189e67888a, type: 3}
 --- !u!1 &6712820590810972425
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,7 +211,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6050097655470985609}
   - component: {fileID: 8439985757110308094}
-  - component: {fileID: 3052329698358216071}
   - component: {fileID: 1353911796758145049}
   m_Layer: 2
   m_Name: LineRenderer
@@ -343,20 +342,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!64 &3052329698358216071
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6968059397588910500}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!114 &1353911796758145049
 MonoBehaviour:
   m_ObjectHideFlags: 0

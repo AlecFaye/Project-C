@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollisionDetection : MonoBehaviour
+public class CollisionFunction : MonoBehaviour
 {
 
     public Weapon weapon;
@@ -22,8 +22,7 @@ public class CollisionDetection : MonoBehaviour
         Debug.Log("Collided obect's name: " + other.name);
 
         // Checks if it collided with an enemy ====== Checks if the player should be attacking rn (done in weapon controller) ====== Checks if the enemy was already hit by this attack
-        if (other.CompareTag("Enemy") && weaponController.GetComponent<WeaponController>().IsAttacking && !weaponController.enemiesHitList.Contains(other))
-        {
+        if (other.CompareTag("Enemy") && weaponController.GetComponent<WeaponController>().IsAttacking && !weaponController.enemiesHitList.Contains(other)) {
             CollisionDetected collisionDetected = other.GetComponent<CollisionDetected>();
 
             if (collisionDetected) {
