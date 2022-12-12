@@ -16,9 +16,7 @@ public class BeamFunction : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other)
-    {
-        foreach (Collider enemy in enemiesHitList) { Debug.Log(enemy.name); }
-        
+    {   
         if (other.CompareTag("Enemy") && !enemiesHitList.Contains(other)) {
             Debug.Log("You did " + damageValue + " damage to " + other.name);
             CollisionDetected collisionDetected = other.GetComponent<CollisionDetected>();
