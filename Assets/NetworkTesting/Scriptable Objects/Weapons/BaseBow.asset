@@ -22,7 +22,7 @@ MonoBehaviour:
   IsAttacking: 0
   attackingTime: 0.1
   attackingCooldown: 0.3
-  damageValue: 1
+  damageValue: 4
   attackSpeed: 0
   cutLevel: 0
   Max_Charge: 100

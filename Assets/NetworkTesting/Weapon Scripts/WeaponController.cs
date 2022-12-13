@@ -1,6 +1,7 @@
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Weapon;
 
@@ -32,6 +33,7 @@ public class WeaponController : MonoBehaviour
     private float tomeChargedFor = 0;
 
     [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private Transform beamHitbox;
 
 
     private void Start()
@@ -54,10 +56,9 @@ public class WeaponController : MonoBehaviour
     }
     private void CreateWeapon(Weapon weapon)
     {
-        Transform tempWeapon = Instantiate(weapon.weaponModel, Vector3.zero, Quaternion.identity); // Creates the weapon in the hotbar slot
+        Transform tempWeapon = Instantiate(weapon.weaponModel, this.transform.position, Quaternion.identity); // Creates the weapon in the hotbar slot
         tempWeapon.transform.SetParent(this.transform); // Sets this gameobject to the parent of the 
-        tempWeapon.transform.localPosition = new Vector3(0.034f, -0.046f, 0.2f); // Sets position to hand
-        tempWeapon.transform.localRotation = Quaternion.Euler(15f, -90f, 100f); // Sets rotation to hand
+        tempWeapon.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f); // Sets rotation to hand
         weapon._player = player;
     }
 
@@ -98,14 +99,12 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case WeaponType.Bow:
-                if (!IsChannelingAttack)
-                {
+                if (!IsChannelingAttack) {
                     IsChannelingAttack = true;
                     currentBowCharge = 0;
                     InvokeRepeating("BowCharge", 0f, (1f / currentWeapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
                 }
-                else
-                {
+                else {
                     IsChannelingAttack = false;
                     CancelInvoke("BowCharge");
                     if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
@@ -119,17 +118,13 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case WeaponType.Tome:
-                if (!IsChannelingAttack)
-                {
+                if (!IsChannelingAttack) {
                     IsChannelingAttack = true;
                     tomeChargedFor = 0;
                     CancelInvoke("TomeCharge");
                     InvokeRepeating("TomeDrain", 0, (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeDrain(), instantly once, then once every (1 sec/TomeChargeRate)
-
-                    //currentWeapon.weaponModel.GetComponent<TomeBeamFunction>().Create(player._projectileSpawn.position); // Sets beam base at projectile spawn
                 }
-                else
-                {
+                else {
                     IsChannelingAttack = false;
                     lineRenderer.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
                     CancelInvoke("TomeDrain");
@@ -155,17 +150,17 @@ public class WeaponController : MonoBehaviour
         currentTomeCharge--;
         tomeChargedFor++;
         //Debug.Log("Current tome charge: " + currentTomeCharge);
-        //Debug.Log("Current tome charged for: " + tomeChargedFor);
-        if (tomeChargedFor % 5 == 0)
-        {
+        Debug.Log("Current tome charged for: " + tomeChargedFor);
+        if (tomeChargedFor % 5 == 0) {
             tomeChargedFor = 0;
             if (player.Grounded && player.IsOwner)
-                StartCoroutine(TomeAttack());
+                //StartCoroutine(TomeAttack());
+                TomeAttack();
         }
-        if (currentTomeCharge < 0)
-        {
+        if (currentTomeCharge < 0) {
             currentTomeCharge = 0;
-            //Debug.Log("Out of Energy");
+            CancelInvoke("TomeDrain");
+            Debug.Log("Out of Energy");
         }
     }
 
@@ -182,9 +177,7 @@ public class WeaponController : MonoBehaviour
     #endregion
 
     #region Weapon Attack Functions
-    private IEnumerator AxeAttack()
-    {
-        Debug.Log("Execute the Axe Attack");
+    private IEnumerator AxeAttack() {
         CanAttack = false;
         IsAttacking = true;
         player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
@@ -194,9 +187,7 @@ public class WeaponController : MonoBehaviour
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
-    private IEnumerator BowAttack(float chargeValue)
-    {
-        Debug.Log("Execute the Bow Attack");
+    private IEnumerator BowAttack(float chargeValue) {
         CanAttack = false;
         IsAttacking = true;
 
@@ -212,12 +203,9 @@ public class WeaponController : MonoBehaviour
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
         yield return new WaitForSeconds(AttackingCooldown);
-        enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
-    private IEnumerator PickaxeAttack()
-    {
-        Debug.Log("Execute the Pickaxe Attack");
+    private IEnumerator PickaxeAttack() {
         CanAttack = false;
         IsAttacking = true;
         player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
@@ -227,58 +215,31 @@ public class WeaponController : MonoBehaviour
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
-    private IEnumerator TomeAttack()
-    {
-        Debug.Log("Execute the Tome Attack");
-
-        //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
-        yield return new WaitForSeconds(AttackingTime);
-        IsAttacking = false;
-        yield return new WaitForSeconds(AttackingCooldown);
-        enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
-        CanAttack = true;
+    private void TomeAttack() {
+        Vector3 point0 = player._projectileSpawn.position;
+        Vector3 point1 = player.mouseWorldPosition;
+        Vector3 aimDir = (point1 - point0).normalized;
+        Transform tempBeam = Instantiate(beamHitbox, point0, Quaternion.LookRotation(aimDir, Vector3.up));
+        
+        tempBeam.GetComponent<BeamFunction>().StartCoroutine("Create", currentWeapon.damageValue);
+        tempBeam.position = Vector3.Lerp(point0, point1, 0.5f);
+        tempBeam.localScale = new Vector3(0.1f, 0.1f, Vector3.Distance(point0, point1));
     }
     #endregion
 
     #region Hotbar Inputs
-    private void OnHotbar1()
-    {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack)
-        {
-            selectedWeapon = 0;
-            SelectWeapon();
-            Debug.Log(Hotbar[selectedWeapon].weaponName);
-        }
-    }
 
-    private void OnHotbar2()
-    {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack)
-        {
-            selectedWeapon = 1;
+    private void SwitchHotBar(int hotbarNum) {
+        if (player.IsOwner && CanAttack && !IsChannelingAttack) {
+            selectedWeapon = hotbarNum - 1; // - 1 for arrary starting at 0
             SelectWeapon();
-            Debug.Log(Hotbar[selectedWeapon].weaponName);
+            //Debug.Log(Hotbar[selectedWeapon].weaponName);
         }
     }
-
-    private void OnHotbar3()
-    {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack)
-        {
-            selectedWeapon = 2;
-            SelectWeapon();
-            Debug.Log(Hotbar[selectedWeapon].weaponName);
-        }
-    }
-
-    private void OnHotbar4()
-    {
-        if (player.IsOwner && CanAttack && !IsChannelingAttack)
-        {
-            selectedWeapon = 3;
-            SelectWeapon();
-            Debug.Log(Hotbar[selectedWeapon].weaponName);
-        }
-    }
+    private void OnHotbar1() { SwitchHotBar(1); }
+    private void OnHotbar2() { SwitchHotBar(2); }
+    private void OnHotbar3() { SwitchHotBar(3); }
+    private void OnHotbar4() { SwitchHotBar(4); }
+    private void OnHotbar5() { SwitchHotBar(5); }
     #endregion
 }

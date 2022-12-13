@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cf2a6a74806cc44a8bf28b7cba100da, type: 3}
-  m_Name: BasePickaxe
+  m_Name: HandPosition
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
-  weaponType: 3
-  weaponName: Base Pickaxe
-  description: This is the Base for a Pickaxe
+  weaponType: 0
+  weaponName: Test Weapon
+  description: Used for testing position of players hand
   inventorySprite: {fileID: 0}
-  weaponModel: {fileID: 7197912442079774620, guid: b77867408f3bc7b4ca0b969ed9960f16, type: 3}
+  weaponModel: {fileID: 2650818998789002924, guid: 78220e08f9002914f8e35748facf915b, type: 3}
   CanAttack: 1
   IsAttacking: 0
-  attackingTime: 1.6
-  attackingCooldown: 2
-  damageValue: 10
+  attackingTime: 0.8
+  attackingCooldown: 1
+  damageValue: 0
   attackSpeed: 0
   cutLevel: 0
   Max_Charge: 0

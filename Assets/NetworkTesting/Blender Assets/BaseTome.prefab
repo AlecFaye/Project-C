@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2667027181740135718}
   m_Layer: 0
   m_Name: BaseTome
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,7 +53,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: db0c9dc5bee9aaf4a96e1f4112c48934, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.208
+      value: 0.13
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: db0c9dc5bee9aaf4a96e1f4112c48934, type: 3}
       propertyPath: m_LocalPosition.z

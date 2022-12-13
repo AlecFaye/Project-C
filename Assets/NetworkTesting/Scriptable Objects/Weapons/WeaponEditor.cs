@@ -1,28 +1,22 @@
+#if UNITY_EDITOR // This stops the game from building this
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
+using UnityEditor.UIElements;
 
 
 [CustomEditor(typeof(Weapon))]
 public class WeaponEditor : Editor
 {
     #region SerializedProperties
-    SerializedProperty _player;
-    SerializedProperty WeaponType;
-
     SerializedProperty weaponName;
     SerializedProperty description;
     SerializedProperty inventorySprite;
     SerializedProperty weaponModel;
 
     SerializedProperty weaponType;
-
-
-    SerializedProperty CanAttack;
-
-    SerializedProperty IsAttacking;
 
     SerializedProperty attackingTime;
 
@@ -49,42 +43,42 @@ public class WeaponEditor : Editor
     #endregion
 
 
-    private void OnEnable()
-    {
-        _player = serializedObject.FindProperty("_player");
-        WeaponType = serializedObject.FindProperty("WeaponType");
+    //private void OnEnable()
+    //{
+    //    _player = serializedObject.FindProperty("_player");
+    //    WeaponType = serializedObject.FindProperty("WeaponType");
 
-        weaponName = serializedObject.FindProperty("weaponName");
-        description = serializedObject.FindProperty("description");
-        inventorySprite = serializedObject.FindProperty("inventorySprite");
-        weaponModel = serializedObject.FindProperty("weaponModel");
+    //    weaponName = serializedObject.FindProperty("weaponName");
+    //    description = serializedObject.FindProperty("description");
+    //    inventorySprite = serializedObject.FindProperty("inventorySprite");
+    //    weaponModel = serializedObject.FindProperty("weaponModel");
 
-        weaponType = serializedObject.FindProperty("weaponType");
+    //    weaponType = serializedObject.FindProperty("weaponType");
 
-        CanAttack = serializedObject.FindProperty("CanAttack");
+    //    CanAttack = serializedObject.FindProperty("CanAttack");
 
-        IsAttacking = serializedObject.FindProperty("IsAttacking");
+    //    IsAttacking = serializedObject.FindProperty("IsAttacking");
 
-        attackingTime = serializedObject.FindProperty("attackingTime");
+    //    attackingTime = serializedObject.FindProperty("attackingTime");
 
-        attackingCooldown = serializedObject.FindProperty("attackingCooldown");
+    //    attackingCooldown = serializedObject.FindProperty("attackingCooldown");
 
-        damageValue = serializedObject.FindProperty("damageValue");
-        attackSpeed = serializedObject.FindProperty("attackSpeed");
+    //    damageValue = serializedObject.FindProperty("damageValue");
+    //    attackSpeed = serializedObject.FindProperty("attackSpeed");
 
-        cutLevel = serializedObject.FindProperty("cutLevel");
+    //    cutLevel = serializedObject.FindProperty("cutLevel");
 
-        Max_Charge = serializedObject.FindProperty("Max_Charge");
-        currentCharge = serializedObject.FindProperty("currentCharge");
-        chargeGainedRate = serializedObject.FindProperty("chargeGainedRate");
-        _arrowType = serializedObject.FindProperty("_arrowType");
+    //    Max_Charge = serializedObject.FindProperty("Max_Charge");
+    //    currentCharge = serializedObject.FindProperty("currentCharge");
+    //    chargeGainedRate = serializedObject.FindProperty("chargeGainedRate");
+    //    _arrowType = serializedObject.FindProperty("_arrowType");
 
-        mineLevel = serializedObject.FindProperty("mineLevel");
+    //    mineLevel = serializedObject.FindProperty("mineLevel");
 
-        Max_Held_Charge = serializedObject.FindProperty("Max_Held_Charge");
-        currentHeldCharge = serializedObject.FindProperty("currentHeldCharge");
-        chargeLostRate = serializedObject.FindProperty("chargeLostRate");
-    }
+    //    Max_Held_Charge = serializedObject.FindProperty("Max_Held_Charge");
+    //    currentHeldCharge = serializedObject.FindProperty("currentHeldCharge");
+    //    chargeLostRate = serializedObject.FindProperty("chargeLostRate");
+    //}
 
     public override void OnInspectorGUI()
     {
@@ -154,3 +148,4 @@ public class WeaponEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
+#endif

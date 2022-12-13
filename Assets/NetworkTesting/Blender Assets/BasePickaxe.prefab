@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e126bbccdf06c49a74ba47f47b6a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 11400000, guid: ade7439ef67604f40b849e505b3c6399, type: 2}
+  weapon: {fileID: 11400000, guid: 76115dd882159704fa65e435c39bbe90, type: 2}
   weaponController: {fileID: 0}
 --- !u!65 &-504257764974797377
 BoxCollider:
@@ -56,11 +56,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6214889968840792126}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.1714296, y: 0.93006825, z: 0.58718586}
-  m_Center: {x: -0.27585706, y: 0.45903635, z: 0}
+  m_Size: {x: 0.38077572, y: 0.93006825, z: 1.2907608}
+  m_Center: {x: 0, y: 0.45903635, z: -0.35178757}
 --- !u!1001 &5642683256914994886
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -98,7 +98,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a000604ce82f83d4594013cca01e1bca, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a000604ce82f83d4594013cca01e1bca, type: 3}
       propertyPath: m_LocalRotation.x
@@ -106,7 +106,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a000604ce82f83d4594013cca01e1bca, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a000604ce82f83d4594013cca01e1bca, type: 3}
       propertyPath: m_LocalRotation.z
@@ -118,7 +118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a000604ce82f83d4594013cca01e1bca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a000604ce82f83d4594013cca01e1bca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

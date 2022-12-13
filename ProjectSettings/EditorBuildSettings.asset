@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MultiplayerTester.unity
     guid: 0ceeaa17f5b3b5a4a83aab2e4571e906
-  - enabled: 1
+  - enabled: 0
     path: Assets/Enemies/EnemyTester.unity
     guid: b929555c478bc52438a3cfff2a4a281f
   m_configObjects:
