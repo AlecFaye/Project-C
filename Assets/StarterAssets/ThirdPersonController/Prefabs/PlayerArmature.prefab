@@ -1147,14 +1147,22 @@ MonoBehaviour:
   GroundLayers:
     serializedVersion: 2
     m_Bits: 513
-  CinemachineCameraTarget: {fileID: 8338988566280778634}
+  cameraRoot: {fileID: 0}
   First_TopClamp: 89
   First_BottomClamp: -89
   Third_TopClamp: 70
   Third_BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
+  IsAiming: 0
+  mouseWorldPosition: {x: 0, y: 0, z: 0}
+  aimColliderLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _projectileSpawn: {fileID: 0}
   _animator: {fileID: 0}
+  DebugTransform: {fileID: 0}
+  WeaponContoller: {fileID: 0}
 --- !u!114 &5885216827943657505
 MonoBehaviour:
   m_ObjectHideFlags: 0

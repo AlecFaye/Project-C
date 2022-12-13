@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 22436095924647042}
   - component: {fileID: 3072407726086048610}
   - component: {fileID: 1375850327542480464}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Line (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 7643716619770294265}
   - component: {fileID: 941652684817427697}
   - component: {fileID: 4741543222892077079}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 6659046260547225727}
   - component: {fileID: 3694003371857138823}
   - component: {fileID: 3107817335699265037}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sphere (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 7455212425661152651}
   - component: {fileID: 303282088665538229}
   - component: {fileID: 4568039903506707028}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -397,7 +397,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2650818998789002924}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: HandPostiion
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 4372056209691976694}
   - component: {fileID: 732907007871211504}
   - component: {fileID: 4049924866943289686}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sphere (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

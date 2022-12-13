@@ -248,9 +248,9 @@ namespace StarterAssets {
         {
             if (!IsOwner) return; // Checks if you are owner of this Player
             _animIDSpeed = Animator.StringToHash("Speed");
-            _animIDGrounded = Animator.StringToHash("Grounded");
-            _animIDJump = Animator.StringToHash("Jump");
-            _animIDFreeFall = Animator.StringToHash("FreeFall");
+            _animIDGrounded = Animator.StringToHash("Is Grounded");
+            _animIDJump = Animator.StringToHash("Is Jumping");
+            _animIDFreeFall = Animator.StringToHash("Is FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         }
 

@@ -54,6 +54,7 @@ public class WeaponController : MonoBehaviour
            lineRenderer.SetPositions(new Vector3[] { player._projectileSpawn.position, player.mouseWorldPosition});
         }
     }
+
     private void CreateWeapon(Weapon weapon)
     {
         Transform tempWeapon = Instantiate(weapon.weaponModel, this.transform.position, Quaternion.identity); // Creates the weapon in the hotbar slot
@@ -61,7 +62,6 @@ public class WeaponController : MonoBehaviour
         tempWeapon.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f); // Sets rotation to hand
         weapon._player = player;
     }
-
     private void SelectWeapon()
     {
         int i = 0;
