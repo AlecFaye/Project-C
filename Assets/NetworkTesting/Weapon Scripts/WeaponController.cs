@@ -150,17 +150,17 @@ public class WeaponController : MonoBehaviour
         currentTomeCharge--;
         tomeChargedFor++;
         //Debug.Log("Current tome charge: " + currentTomeCharge);
-        //Debug.Log("Current tome charged for: " + tomeChargedFor);
-        if (tomeChargedFor % 5 == 0)
-        {
+        Debug.Log("Current tome charged for: " + tomeChargedFor);
+        if (tomeChargedFor % 5 == 0) {
             tomeChargedFor = 0;
             if (player.Grounded && player.IsOwner)
-                StartCoroutine(TomeAttack());
+                //StartCoroutine(TomeAttack());
+                TomeAttack();
         }
-        if (currentTomeCharge < 0)
-        {
+        if (currentTomeCharge < 0) {
             currentTomeCharge = 0;
-            //Debug.Log("Out of Energy");
+            CancelInvoke("TomeDrain");
+            Debug.Log("Out of Energy");
         }
     }
 
@@ -177,9 +177,7 @@ public class WeaponController : MonoBehaviour
     #endregion
 
     #region Weapon Attack Functions
-    private IEnumerator AxeAttack()
-    {
-        //Debug.Log("Execute the Axe Attack");
+    private IEnumerator AxeAttack() {
         CanAttack = false;
         IsAttacking = true;
         player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
@@ -189,9 +187,7 @@ public class WeaponController : MonoBehaviour
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
-    private IEnumerator BowAttack(float chargeValue)
-    {
-        //Debug.Log("Execute the Bow Attack");
+    private IEnumerator BowAttack(float chargeValue) {
         CanAttack = false;
         IsAttacking = true;
 
@@ -207,12 +203,9 @@ public class WeaponController : MonoBehaviour
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
         yield return new WaitForSeconds(AttackingCooldown);
-        enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
-    private IEnumerator PickaxeAttack()
-    {
-        //Debug.Log("Execute the Pickaxe Attack");
+    private IEnumerator PickaxeAttack() {
         CanAttack = false;
         IsAttacking = true;
         player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
@@ -222,8 +215,7 @@ public class WeaponController : MonoBehaviour
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }
-    private IEnumerator TomeAttack() {
-        //Debug.Log("Execute the Tome Attack");
+    private void TomeAttack() {
         Vector3 point0 = player._projectileSpawn.position;
         Vector3 point1 = player.mouseWorldPosition;
         Vector3 aimDir = (point1 - point0).normalized;
@@ -232,12 +224,6 @@ public class WeaponController : MonoBehaviour
         tempBeam.GetComponent<BeamFunction>().StartCoroutine("Create", currentWeapon.damageValue);
         tempBeam.position = Vector3.Lerp(point0, point1, 0.5f);
         tempBeam.localScale = new Vector3(0.1f, 0.1f, Vector3.Distance(point0, point1));
-
-        //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
-        yield return new WaitForSeconds(AttackingTime);
-        IsAttacking = false;
-        yield return new WaitForSeconds(AttackingCooldown);
-        CanAttack = true;
     }
     #endregion
 

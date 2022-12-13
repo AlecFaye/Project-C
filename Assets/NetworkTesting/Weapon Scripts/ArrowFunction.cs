@@ -37,9 +37,8 @@ public class ArrowFunction : MonoBehaviour
 
             CreateAnchor(other);
 
-            // Triggers if the enemy has the enemy tag
             if (collisionDetected)
-                collisionDetected.Hit(damageValue, Weapon.WeaponType.Bow); // Runs the funtion "Hit" in the other objects CollisionDetected script
+                collisionDetected.Hit(damageValue, Weapon.WeaponType.Bow, other.transform.position); // Runs the funtion "Hit" in the other objects CollisionDetected script
 
             yield return new WaitForSeconds(5);
             Destroy(gameObject);

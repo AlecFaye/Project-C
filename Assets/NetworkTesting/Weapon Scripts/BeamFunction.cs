@@ -22,7 +22,7 @@ public class BeamFunction : MonoBehaviour
             CollisionDetected collisionDetected = other.GetComponent<CollisionDetected>();
 
             if (collisionDetected) {
-                collisionDetected.Hit(damageValue, Weapon.WeaponType.Bow); // Runs the funtion "Hit" in the other objects CollisionDetected script
+                collisionDetected.Hit(damageValue, Weapon.WeaponType.Bow, other.transform.position); // Runs the funtion "Hit" in the other objects CollisionDetected script
                 enemiesHitList.Add(other); // Adds current enemy to enemiesHitList to keep track of
             }
         }
