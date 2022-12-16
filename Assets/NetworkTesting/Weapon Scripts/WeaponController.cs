@@ -55,6 +55,7 @@ public class WeaponController : MonoBehaviour
         }
     }
 
+    // Fix the bug so items can go in any positions (Maybe make a child for each Hotbar slot and add the weapons to the children) <- [This solution allows me to add back the line renderer as a child of the weapon controller]
     private void CreateWeapon(Weapon weapon)
     {
         Transform tempWeapon = Instantiate(weapon.weaponModel, this.transform.position, Quaternion.identity); // Creates the weapon in the hotbar slot
@@ -94,15 +95,25 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case WeaponType.Axe:
-                if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
+                if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner) {
+                    player.IsAttacking = true;
+                    player.IsConstantAim = false;
+                    player.aimTarget = player.mouseWorldPosition;
+                    player.RotatePlayerToCamera();
+
                     StartCoroutine(AxeAttack());
+                }
                 break;
 
             case WeaponType.Bow:
                 if (!IsChannelingAttack) {
+                    player.IsAttacking = true;
+                    player.IsConstantAim = true;
+
                     IsChannelingAttack = true;
                     currentBowCharge = 0;
                     InvokeRepeating("BowCharge", 0f, (1f / currentWeapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
+
                 }
                 else {
                     IsChannelingAttack = false;
@@ -113,18 +124,30 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case WeaponType.Pickaxe:
-                if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
+                if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner) {
+                    player.IsAttacking = true;
+                    player.IsConstantAim = false;
+                    player.aimTarget = player.mouseWorldPosition;
+                    player.RotatePlayerToCamera();
+
                     StartCoroutine(PickaxeAttack());
+                }
                 break;
 
             case WeaponType.Tome:
                 if (!IsChannelingAttack) {
+                    player.IsAttacking = true;
+                    player.IsConstantAim = true;
+
                     IsChannelingAttack = true;
                     tomeChargedFor = 0;
                     CancelInvoke("TomeCharge");
                     InvokeRepeating("TomeDrain", 0, (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeDrain(), instantly once, then once every (1 sec/TomeChargeRate)
                 }
                 else {
+                    player.IsAttacking = false;
+                    player.IsConstantAim = false;
+
                     IsChannelingAttack = false;
                     lineRenderer.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
                     CancelInvoke("TomeDrain");
@@ -180,9 +203,12 @@ public class WeaponController : MonoBehaviour
     private IEnumerator AxeAttack() {
         CanAttack = false;
         IsAttacking = true;
+        
         player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
+
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
+        player.IsAttacking = false;
         yield return new WaitForSeconds(AttackingCooldown);
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
@@ -190,6 +216,9 @@ public class WeaponController : MonoBehaviour
     private IEnumerator BowAttack(float chargeValue) {
         CanAttack = false;
         IsAttacking = true;
+
+        player.IsAttacking = false;
+        player.IsConstantAim = false;
 
         Vector3 aimDir = (player.mouseWorldPosition - player._projectileSpawn.position).normalized;
         Transform tempArrow = Instantiate(currentWeapon._arrowType.arrowModel, player._projectileSpawn.position, Quaternion.LookRotation(aimDir, Vector3.up));
@@ -208,9 +237,12 @@ public class WeaponController : MonoBehaviour
     private IEnumerator PickaxeAttack() {
         CanAttack = false;
         IsAttacking = true;
+
         player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
+       
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
+        player.IsAttacking = false;
         yield return new WaitForSeconds(AttackingCooldown);
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;

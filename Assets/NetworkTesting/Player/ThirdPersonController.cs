@@ -5,6 +5,7 @@ using Cinemachine;
 using UnityEngine;
 using QFSW.QC;
 using Unity.Services.Lobbies.Models;
+using UnityEngine.UIElements;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -116,9 +117,13 @@ namespace StarterAssets {
         public bool LockCameraPosition = false;
 
         // Player Aim Variables
-        [Header("Aim Variables")]
-        [Tooltip("Checks if the player is Aiming or not")]
-        [SerializeField] private bool IsAttacking = false;
+        [Header("Attack/Camera-Aim Variables")]
+        [Tooltip("Checks if the player is Attacking or not")]
+        public bool IsAttacking = false;
+        [Tooltip("Checks if the player's aim is constant or not")]
+        public bool IsConstantAim = false;
+        [Tooltip("Checks if the player's aim is constant or not")]
+        public Vector3 aimTarget = Vector3.zero;
     
         public Vector3 mouseWorldPosition = Vector3.zero;
 
@@ -269,6 +274,7 @@ namespace StarterAssets {
             }
         }
 
+        #region Camera Stuff (Camera and Player rotations)
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
@@ -287,14 +293,6 @@ namespace StarterAssets {
 
             // Cinemachine will follow this target
             cameraRoot.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
-
-            if (IsAttacking) {
-                Vector3 worldAimTarget = mouseWorldPosition;
-                worldAimTarget.y = transform.position.y;
-                Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
-
-                transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
-            }
         }
 
         // Function Used for getting position of players mouse
@@ -307,7 +305,20 @@ namespace StarterAssets {
                 DebugTransform.position = raycastHit.point;
                 mouseWorldPosition = raycastHit.point;
             }
+
+            if (IsAttacking) {
+                RotatePlayerToCamera();
+            }
         }
+        public void RotatePlayerToCamera() {
+            Vector3 worldAimTarget;
+            if (IsConstantAim) worldAimTarget = mouseWorldPosition; 
+            else worldAimTarget = aimTarget;
+            worldAimTarget.y = transform.position.y;
+            Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+            transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
+        }
+        #endregion
 
         private void Move()
         {
@@ -511,7 +522,9 @@ namespace StarterAssets {
         }
 
         // Change to run and edit the camera zoom so that it matches the charge rate of the bow being used {P.S. maybe the Tome can zoom a little while charging}
-        public void OnAim()
+        // Have the Zoom apply slowly overtime to match with aim and reduce the sway to zero -> then to zoom out with a different transitional value to reset camera faster
+        // Have player move slower while they do this aswell
+        public void TriggerAim()
         {
             if (!IsAttacking)
             {
