@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(SphereCollider))]
 public class AttackRadius : MonoBehaviour
 {
+    public NavMeshAgent agent;
     public SphereCollider sphereCollider;
 
     protected List<IDamageable> damageables = new();
@@ -16,6 +18,8 @@ public class AttackRadius : MonoBehaviour
     public AttackEvent OnAttack;
 
     protected Coroutine attackCoroutine;
+
+    protected IDamageable closestDamageable = null;
 
     protected virtual void Awake()
     {
@@ -32,6 +36,7 @@ public class AttackRadius : MonoBehaviour
 
             if (attackCoroutine == null)
             {
+                agent.enabled = false;
                 attackCoroutine = StartCoroutine(Attack());
             }
         }
@@ -55,11 +60,9 @@ public class AttackRadius : MonoBehaviour
 
     protected virtual IEnumerator Attack()
     {
-        WaitForSeconds wait = new WaitForSeconds(attackDelay);
+        WaitForSeconds wait = new(attackDelay);
 
-        yield return wait;
-
-        IDamageable closestDamageable = null;
+        closestDamageable = null;
         float closestDistance = float.MaxValue;
 
         while (damageables.Count > 0)
@@ -79,13 +82,12 @@ public class AttackRadius : MonoBehaviour
             if (closestDamageable != null)
             {
                 OnAttack?.Invoke(closestDamageable);
-                closestDamageable.TakeDamage(damage);
             }
+
+            yield return wait;
 
             closestDamageable = null;
             closestDistance = float.MaxValue;
-
-            yield return wait;
 
             damageables.RemoveAll(DisabledDamageables);
         }
@@ -96,5 +98,13 @@ public class AttackRadius : MonoBehaviour
     protected bool DisabledDamageables(IDamageable damageable)
     {
         return damageable != null && !damageable.GetTransform().gameObject.activeSelf;
+    }
+
+    public void DealDamage()
+    {
+        if (closestDamageable != null)
+        {
+            closestDamageable.TakeDamage(damage);
+        }
     }
 }

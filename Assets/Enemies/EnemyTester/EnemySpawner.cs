@@ -7,7 +7,7 @@ public class EnemySpawner : MonoBehaviour
 {
     public int numberOfEnemiesToSpawn = 3;
     public float spawnDelay = 1.0f;
-    public List<Enemy> enemyPrefabs = new();
+    public List<EnemyScriptableObject> enemies = new();
     public SpawnMethod enemySpawnMethod = SpawnMethod.RoundRobin;
 
     private NavMeshTriangulation triangulation;
@@ -15,9 +15,9 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        for (int index = 0; index < enemyPrefabs.Count; index++)
+        for (int index = 0; index < enemies.Count; index++)
         {
-            enemyObjectPools.Add(index, ObjectPool.CreateInstance(enemyPrefabs[index], numberOfEnemiesToSpawn));
+            enemyObjectPools.Add(index, ObjectPool.CreateInstance(enemies[index].enemyPrefab, numberOfEnemiesToSpawn));
         }
     }
 
@@ -51,14 +51,14 @@ public class EnemySpawner : MonoBehaviour
     
     private void SpawnRoundRobinEnemy(int spawnedEnemies)
     {
-        int spawnIndex = spawnedEnemies % enemyPrefabs.Count;
+        int spawnIndex = spawnedEnemies % enemies.Count;
 
         DoSpawnEnemy(spawnIndex);
     }
 
     private void SpawnRandomEnemy()
     {
-        DoSpawnEnemy(Random.Range(0, enemyPrefabs.Count));
+        DoSpawnEnemy(Random.Range(0, enemies.Count));
     }
 
     private void DoSpawnEnemy(int spawnIndex)
@@ -68,18 +68,21 @@ public class EnemySpawner : MonoBehaviour
         if (poolableObject)
         {
             Enemy enemy = poolableObject.GetComponent<Enemy>();
+            enemies[spawnIndex].SetupEnemy(enemy);
 
             int vertexIndex = Random.Range(0, triangulation.vertices.Length);
 
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(triangulation.vertices[vertexIndex], out hit, 2.0f, 1))
+            if (NavMesh.SamplePosition(triangulation.vertices[vertexIndex], out NavMeshHit hit, 2f, -1))
             {
                 enemy.agent.Warp(hit.position);
                 enemy.agent.enabled = true;
+
+                enemy.movement.triangulation = triangulation;
+                enemy.movement.Spawn();
             }
             else
             {
-                Debug.LogError($"Unable to palce NavMeshAgent on NavMesh. Tried to use {triangulation.vertices[vertexIndex]}");
+                Debug.LogError($"Unable to place {enemy.name} on NavMesh. Tried to use {triangulation.vertices[vertexIndex]}");
             }
         }
         else

@@ -15,19 +15,16 @@ public class CollisionDetection : MonoBehaviour
             weaponController = this.transform.parent.GetComponent<WeaponController>();
     }
 
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other) 
+    {
         // Checks if it collided with an enemy ====== Checks if the player should be attacking rn(done in weapon controller) ====== Checks if the enemy was already hit by this attack
-        if (other.CompareTag("Enemy") && weaponController.GetComponent<WeaponController>().IsAttacking && !weaponController.enemiesHitList.Contains(other))
+        if (weaponController.GetComponent<WeaponController>().IsAttacking && !weaponController.enemiesHitList.Contains(other))
         {
-            CollisionDetected collisionDetected = other.GetComponent<CollisionDetected>();
-
-            if (collisionDetected)
+            if (other.TryGetComponent(out IDamageable damageable))
             {
-                collisionDetected.Hit(weapon.damageValue, weapon.weaponType); // Runs the funtion "Hit" in the other objects CollisionDetected script
-                weaponController.enemiesHitList.Add(other); // Adds current enemy to enemiesHitList to keep track of
+                damageable.TakeDamage(weapon.damageValue, weapon.weaponType);
+                weaponController.enemiesHitList.Add(other);
             }
-
-            //Debug.Log("Enemy list after being added: " + weaponController.enemiesHitList);
         }
     }
 }

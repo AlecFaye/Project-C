@@ -36,6 +36,9 @@ public class ObjectPool
 
     public PoolableObject GetObject()
     {
+        if (availableObjectsPool.Count <= 0) 
+            return null;
+
         PoolableObject instance = availableObjectsPool[0];
 
         availableObjectsPool.RemoveAt(0);

@@ -12,15 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 139147c898fc66c4cb428bf1b3faf56d, type: 3}
   m_Name: Deer
   m_EditorClassIdentifier: 
-  health: 100
+  enemyPrefab: {fileID: 7646705840927912351, guid: a75589f09117d9b4a87785d3cb75d8d8, type: 3}
+  attackConfiguration: {fileID: 11400000, guid: 815bbdb9aa75bd64cbdecf055e879dd8, type: 2}
+  health: 15
   armourType: 2
-  weaknessTypes: 0100000002000000
+  weaknessTypes: 02000000
   weaknessDamageMultiplier: 1.5
-  attackDamage: 10
-  attackCooldown: 5
+  defaultState: 1
+  idleLocationRadius: 8
+  idleMovespeedMultiplier: 0.5
+  lineOfSightRange: 8
+  fieldOfView: 180
+  numOfWaypoints: 4
   aiUpdateInterval: 0.1
   acceleration: 12
-  angularSpeed: 200
+  angularSpeed: 150
   areaMask: -1
   avoidancePriority: 50
   baseOffset: -0.04
