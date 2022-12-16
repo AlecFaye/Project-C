@@ -118,7 +118,7 @@ namespace StarterAssets {
         // Player Aim Variables
         [Header("Aim Variables")]
         [Tooltip("Checks if the player is Aiming or not")]
-        [SerializeField] private bool IsAiming = false;
+        [SerializeField] private bool IsAttacking = false;
     
         public Vector3 mouseWorldPosition = Vector3.zero;
 
@@ -287,27 +287,25 @@ namespace StarterAssets {
 
             // Cinemachine will follow this target
             cameraRoot.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
-            
+
+            if (IsAttacking) {
+                Vector3 worldAimTarget = mouseWorldPosition;
+                worldAimTarget.y = transform.position.y;
+                Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+
+                transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
+            }
         }
 
         // Function Used for getting position of players mouse
         private void RaycastMouse()
         {
             Vector2 screenCentrePoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
-
             Ray ray = Camera.main.ScreenPointToRay(screenCentrePoint);
 
             if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask)) {
                 DebugTransform.position = raycastHit.point;
                 mouseWorldPosition = raycastHit.point;
-            }
-
-            if (IsAiming) {
-                Vector3 worldAimTarget = mouseWorldPosition;
-                worldAimTarget.y = transform.position.y;
-                Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
-
-                transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
             }
         }
 
@@ -361,7 +359,7 @@ namespace StarterAssets {
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
 
-                if (!IsAiming) 
+                if (!IsAttacking) 
                     // rotate to face input direction relative to camera position
                     transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
@@ -512,19 +510,20 @@ namespace StarterAssets {
             }
         }
 
+        // Change to run and edit the camera zoom so that it matches the charge rate of the bow being used {P.S. maybe the Tome can zoom a little while charging}
         public void OnAim()
         {
-            if (!IsAiming)
+            if (!IsAttacking)
             {
-                IsAiming = true;
+                IsAttacking = true;
                 //_animator.SetTrigger("Aim");
             }
             else
-                IsAiming = false;
+                IsAttacking = false;
 
-            _animator.SetBool("Aiming", IsAiming);
-            _aimCamera.gameObject.SetActive(IsAiming);
-            _followCamera.gameObject.SetActive(!IsAiming);
+            _animator.SetBool("Aiming", IsAttacking);
+            _aimCamera.gameObject.SetActive(IsAttacking);
+            _followCamera.gameObject.SetActive(!IsAttacking);
 
         }
 
