@@ -318,6 +318,22 @@ namespace StarterAssets {
             Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
         }
+
+        // Change to run and edit the camera zoom so that it matches the charge rate of the bow being used {P.S. maybe the Tome can zoom a little while charging}
+        // Have the Zoom apply slowly overtime to match with aim and reduce the sway to zero -> then to zoom out with a different transitional value to reset camera faster
+        // Have player move slower while they do this aswell
+        public void TriggerAim(float seconds)
+        {
+            if (IsAttacking) _animator.SetTrigger("Aim");
+            _animator.SetBool("Aiming", IsAttacking);
+
+            // Sets the main camera to a slower or faster zoom depending on required speed
+            Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = seconds;
+            // Sets the camera to follow the next one
+            _aimCamera.gameObject.SetActive(IsAttacking);
+            _followCamera.gameObject.SetActive(!IsAttacking);
+
+        }
         #endregion
 
         private void Move()
@@ -521,25 +537,7 @@ namespace StarterAssets {
             }
         }
 
-        // Change to run and edit the camera zoom so that it matches the charge rate of the bow being used {P.S. maybe the Tome can zoom a little while charging}
-        // Have the Zoom apply slowly overtime to match with aim and reduce the sway to zero -> then to zoom out with a different transitional value to reset camera faster
-        // Have player move slower while they do this aswell
-        public void TriggerAim()
-        {
-            if (!IsAttacking)
-            {
-                IsAttacking = true;
-                //_animator.SetTrigger("Aim");
-            }
-            else
-                IsAttacking = false;
-
-            _animator.SetBool("Aiming", IsAttacking);
-            _aimCamera.gameObject.SetActive(IsAttacking);
-            _followCamera.gameObject.SetActive(!IsAttacking);
-
-        }
-
+       
         #region Quantum Commands
         [Command("Player.Set_Move_Speed")]
         private void SetMoveSpeed(float newValue) {

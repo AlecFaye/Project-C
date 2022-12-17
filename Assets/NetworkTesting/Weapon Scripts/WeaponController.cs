@@ -109,7 +109,8 @@ public class WeaponController : MonoBehaviour
                 if (!IsChannelingAttack) {
                     player.IsAttacking = true;
                     player.IsConstantAim = true;
-
+                    player.TriggerAim(0.5f); // Calculate Seconds to aim in
+                    
                     IsChannelingAttack = true;
                     currentBowCharge = 0;
                     InvokeRepeating("BowCharge", 0f, (1f / currentWeapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
@@ -218,7 +219,9 @@ public class WeaponController : MonoBehaviour
         IsAttacking = true;
 
         player.IsAttacking = false;
-        player.IsConstantAim = false;
+        player.IsConstantAim = false; 
+        player.TriggerAim(0.5f); // Calculate Seconds to aim out
+
 
         Vector3 aimDir = (player.mouseWorldPosition - player._projectileSpawn.position).normalized;
         Transform tempArrow = Instantiate(currentWeapon._arrowType.arrowModel, player._projectileSpawn.position, Quaternion.LookRotation(aimDir, Vector3.up));
@@ -226,8 +229,6 @@ public class WeaponController : MonoBehaviour
             currentWeapon._arrowType.travelSpeed * (currentBowCharge / 100), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
             (currentWeapon._arrowType.damageValue + (currentWeapon.damageValue * (currentBowCharge / 100))) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
             );
-
-        //player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
 
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
