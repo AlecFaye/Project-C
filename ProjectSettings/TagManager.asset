@@ -8,6 +8,8 @@ TagManager:
   - CinemachineTarget
   - TrainingDummy
   - Enemy
+  - Item
+  - PlayerAimCamera
   layers:
   - Default
   - TransparentFX
@@ -33,8 +35,8 @@ TagManager:
   - 
   - 
   - 
-  - TDtest
-  - PlayerTomeBeam
+  - 
+  - CameraRaycast
   - 
   - 
   - 
