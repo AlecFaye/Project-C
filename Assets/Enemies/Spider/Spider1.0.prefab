@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 3532039765115323607}
   - component: {fileID: 4309001771206028539}
   - component: {fileID: 3065165054645033464}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: LineOfSightChecker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
