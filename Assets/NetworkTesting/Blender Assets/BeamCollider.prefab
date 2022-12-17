@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 3378389754504443402}
   - component: {fileID: 1581407613151008895}
   - component: {fileID: 110367473472304836}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: BeamCollider
   m_TagString: Item
   m_Icon: {fileID: 0}

@@ -18,14 +18,15 @@ public class CollisionFunction : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other) {
-        // Checks if it collided with an enemy ====== Checks if the player should be attacking rn (done in weapon controller) ====== Checks if the enemy was already hit by this attack
-        if (other.CompareTag("Enemy") && weaponController.GetComponent<WeaponController>().IsAttacking && !weaponController.enemiesHitList.Contains(other)) {
-            CollisionDetected collisionDetected = other.GetComponent<CollisionDetected>();
-
-            if (collisionDetected) {
-                collisionDetected.Hit(weapon.damageValue, weapon.weaponType, other.transform.position); // Runs the funtion "Hit" in the other objects CollisionDetected script
-                weaponController.enemiesHitList.Add(other); // Adds current enemy to enemiesHitList to keep track of
+    private void OnTriggerEnter(Collider other) 
+    {
+        // Checks if it collided with an enemy ====== Checks if the player should be attacking rn(done in weapon controller) ====== Checks if the enemy was already hit by this attack
+        if (weaponController.GetComponent<WeaponController>().IsAttacking && !weaponController.enemiesHitList.Contains(other))
+        {
+            if (other.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(weapon.damageValue, weapon.weaponType);
+                weaponController.enemiesHitList.Add(other);
             }
         }
     }

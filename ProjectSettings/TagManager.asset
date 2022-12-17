@@ -6,9 +6,10 @@ TagManager:
   tags:
   - PlayerFollowCamera
   - CinemachineTarget
+  - TrainingDummy
   - Enemy
-  - PlayerAimCamera
   - Item
+  - PlayerAimCamera
   layers:
   - Default
   - TransparentFX
@@ -16,6 +17,8 @@ TagManager:
   - 
   - Water
   - UI
+  - Player
+  - PlayerAttack
   - 
   - 
   - 
@@ -23,6 +26,9 @@ TagManager:
   - 
   - 
   - 
+  - Enemy
+  - EnemyAttackRadius
+  - EnemyProjectile
   - 
   - 
   - 
@@ -30,12 +36,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - TDtest
-  - PlayerTomeBeam
+  - CameraRaycast
   - 
   - 
   - 

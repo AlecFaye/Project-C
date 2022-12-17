@@ -17,12 +17,10 @@ public class BeamFunction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {   
-        if (other.CompareTag("Enemy") && !enemiesHitList.Contains(other)) {
-            Debug.Log("You did " + damageValue + " damage to " + other.name);
-            CollisionDetected collisionDetected = other.GetComponent<CollisionDetected>();
-
-            if (collisionDetected) {
-                collisionDetected.Hit(damageValue, Weapon.WeaponType.Bow, other.transform.position); // Runs the funtion "Hit" in the other objects CollisionDetected script
+        if (!enemiesHitList.Contains(other)) {
+            if (other.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(damageValue, Weapon.WeaponType.Tome);
                 enemiesHitList.Add(other); // Adds current enemy to enemiesHitList to keep track of
             }
         }

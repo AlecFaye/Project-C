@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 139147c898fc66c4cb428bf1b3faf56d, type: 3}
+  m_Name: Gorilla
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: -8485934471412321361, guid: f737398ad4d3b454c8e237c8ddb319d4, type: 3}
+  attackConfiguration: {fileID: 11400000, guid: 6af42d989f74a1b41ac8126eb2f9dee5, type: 2}
+  health: 100
+  armourType: 3
+  weaknessTypes: 03000000
+  weaknessDamageMultiplier: 1.5
+  defaultState: 1
+  idleLocationRadius: 8
+  idleMovespeedMultiplier: 0.25
+  lineOfSightRange: 8
+  fieldOfView: 115
+  numOfWaypoints: 3
+  aiUpdateInterval: 0.1
+  acceleration: 4
+  angularSpeed: 120
+  areaMask: -1
+  avoidancePriority: 50
+  baseOffset: 0
+  height: 2
+  obstacleAvoidanceType: 1
+  radius: 0.5
+  speed: 3
+  stoppingDistance: 0.5

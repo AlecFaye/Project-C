@@ -32,13 +32,13 @@ public class ArrowFunction : MonoBehaviour
     private IEnumerator OnTriggerEnter(Collider other)
     {
         Debug.Log("Arrow Hit");
-        if (other.CompareTag("Enemy") && !IsTarget) {
-            CollisionDetected collisionDetected = other.GetComponent<CollisionDetected>();
-
+        if (!IsTarget) {
             CreateAnchor(other);
 
-            if (collisionDetected)
-                collisionDetected.Hit(damageValue, Weapon.WeaponType.Bow, other.transform.position); // Runs the funtion "Hit" in the other objects CollisionDetected script
+            if (other.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(damageValue, Weapon.WeaponType.Bow);
+            }
 
             yield return new WaitForSeconds(5);
             Destroy(gameObject);
