@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7197912442079774620}
   - component: {fileID: -7118985287197163034}
   - component: {fileID: -504257764974797377}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: BaseAxe
   m_TagString: Item
   m_Icon: {fileID: 0}
