@@ -2387,7 +2387,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 224130951485110974, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000091552734
+      value: -0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 224166536479716514, guid: 9ed2a051c32b4fe47a5e4fb95c20b03f, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3813,9 +3813,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fc9524357f9d8c48b8bf3465babf400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfEnemiesToSpawn: 20
+  numberOfEnemiesToSpawn: 5
   spawnDelay: 1
   enemies:
+  - {fileID: 11400000, guid: 968f29f8fd2bc654485883917f69e0af, type: 2}
+  - {fileID: 11400000, guid: 767ff04eb4ede2c48ae69b53c46b1071, type: 2}
+  - {fileID: 11400000, guid: bb402fe277f479a4c80d5b47357c6a17, type: 2}
+  - {fileID: 11400000, guid: 1b1bf7bd58b1290478c5f4dd1fa71284, type: 2}
   - {fileID: 11400000, guid: d194f790744daad4b83a2b6554d9a10f, type: 2}
   enemySpawnMethod: 0
 --- !u!1 &2137179291
