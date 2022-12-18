@@ -47,7 +47,6 @@ public class InventoryController : MonoBehaviour
         SelectWeapon(0);
     }
 
-    // Fix the bug so items can go in any positions (Maybe make a child for each Hotbar slot and add the weapons to the children) <- [This solution allows me to add back the line renderer as a child of the weapon controller]
     private void CreateWeapon(Transform weapon, int hotbarSlot) {
         Transform tempWeapon = Instantiate(weapon, this.transform.position, Quaternion.identity); // Creates the weapon in the hotbar slot
         tempWeapon.transform.SetParent(HotbarSlots[hotbarSlot]); // Sets this gameobject to the parent of the 

@@ -3010,7 +3010,7 @@ GameObject:
   - component: {fileID: 1708232174136693401}
   - component: {fileID: 6595214371002474586}
   m_Layer: 0
-  m_Name: Weapon Holder
+  m_Name: HotbarController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3061,9 +3061,9 @@ MonoBehaviour:
   - {fileID: 3135234470568853782}
   Hotbar:
   - {fileID: 7197912442079774620, guid: 9a39a60708e685a4ea999a559273dee0, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2382075212467369068, guid: b6edddb6e3c518b47b6a79ab56ab884b, type: 3}
+  - {fileID: 7197912442079774620, guid: b77867408f3bc7b4ca0b969ed9960f16, type: 3}
+  - {fileID: 2667027181740135718, guid: 6c731cdfbf36e66418631104f20bd22e, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   lineRenderer: {fileID: 8439985757110308094}
