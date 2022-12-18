@@ -4,25 +4,21 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using static Weapon;
-
+using StarterAssets;
 
 public class InventoryController : MonoBehaviour
 {
     public ThirdPersonController player; // Refrences the player it's attatched too
 
     [SerializeField] private Transform[] HotbarSlots;
-    [SerializeField] private Transform[] Hotbar; // this is for testing
 
+    private StarterAssetsInputs starterAssetsInputs;
+
+    [SerializeField] private Transform[] Hotbar; // this is for testing
     //private Weapon currentWeapon;
 
 
     //private int selectedWeapon = 0;
-
-    //Stats -> Get overwritten
-    //private bool CanAttack;
-    //public bool IsAttacking; // Is public to be called by other functions
-    //private float AttackingTime;
-    //private float AttackingCooldown;
 
     // Channel Variables
     private bool IsChannelingAttack = false; // Used to check if player should be charging their attack
@@ -33,6 +29,10 @@ public class InventoryController : MonoBehaviour
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Transform beamHitbox;
 
+
+    private void Awake() {
+        starterAssetsInputs = GetComponent<StarterAssetsInputs>();
+    }
 
     private void Start() {
         int hotbarSlot = 0;
@@ -88,6 +88,11 @@ public class InventoryController : MonoBehaviour
     #endregion
 
     private void Update() {
+        if (starterAssetsInputs.attack)
+        {
+            Debug.Log("Yeet");
+        }
+
         //if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome) {
         //   lineRenderer.SetPositions(new Vector3[] { player._projectileSpawn.position, player.mouseWorldPosition});
         //}
