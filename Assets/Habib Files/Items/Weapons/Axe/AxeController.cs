@@ -5,8 +5,8 @@ using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class AxeController : MonoBehaviour {
-    public ThirdPersonController owner;
+public class AxeController : WeaponController 
+{
     public Weapon weapon;
 
     public bool CanAttack;
@@ -18,29 +18,23 @@ public class AxeController : MonoBehaviour {
 
     private List<Collider> enemiesHitList = new List<Collider>(); // Makes a list to keep track of which enemies were hit (enemies added by the CollisionDetection Script on weapons)
 
-    public void Create(ThirdPersonController player) {
-        Debug.Log("Created");
-        SetOwner(player);
+
+    private void Start()
+    {
         SetWeaponStats();
         Debug.Log(owner);
     }
-
-    #region Start Set Functions
-    private void SetOwner(ThirdPersonController player) {
-        if (owner != null)
-            owner = player; // This was the old way -> this.transform.parent.GetComponentInParent<WeaponController>().
-        else Debug.Log("Uh Oh Player was not found in: " + this.name);
-    }
-    private void SetWeaponStats() {
+    private void SetWeaponStats()
+    {
         if (weapon == null) Debug.Log("No Weapon Set");
-        else {
+        else
+        {
             CanAttack = weapon.CanAttack;
             IsAttacking = weapon.IsAttacking;
             AttackingTime = weapon.attackingTime;
             AttackingCooldown = weapon.attackingCooldown;
         }
     }
-    #endregion
 
     public void OnAxeAttack()
     {
