@@ -8,16 +8,22 @@ public class AxeController : MonoBehaviour
 {
     public ThirdPersonController owner;
 
+    #region Axe Specific Variables
 
-    public void OnAxeAttack() { 
-            if (CanAttack && !IsAttacking && owner.Grounded && owner.IsOwner) {
-                owner.IsAttacking = true;
-                owner.IsConstantAim = false;
-                owner.aimTarget = owner.mouseWorldPosition;
-                owner.RotatePlayerToCamera();
+    [SerializeField] private LineRenderer lineRenderer;
 
-                StartCoroutine(AxeAttack());
+    #endregion
+    public void OnAxeAttack()
+    {
+        if (CanAttack && !IsAttacking && owner.Grounded && owner.IsOwner) {
+            owner.IsAttacking = true;
+            owner.IsConstantAim = false;
+            owner.aimTarget = owner.mouseWorldPosition;
+            owner.RotatePlayerToCamera();
+
+            StartCoroutine(AxeAttack());
         }
+    }
 
     private IEnumerator AxeAttack() {
             CanAttack = false;
