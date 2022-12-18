@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2382075212467369068}
   m_Layer: 7
-  m_Name: BaseBow
+  m_Name: pf_BaseBow
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

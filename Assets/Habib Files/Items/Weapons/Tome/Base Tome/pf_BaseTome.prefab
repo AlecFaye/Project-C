@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2667027181740135718}
   m_Layer: 7
-  m_Name: BaseTome
+  m_Name: pf_BaseTome
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
