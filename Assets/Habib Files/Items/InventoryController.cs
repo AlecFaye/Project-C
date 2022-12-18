@@ -13,10 +13,10 @@ public class InventoryController : MonoBehaviour
     [SerializeField] private Transform[] HotbarSlots;
     [SerializeField] private Transform[] Hotbar; // this is for testing
 
-    private int selectedWeapon = 0;
+    //private Weapon currentWeapon;
 
-    private Weapon currentWeapon;
 
+    //private int selectedWeapon = 0;
 
     //Stats -> Get overwritten
     //private bool CanAttack;
@@ -44,7 +44,7 @@ public class InventoryController : MonoBehaviour
             hotbarSlot++;
         }
 
-        SelectWeapon();
+        SelectWeapon(0);
     }
 
     // Fix the bug so items can go in any positions (Maybe make a child for each Hotbar slot and add the weapons to the children) <- [This solution allows me to add back the line renderer as a child of the weapon controller]
@@ -61,26 +61,37 @@ public class InventoryController : MonoBehaviour
             weaponController.owner = player;
     }
 
-    private void SelectWeapon() {
-        int i = 0;
-        foreach (Transform weapon in this.transform)
-        {
-            if (i == selectedWeapon)
-            {
-                weapon.gameObject.SetActive(true);
-                currentWeapon = Hotbar[selectedWeapon];
-                Transform currentWeaponObject = weapon;
-            }
+    private void SelectWeapon(int selectedWeapon) {
+        int position = 0;
+        foreach (Transform slot in HotbarSlots) {
+            if (position == selectedWeapon) 
+                slot.gameObject.SetActive(true);
             else
-                weapon.gameObject.SetActive(false);
-            i++;
+                slot.gameObject.SetActive(false);
+            position++;
         }
     }
+   
+    #region Hotbar Inputs
+
+    private void SwitchHotBar(int hotbarNum) {
+        //if (player.IsOwner && CanAttack && !IsChannelingAttack) {
+        SelectWeapon(hotbarNum);
+        //Debug.Log(Hotbar[selectedWeapon].weaponName);
+        //}
+    }
+    private void OnHotbar1() { SwitchHotBar(0); }
+    private void OnHotbar2() { SwitchHotBar(1); }
+    private void OnHotbar3() { SwitchHotBar(2); }
+    private void OnHotbar4() { SwitchHotBar(3); }
+    private void OnHotbar5() { SwitchHotBar(4); }
+    private void OnHotbar6() { SwitchHotBar(5); }
+    #endregion
 
     private void Update() {
-        if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome) {
-           lineRenderer.SetPositions(new Vector3[] { player._projectileSpawn.position, player.mouseWorldPosition});
-        }
+        //if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome) {
+        //   lineRenderer.SetPositions(new Vector3[] { player._projectileSpawn.position, player.mouseWorldPosition});
+        //}
     }
 
     #region On Attack Input
@@ -98,7 +109,7 @@ public class InventoryController : MonoBehaviour
     //                player.IsAttacking = true;
     //                player.IsConstantAim = true;
     //                player.TriggerAim(0.5f); // Calculate Seconds to aim in
-                    
+
     //                IsChannelingAttack = true;
     //                currentBowCharge = 0;
     //                InvokeRepeating("BowCharge", 0f, (1f / currentWeapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
@@ -150,45 +161,47 @@ public class InventoryController : MonoBehaviour
     #endregion
 
     #region Charge Functions
-    private void BowCharge()
-    {
-        currentBowCharge++;
-        if (currentBowCharge > currentWeapon.Max_Charge) currentBowCharge = currentWeapon.Max_Charge;
-        //Debug.Log("Current bow charge: " + currentBowCharge);
-    }
+    //private void BowCharge()
+    //{
+    //    currentBowCharge++;
+    //    if (currentBowCharge > currentWeapon.Max_Charge) currentBowCharge = currentWeapon.Max_Charge;
+    //    Debug.Log("Current bow charge: " + currentBowCharge);
+    //}
 
-    private void TomeDrain()
-    {
-        currentTomeCharge--;
-        tomeChargedFor++;
-        //Debug.Log("Current tome charge: " + currentTomeCharge);
-        Debug.Log("Current tome charged for: " + tomeChargedFor);
-        if (tomeChargedFor % 5 == 0) {
-            tomeChargedFor = 0;
-            //if (player.Grounded && player.IsOwner)
-                //StartCoroutine(TomeAttack());
-                //TomeAttack();
-        }
-        if (currentTomeCharge < 0) {
-            currentTomeCharge = 0;
-            CancelInvoke("TomeDrain");
-            Debug.Log("Out of Energy");
-        }
-    }
+    //private void TomeDrain()
+    //{
+    //    currentTomeCharge--;
+    //    tomeChargedFor++;
+    //    Debug.Log("Current tome charge: " + currentTomeCharge);
+    //    Debug.Log("Current tome charged for: " + tomeChargedFor);
+    //    if (tomeChargedFor % 5 == 0)
+    //    {
+    //        tomeChargedFor = 0;
+    //        if (player.Grounded && player.IsOwner)
+    //            StartCoroutine(TomeAttack());
+    //        TomeAttack();
+    //    }
+    //    if (currentTomeCharge < 0)
+    //    {
+    //        currentTomeCharge = 0;
+    //        CancelInvoke("TomeDrain");
+    //        Debug.Log("Out of Energy");
+    //    }
+    //}
 
-    private void TomeCharge()
-    {
-        currentTomeCharge++;
-        if (currentTomeCharge >= currentWeapon.Max_Held_Charge)
-        {
-            currentTomeCharge = currentWeapon.Max_Held_Charge;
-            CancelInvoke("TomeCharge");
-        }
-        //Debug.Log("Current tome charge: " + currentTomeCharge);
-    }
+    //private void TomeCharge()
+    //{
+    //    currentTomeCharge++;
+    //    if (currentTomeCharge >= currentWeapon.Max_Held_Charge)
+    //    {
+    //        currentTomeCharge = currentWeapon.Max_Held_Charge;
+    //        CancelInvoke("TomeCharge");
+    //    }
+    //    Debug.Log("Current tome charge: " + currentTomeCharge);
+    //}
     #endregion
 
-    //#region Weapon Attack Functions
+    #region Weapon Attack Functions
     //private IEnumerator BowAttack(float chargeValue) {
     //    CanAttack = false;
     //    IsAttacking = true;
@@ -215,7 +228,7 @@ public class InventoryController : MonoBehaviour
     //    IsAttacking = true;
 
     //    player._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
-       
+
     //    yield return new WaitForSeconds(AttackingTime);
     //    IsAttacking = false;
     //    player.IsAttacking = false;
@@ -228,26 +241,11 @@ public class InventoryController : MonoBehaviour
     //    Vector3 point1 = player.mouseWorldPosition;
     //    Vector3 aimDir = (point1 - point0).normalized;
     //    Transform tempBeam = Instantiate(beamHitbox, point0, Quaternion.LookRotation(aimDir, Vector3.up));
-        
+
     //    tempBeam.GetComponent<BeamFunction>().StartCoroutine("Create", currentWeapon.damageValue);
     //    tempBeam.position = Vector3.Lerp(point0, point1, 0.5f);
     //    tempBeam.localScale = new Vector3(0.1f, 0.1f, Vector3.Distance(point0, point1));
     //}
-    //#endregion
+    #endregion
 
-    //#region Hotbar Inputs
-
-    //private void SwitchHotBar(int hotbarNum) {
-    //    if (player.IsOwner && CanAttack && !IsChannelingAttack) {
-    //        selectedWeapon = hotbarNum - 1; // - 1 for arrary starting at 0
-    //        SelectWeapon();
-    //        //Debug.Log(Hotbar[selectedWeapon].weaponName);
-    //    }
-    //}
-    //private void OnHotbar1() { SwitchHotBar(1); }
-    //private void OnHotbar2() { SwitchHotBar(2); }
-    //private void OnHotbar3() { SwitchHotBar(3); }
-    //private void OnHotbar4() { SwitchHotBar(4); }
-    //private void OnHotbar5() { SwitchHotBar(5); }
-    //#endregion
 }
