@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: -8485934471412321361, guid: f737398ad4d3b454c8e237c8ddb319d4, type: 3}
   attackConfiguration: {fileID: 11400000, guid: 6af42d989f74a1b41ac8126eb2f9dee5, type: 2}
-  health: 100
+  health: 30
   armourType: 3
   weaknessTypes: 03000000
   weaknessDamageMultiplier: 1.5
