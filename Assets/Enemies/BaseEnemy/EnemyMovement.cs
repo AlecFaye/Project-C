@@ -66,7 +66,18 @@ public class EnemyMovement : MonoBehaviour
     private void HandleGainSight(Player player)
     {
         this.player = player;
-        State = EnemyState.Chase;
+        
+        if (TryGetComponent<Enemy>(out Enemy enemy))
+        {
+            if (enemy.enemyScriptableObject.attackConfiguration.isFleeing)
+            {
+                State = EnemyState.Flee;
+            }
+            else
+            {
+                State = EnemyState.Chase;
+            }
+        }
     }
 
     private void HandleLoseSight(Player player)
@@ -74,7 +85,7 @@ public class EnemyMovement : MonoBehaviour
         this.player = null;
         State = defaultState;
     }
-
+    
     private void Update()
     {
         if (currentState == EnemyState.Chase)
@@ -86,6 +97,14 @@ public class EnemyMovement : MonoBehaviour
                 animator.SetBool(IS_RUNNING, agent.velocity.magnitude > 0.01f);
             else
                 animator.SetBool(IS_WALKING, agent.velocity.magnitude > 0.01f);
+        }
+        else if (currentState == EnemyState.Flee)
+        {
+            if (animatorParameters.TryGetValue(IS_WALKING, out _))
+                animator.SetBool(IS_WALKING, false);
+
+            if (animatorParameters.TryGetValue(IS_RUNNING, out _))
+                animator.SetBool(IS_RUNNING, agent.velocity.magnitude > 0.01f);
         }
         else
         {
@@ -149,6 +168,9 @@ public class EnemyMovement : MonoBehaviour
                     break;
                 case EnemyState.Chase:
                     followCoroutine = StartCoroutine(FollowTarget());
+                    break;
+                case EnemyState.Flee:
+                    followCoroutine = StartCoroutine(FleeTarget());
                     break;
             }
         }
@@ -233,6 +255,23 @@ public class EnemyMovement : MonoBehaviour
                             changeBaseOffsetCoroutine = StartCoroutine(ChangeBaseOffset(1.2f));
                     }
                 }
+            }
+            yield return wait;
+        }
+    }
+
+    private IEnumerator FleeTarget()
+    {
+        WaitForSeconds wait = new(updateRate);
+
+        while (true)
+        {
+            if (agent.enabled)
+            {
+                Vector3 direction = (transform.position - player.transform.position).normalized;
+                Vector3 destination = transform.position + direction * 10.0f;
+
+                agent.SetDestination(destination);
             }
             yield return wait;
         }

@@ -22,7 +22,7 @@ MonoBehaviour:
   idleLocationRadius: 8
   idleMovespeedMultiplier: 0.5
   lineOfSightRange: 8
-  fieldOfView: 180
+  fieldOfView: 135
   numOfWaypoints: 4
   aiUpdateInterval: 0.1
   acceleration: 12
