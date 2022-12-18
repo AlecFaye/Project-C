@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using static Weapon;
-using StarterAssets;
 
 public class InventoryController : MonoBehaviour
 {
@@ -12,39 +11,35 @@ public class InventoryController : MonoBehaviour
 
     [SerializeField] private Transform[] HotbarSlots;
 
+    public bool IsAttacking = false; // Used to check if player is attacking
+    private bool CanAttack = true; // Used to check if player can attack
+
+    private int selectedWeapon = 0;
+    
     private StarterAssetsInputs starterAssetsInputs;
+
 
     [SerializeField] private Transform[] Hotbar; // this is for testing
     //private Weapon currentWeapon;
-
-
-    //private int selectedWeapon = 0;
-
     // Channel Variables
-    private bool IsChannelingAttack = false; // Used to check if player should be charging their attack
     private float currentBowCharge = 0;
     private float currentTomeCharge = 100;
     private float tomeChargedFor = 0;
-
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Transform beamHitbox;
 
-
     private void Awake() {
-        starterAssetsInputs = GetComponent<StarterAssetsInputs>();
+        starterAssetsInputs = player.GetComponent<StarterAssetsInputs>();
     }
 
     private void Start() {
         int hotbarSlot = 0;
         foreach (Transform weapon in Hotbar) {
-            if (weapon != null) {
-                Debug.Log(weapon.name);
-                CreateWeapon(weapon, hotbarSlot);
-            }
+            if (weapon != null) CreateWeapon(weapon, hotbarSlot);
             hotbarSlot++;
-        }
-
-        SelectWeapon(0);
+        } 
+        
+        SelectWeapon();
     }
 
     private void CreateWeapon(Transform weapon, int hotbarSlot) {
@@ -60,7 +55,7 @@ public class InventoryController : MonoBehaviour
             weaponController.owner = player;
     }
 
-    private void SelectWeapon(int selectedWeapon) {
+    private void SelectWeapon() {
         int position = 0;
         foreach (Transform slot in HotbarSlots) {
             if (position == selectedWeapon) 
@@ -74,10 +69,10 @@ public class InventoryController : MonoBehaviour
     #region Hotbar Inputs
 
     private void SwitchHotBar(int hotbarNum) {
-        //if (player.IsOwner && CanAttack && !IsChannelingAttack) {
-        SelectWeapon(hotbarNum);
-        //Debug.Log(Hotbar[selectedWeapon].weaponName);
-        //}
+        if (player.IsOwner && CanAttack && !IsAttacking) {
+            selectedWeapon = hotbarNum;
+            SelectWeapon();
+        }
     }
     private void OnHotbar1() { SwitchHotBar(0); }
     private void OnHotbar2() { SwitchHotBar(1); }
@@ -88,9 +83,10 @@ public class InventoryController : MonoBehaviour
     #endregion
 
     private void Update() {
-        if (starterAssetsInputs.attack)
-        {
-            Debug.Log("Yeet");
+        if (starterAssetsInputs.attack && !IsAttacking) {
+            IsAttacking = true;
+            if (HotbarSlots[selectedWeapon].GetChild(0).TryGetComponent<WeaponController>(out WeaponController weaponController))
+                weaponController.Attack();
         }
 
         //if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome) {
@@ -98,8 +94,10 @@ public class InventoryController : MonoBehaviour
         //}
     }
 
+
+
     #region On Attack Input
-    //public void OnAttack()
+    //public void OnAttack()s
     //{
     //    switch (Hotbar[selectedWeapon].weaponType)
     //    {

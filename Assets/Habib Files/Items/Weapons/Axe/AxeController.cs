@@ -36,15 +36,20 @@ public class AxeController : WeaponController
         }
     }
 
-    public void OnAxeAttack()
+    public override void Attack()
     {
-        if (CanAttack && !IsAttacking && owner.Grounded && owner.IsOwner) {
-            owner.IsAttacking = true;
-            owner.IsConstantAim = false;
-            owner.aimTarget = owner.mouseWorldPosition;
-            owner.RotatePlayerToCamera();
+        if (!IsAttacking && owner.IsOwner) { // Cut out -> owner.Grounded (Checked if player was grounded)
+            if (CanAttack) {
+                Debug.Log("Attack Started");
+                owner.IsAttacking = true;
+                owner.IsConstantAim = false;
+                owner.aimTarget = owner.mouseWorldPosition;
+                owner.RotatePlayerToCamera();
 
-            StartCoroutine(AxeAttack());
+                StartCoroutine(AxeAttack());
+            } else {
+                DisableIsAttacking();
+            }
         }
     }
 
@@ -57,6 +62,7 @@ public class AxeController : WeaponController
         yield return new WaitForSeconds(AttackingTime);
         IsAttacking = false;
         owner.IsAttacking = false;
+        DisableIsAttacking();
         yield return new WaitForSeconds(AttackingCooldown);
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
@@ -72,5 +78,9 @@ public class AxeController : WeaponController
                 enemiesHitList.Add(other);
             }
         }
+    }
+
+    private void DisableIsAttacking() {
+        this.transform.parent.parent.GetComponent<InventoryController>().IsAttacking = false;
     }
 }

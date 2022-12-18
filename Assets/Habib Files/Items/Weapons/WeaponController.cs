@@ -6,4 +6,8 @@ using UnityEngine;
 public class WeaponController : MonoBehaviour
 {
     public ThirdPersonController owner;
+
+    public virtual void Attack() {
+        Debug.Log("Reeeee No attack Set");
+    }
 }
