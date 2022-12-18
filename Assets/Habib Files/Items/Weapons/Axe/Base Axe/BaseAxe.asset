@@ -15,7 +15,7 @@ MonoBehaviour:
   _player: {fileID: 0}
   weaponType: 1
   weaponName: Base Axe
-  description: This is the Base for an Axe
+  description: This is the Base for a Axe
   inventorySprite: {fileID: 0}
   weaponModel: {fileID: 7197912442079774620, guid: 9a39a60708e685a4ea999a559273dee0, type: 3}
   CanAttack: 1

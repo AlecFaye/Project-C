@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Arrow", menuName = "New Arrow")]
+[CreateAssetMenu(fileName = "Arrow", menuName = "Create Item/New Arrow")]
 public class Arrow : ScriptableObject
 {
     public string arrowName;

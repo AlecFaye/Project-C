@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollisionFunction : MonoBehaviour
+public class MeleeFunction : MonoBehaviour
 {
 
     public Weapon weapon;

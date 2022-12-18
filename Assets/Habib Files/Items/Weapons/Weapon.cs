@@ -6,8 +6,7 @@ using UnityEngine;
 using StarterAssets;
 using Unity.Services.Lobbies.Models;
 
-
-[CreateAssetMenu(fileName = "Weapon", menuName = "New Weapon")]
+[CreateAssetMenu(fileName = "Weapon", menuName = "Create Item/New Weapon")]
 public class Weapon : ScriptableObject
 {
     public ThirdPersonController _player;
@@ -21,7 +20,7 @@ public class Weapon : ScriptableObject
         Tome
     }
 
-    public WeaponType weaponType;
+    public WeaponType weaponType = WeaponType.None;
 
     public string weaponName;
     public string description;

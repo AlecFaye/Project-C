@@ -6,11 +6,11 @@ using UnityEngine;
 using static Weapon;
 
 
-//namespace WeaponController{
 public class WeaponController : MonoBehaviour
 {
     public ThirdPersonController player; // Refrences the player it's attatched too
 
+    [SerializeField] private GameObject[] HotbarSlots;
     [SerializeField] private Weapon[] Hotbar;
 
     private int selectedWeapon = 0;
