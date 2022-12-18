@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 8686986069671427129}
   - component: {fileID: -8485934471412321361}
   - component: {fileID: 5590864227609593972}
+  - component: {fileID: 7554235466082642495}
   m_Layer: 15
   m_Name: Gorilla1.0
   m_TagString: Untagged
@@ -361,8 +362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70638908042a7cf4f9f74ee093de14ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pfWeapon: {fileID: 0}
-  animator: {fileID: 7116147781233330615}
   enemy: {fileID: 0}
 --- !u!114 &-8485934471412321361
 MonoBehaviour:
@@ -408,6 +407,52 @@ MonoBehaviour:
   idleMoveSpeedMultiplier: 0.5
   waypoints: []
   waypointIndex: 0
+--- !u!114 &7554235466082642495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7003615246658576132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f3f856eba544347b193cc3853bfff6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Method: 3
+  m_Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.21352348
+      value: 0.93892705
+      inSlope: 3.0109224
+      outSlope: 3.0109224
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &170114698912715153
 PrefabInstance:
   m_ObjectHideFlags: 0
