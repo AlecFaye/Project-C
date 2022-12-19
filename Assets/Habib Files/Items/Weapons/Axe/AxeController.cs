@@ -48,7 +48,8 @@ public class AxeController : WeaponController
     }
 
     public override void AttackEnd() {
-        Debug.Log("End Attack");
+        //if (!IsAttacking && !CanAttack)
+        //    CanAttack = true;
     }
 
     private IEnumerator AxeAttack() {

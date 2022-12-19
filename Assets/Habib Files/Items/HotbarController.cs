@@ -43,10 +43,10 @@ public class HotbarController : MonoBehaviour
     }
     private void Update()
     {
-        if (IsAttacking) {
-            if (HotbarSlots[selectedWeapon].GetChild(0).TryGetComponent<WeaponController>(out WeaponController weaponController))
-                weaponController.AttackStart();
-        }
+        //if (IsAttacking) {
+        //    if (HotbarSlots[selectedWeapon].GetChild(0).TryGetComponent<WeaponController>(out WeaponController weaponController))
+        //        weaponController.AttackStart();
+        //}
 
         //if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome)
         //{

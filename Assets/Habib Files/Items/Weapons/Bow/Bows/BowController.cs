@@ -16,6 +16,7 @@ public class BowController : WeaponController
 
     private float currentBowCharge = 0;
 
+    private string bowCharge = "BowCharge";
 
     private void Start() { SetWeaponStats(); }
     private void SetWeaponStats() {
@@ -39,13 +40,13 @@ public class BowController : WeaponController
             owner.TriggerAim(weapon.maxCharge / weapon.chargeGainedRate); // Calculate Seconds to aim in
 
             currentBowCharge = 0;
-            InvokeRepeating("BowCharge", 0f, (1f / weapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
+            InvokeRepeating(bowCharge, 0f, (1f / weapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
         }
     }
 
     public override void AttackEnd() {
         Debug.Log("End Attack Pre If");
-        CancelInvoke("BowCharge");
+        CancelInvoke(bowCharge);
         if (!CanAttack && IsAttacking && owner.IsOwner && currentBowCharge > 0)
             Debug.Log("End Attack Post If");
             BowAttack(currentBowCharge);

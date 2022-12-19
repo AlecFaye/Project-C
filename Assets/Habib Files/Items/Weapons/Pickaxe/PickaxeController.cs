@@ -47,7 +47,8 @@ public class PickaxeController : WeaponController
     }
     
     public override void AttackEnd() {
-        Debug.Log("End Attack");
+        //if (!IsAttacking && !CanAttack)
+        //    CanAttack = true;
     }
 
     private IEnumerator PickaxeAttack() {
