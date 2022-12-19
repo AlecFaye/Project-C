@@ -19,16 +19,13 @@ public class AxeController : WeaponController
     private List<Collider> enemiesHitList = new List<Collider>(); // Makes a list to keep track of which enemies were hit (enemies added by the CollisionDetection Script on weapons)
 
 
-    private void Start()
-    {
+    private void Start() {
         SetWeaponStats();
         Debug.Log(owner);
     }
-    private void SetWeaponStats()
-    {
+    private void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
-        else
-        {
+        else {
             CanAttack = weapon.CanAttack;
             IsAttacking = weapon.IsAttacking;
             AttackingTime = weapon.attackingTime;
@@ -40,7 +37,6 @@ public class AxeController : WeaponController
     {
         if (!IsAttacking && owner.IsOwner) { // Cut out -> owner.Grounded (Checked if player was grounded)
             if (CanAttack) {
-                Debug.Log("Attack Started");
                 owner.IsAttacking = true;
                 owner.IsConstantAim = false;
                 owner.aimTarget = owner.mouseWorldPosition;
@@ -63,6 +59,7 @@ public class AxeController : WeaponController
         IsAttacking = false;
         owner.IsAttacking = false;
         DisableIsAttacking();
+
         yield return new WaitForSeconds(AttackingCooldown);
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
@@ -70,10 +67,8 @@ public class AxeController : WeaponController
 
     private void OnTriggerEnter(Collider other) {
         // Checks if it collided with an enemy ====== Checks if the player should be attacking rn(done in weapon controller) ====== Checks if the enemy was already hit by this attack
-        if (weapon.IsAttacking && enemiesHitList.Contains(other))
-        {
-            if (other.TryGetComponent(out IDamageable damageable))
-            {
+        if (weapon.IsAttacking && enemiesHitList.Contains(other)) {
+            if (other.TryGetComponent(out IDamageable damageable)) {
                 damageable.TakeDamage(weapon.damageValue, weapon.weaponType);
                 enemiesHitList.Add(other);
             }
