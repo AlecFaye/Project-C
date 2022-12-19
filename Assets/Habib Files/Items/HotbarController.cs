@@ -46,33 +46,11 @@ public class HotbarController : MonoBehaviour
         SelectWeapon();
     }
     private void Update() {
-        if (CanAttack && !IsAttacking && IsHoldingAttack && currentWeapon)
-            currentWeapon.AttackStart();
-
         //if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome)
         //{
         //    lineRenderer.SetPositions(new Vector3[] { player._projectileSpawn.position, player.mouseWorldPosition });
         //}
     }
-
-    #region Attack Start and End
-
-    public void OnAttackStart() {
-        Debug.Log("Attack Start");
-        if (currentWeapon) {
-            IsHoldingAttack = true;
-            currentWeapon.AttackStart();
-        }
-    }
-    public void OnAttackEnd() {
-        Debug.Log("Attack End");
-        if (currentWeapon) {
-            IsHoldingAttack = false;
-            currentWeapon.AttackEnd();
-        }
-    }
-
-    #endregion
 
     private void CreateWeapon(Transform weapon, int hotbarSlot) {
         Transform tempWeapon = Instantiate(weapon, this.transform.position, Quaternion.identity); // Creates the weapon in the hotbar slot
@@ -85,7 +63,7 @@ public class HotbarController : MonoBehaviour
     private void SetOwnerofWeapon(Transform weapon) {
         if (weapon.TryGetComponent<WeaponController>(out WeaponController weaponController)) {
             weaponController.owner = player;
-            weaponController.hotbarController = this;
+            //weaponController.hotbarController = this;
         }
     }
 
@@ -94,7 +72,7 @@ public class HotbarController : MonoBehaviour
         foreach (Transform slot in HotbarSlots) {
             if (position == selectedWeapon) {
                 slot.gameObject.SetActive(true);
-                currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
+                //currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
             }
             else
                 slot.gameObject.SetActive(false);
@@ -102,10 +80,10 @@ public class HotbarController : MonoBehaviour
         }
     }
    
-    public void UpdateAttackingStates() {
-        CanAttack = currentWeapon.CanAttack;
-        IsAttacking = currentWeapon.IsAttacking;
-    }
+    //public void UpdateAttackingStates() {
+    //    CanAttack = currentWeapon.CanAttack;
+    //    IsAttacking = currentWeapon.IsAttacking;
+    //}
 
     #region Hotbar Inputs
 
@@ -121,8 +99,11 @@ public class HotbarController : MonoBehaviour
     private void OnHotbar4() { SwitchHotBar(3); }
     private void OnHotbar5() { SwitchHotBar(4); }
     private void OnHotbar6() { SwitchHotBar(5); }
-   
+
     #endregion
+
+
+
 
     #region On Attack Input
     //public void OnAttack() {
@@ -231,7 +212,7 @@ public class HotbarController : MonoBehaviour
     #endregion
 
     #region Weapon Attack Functions
-    
+
     //private IEnumerator PickaxeAttack() {
     //    CanAttack = false;
     //    IsAttacking = true;
@@ -245,16 +226,7 @@ public class HotbarController : MonoBehaviour
     //    //enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
     //    CanAttack = true;
     //}
-    //private void TomeAttack() {
-    //    Vector3 point0 = player._projectileSpawn.position;
-    //    Vector3 point1 = player.mouseWorldPosition;
-    //    Vector3 aimDir = (point1 - point0).normalized;
-    //    Transform tempBeam = Instantiate(beamHitbox, point0, Quaternion.LookRotation(aimDir, Vector3.up));
 
-    //    tempBeam.GetComponent<BeamFunction>().StartCoroutine("Create", currentWeapon.damageValue);
-    //    tempBeam.position = Vector3.Lerp(point0, point1, 0.5f);
-    //    tempBeam.localScale = new Vector3(0.1f, 0.1f, Vector3.Distance(point0, point1));
-    //}
     #endregion
 
 }
