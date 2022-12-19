@@ -5,7 +5,7 @@ using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class AxeController : WeaponController 
+public class TomeController : WeaponController 
 {
     public Weapon weapon;
 
@@ -13,15 +13,14 @@ public class AxeController : WeaponController
     public bool IsAttacking;
     public float AttackingTime;
     public float AttackingCooldown;
+    private float currentTomeCharge = 100;
 
     [SerializeField] private TrailRenderer trail;
 
     private List<Collider> enemiesHitList = new List<Collider>(); // Makes a list to keep track of which enemies were hit (enemies added by the CollisionDetection Script on weapons)
 
 
-    private void Start() {
-        SetWeaponStats();
-    }
+    private void Start() { SetWeaponStats(); }
     private void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
         else {
@@ -29,21 +28,20 @@ public class AxeController : WeaponController
             IsAttacking = weapon.IsAttacking;
             AttackingTime = weapon.attackingTime;
             AttackingCooldown = weapon.attackingCooldown;
+            currentTomeCharge = weapon.startingCharge;
         }
     }
 
-    public override void AttackStart()
-    {
-        if (CanAttack && !IsAttacking && owner.IsOwner) { // Cut out -> owner.Grounded (Checked if player was grounded)
+    public override void AttackStart() {
+        if (CanAttack && !IsAttacking && owner.IsOwner) {
             CanAttack = false;
             IsAttacking = true;
 
-            owner.IsAttacking = IsAttacking;
-            owner.IsConstantAim = false;
-            owner.aimTarget = owner.mouseWorldPosition;
-            owner.RotatePlayerToCamera();
-                
-            StartCoroutine(AxeAttack());
+            owner.IsAttacking = true;
+            owner.IsConstantAim = true;
+            owner.TriggerAim(weapon.maxCharge / weapon.chargeGainedRate); // Calculate Seconds to aim in
+
+            TomeAttack();
         }
     }
 
@@ -51,13 +49,14 @@ public class AxeController : WeaponController
         Debug.Log("End Attack");
     }
 
-    private IEnumerator AxeAttack() {
+    private void TomeAttack() {
+        CanAttack = false;
+        IsAttacking = true;
+
         owner._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
 
-        yield return new WaitForSeconds(AttackingTime);
         DisableIsAttacking();
 
-        yield return new WaitForSeconds(AttackingCooldown);
         enemiesHitList = new List<Collider>(); // Resets the list of enemies so that they can be hit again
         CanAttack = true;
     }

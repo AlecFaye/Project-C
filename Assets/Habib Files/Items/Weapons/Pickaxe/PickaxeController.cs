@@ -5,7 +5,7 @@ using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class AxeController : WeaponController 
+public class PickaxeController : WeaponController
 {
     public Weapon weapon;
 
@@ -19,12 +19,11 @@ public class AxeController : WeaponController
     private List<Collider> enemiesHitList = new List<Collider>(); // Makes a list to keep track of which enemies were hit (enemies added by the CollisionDetection Script on weapons)
 
 
-    private void Start() {
-        SetWeaponStats();
-    }
+    private void Start() { SetWeaponStats(); }
     private void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
-        else {
+        else
+        {
             CanAttack = weapon.CanAttack;
             IsAttacking = weapon.IsAttacking;
             AttackingTime = weapon.attackingTime;
@@ -32,9 +31,9 @@ public class AxeController : WeaponController
         }
     }
 
-    public override void AttackStart()
-    {
-        if (CanAttack && !IsAttacking && owner.IsOwner) { // Cut out -> owner.Grounded (Checked if player was grounded)
+    public override void AttackStart() {
+        if (CanAttack && !IsAttacking && owner.IsOwner)
+        { // Cut out -> owner.Grounded (Checked if player was grounded)
             CanAttack = false;
             IsAttacking = true;
 
@@ -42,17 +41,17 @@ public class AxeController : WeaponController
             owner.IsConstantAim = false;
             owner.aimTarget = owner.mouseWorldPosition;
             owner.RotatePlayerToCamera();
-                
-            StartCoroutine(AxeAttack());
+
+            StartCoroutine(PickaxeAttack());
         }
     }
-
+    
     public override void AttackEnd() {
         Debug.Log("End Attack");
     }
 
-    private IEnumerator AxeAttack() {
-        owner._animator.SetTrigger("Axe Attack"); // Will call the currently selected weapon's attack animation
+    private IEnumerator PickaxeAttack() {
+        owner._animator.SetTrigger("Picaxe Attack"); // Will call the currently selected weapon's attack animation
 
         yield return new WaitForSeconds(AttackingTime);
         DisableIsAttacking();
@@ -64,8 +63,10 @@ public class AxeController : WeaponController
 
     private void OnTriggerEnter(Collider other) {
         // Checks if it collided with an enemy ====== Checks if the player should be attacking rn(done in weapon controller) ====== Checks if the enemy was already hit by this attack
-        if (weapon.IsAttacking && enemiesHitList.Contains(other)) {
-            if (other.TryGetComponent(out IDamageable damageable)) {
+        if (weapon.IsAttacking && enemiesHitList.Contains(other))
+        {
+            if (other.TryGetComponent(out IDamageable damageable))
+            {
                 damageable.TakeDamage(weapon.damageValue, weapon.weaponType);
                 enemiesHitList.Add(other);
             }

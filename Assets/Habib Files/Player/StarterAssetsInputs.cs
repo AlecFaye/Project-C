@@ -45,10 +45,10 @@ namespace StarterAssets
 			SprintInput(value.isPressed);
 		}
 
-		public void OnAttack(InputValue value)
-		{
-			AttackInput(value.isPressed);
-		}
+		//public void OnAttack(InputValue value)
+		//{
+		//	AttackInput(value.isPressed);
+		//}
 		
 #endif
 
@@ -73,10 +73,10 @@ namespace StarterAssets
             sprint = newSprintState;
 		}
 		
-		public void AttackInput(bool newAttackState)
-        {
-            attack = newAttackState;
-		}
+		//public void AttackInput(bool newAttackState)
+  //      {
+  //          attack = newAttackState;
+		//}
 		
 		private void OnApplicationFocus(bool hasFocus)
 		{

@@ -7,7 +7,10 @@ public class WeaponController : MonoBehaviour
 {
     public ThirdPersonController owner;
 
-    public virtual void Attack() {
-        Debug.Log("Reeeee No attack Set");
+    public virtual void AttackStart() {
+        Debug.Log("Reeeee No Attack Start Set");
+    }
+    public virtual void AttackEnd() {
+        Debug.Log("No Attack End Set");
     }
 }

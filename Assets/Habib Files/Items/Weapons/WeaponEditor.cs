@@ -26,18 +26,24 @@ public class WeaponEditor : Editor
 
     SerializedProperty attackSpeed;
 
+    #region Weapon Specific Variables
     SerializedProperty cutLevel;
     
-    SerializedProperty Max_Charge;
-    SerializedProperty currentCharge;
-    SerializedProperty chargeGainedRate;
     SerializedProperty _arrowType;
 
     SerializedProperty mineLevel;
 
-    SerializedProperty Max_Held_Charge;
-    SerializedProperty currentHeldCharge;
-    SerializedProperty chargeLostRate;
+    SerializedProperty chargeDrainedRate;
+
+    #endregion
+
+    #region Charge Variables
+    
+    SerializedProperty maxCharge;
+    SerializedProperty startingCharge;
+    SerializedProperty chargeGainedRate;
+
+    #endregion
 
     bool WeaponVisualInfoGroup, WeaponBaseStatsInfoGroup = true;
     #endregion
@@ -45,19 +51,12 @@ public class WeaponEditor : Editor
     #region Ignore this unless needed
     private void OnEnable()
     {
-        //_player = serializedObject.FindProperty("_player");
-        //WeaponType = serializedObject.FindProperty("WeaponType");
-
         weaponName = serializedObject.FindProperty("weaponName");
         description = serializedObject.FindProperty("description");
         inventorySprite = serializedObject.FindProperty("inventorySprite");
         weaponModel = serializedObject.FindProperty("weaponModel");
 
         weaponType = serializedObject.FindProperty("weaponType");
-
-        //CanAttack = serializedObject.FindProperty("CanAttack");
-
-        //IsAttacking = serializedObject.FindProperty("IsAttacking");
 
         attackingTime = serializedObject.FindProperty("attackingTime");
 
@@ -68,16 +67,14 @@ public class WeaponEditor : Editor
 
         cutLevel = serializedObject.FindProperty("cutLevel");
 
-        Max_Charge = serializedObject.FindProperty("Max_Charge");
-        currentCharge = serializedObject.FindProperty("currentCharge");
-        chargeGainedRate = serializedObject.FindProperty("chargeGainedRate");
+
         _arrowType = serializedObject.FindProperty("_arrowType");
-
         mineLevel = serializedObject.FindProperty("mineLevel");
+        chargeDrainedRate = serializedObject.FindProperty("chargeDrainedRate");
 
-        Max_Held_Charge = serializedObject.FindProperty("Max_Held_Charge");
-        currentHeldCharge = serializedObject.FindProperty("currentHeldCharge");
-        chargeLostRate = serializedObject.FindProperty("chargeLostRate");
+        maxCharge = serializedObject.FindProperty("maxCharge");
+        startingCharge = serializedObject.FindProperty("startingCharge");
+        chargeGainedRate = serializedObject.FindProperty("chargeGainedRate");
     }
     #endregion
 
@@ -125,8 +122,8 @@ public class WeaponEditor : Editor
                         EditorGUILayout.PropertyField(cutLevel);
                         break;
                     case Weapon.WeaponType.Bow:
-                        EditorGUILayout.PropertyField(Max_Charge);
-                        EditorGUILayout.PropertyField(currentCharge);
+                        EditorGUILayout.PropertyField(maxCharge);
+                        EditorGUILayout.PropertyField(startingCharge);
                         EditorGUILayout.PropertyField(chargeGainedRate);
                         EditorGUILayout.PropertyField(_arrowType);
                         break;
@@ -134,9 +131,10 @@ public class WeaponEditor : Editor
                         EditorGUILayout.PropertyField(mineLevel);
                         break;
                     case Weapon.WeaponType.Tome:
-                        EditorGUILayout.PropertyField(Max_Held_Charge);
-                        EditorGUILayout.PropertyField(currentHeldCharge);
-                        EditorGUILayout.PropertyField(chargeLostRate);
+                        EditorGUILayout.PropertyField(maxCharge);
+                        EditorGUILayout.PropertyField(startingCharge);
+                        EditorGUILayout.PropertyField(chargeGainedRate);
+                        EditorGUILayout.PropertyField(chargeDrainedRate);
                         break;
                 }
             }

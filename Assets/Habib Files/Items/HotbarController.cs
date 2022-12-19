@@ -3,26 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static Weapon;
+using UnityEngine.InputSystem;
 
-public class InventoryController : MonoBehaviour
+
+public class HotbarController : MonoBehaviour
 {
     public ThirdPersonController player; // Refrences the player it's attatched too
 
     [SerializeField] private Transform[] HotbarSlots;
 
     public bool IsAttacking = false; // Used to check if player is attacking
-    private bool CanAttack = true; // Used to check if player can attack
 
     private int selectedWeapon = 0;
     
     private StarterAssetsInputs starterAssetsInputs;
 
 
+    //private InputActionReference inputActionReference;
     [SerializeField] private Transform[] Hotbar; // this is for testing
     //private Weapon currentWeapon;
     // Channel Variables
-    private float currentBowCharge = 0;
     private float currentTomeCharge = 100;
     private float tomeChargedFor = 0;
     [SerializeField] private LineRenderer lineRenderer;
@@ -40,6 +40,30 @@ public class InventoryController : MonoBehaviour
         } 
         
         SelectWeapon();
+    }
+    private void Update()
+    {
+        if (IsAttacking) {
+            if (HotbarSlots[selectedWeapon].GetChild(0).TryGetComponent<WeaponController>(out WeaponController weaponController))
+                weaponController.AttackStart();
+        }
+
+        //if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome)
+        //{
+        //    lineRenderer.SetPositions(new Vector3[] { player._projectileSpawn.position, player.mouseWorldPosition });
+        //}
+    }
+
+    public void OnAttackStart() {
+        Debug.Log("Attack Start");
+        if (HotbarSlots[selectedWeapon].GetChild(0).TryGetComponent<WeaponController>(out WeaponController weaponController))
+            IsAttacking = true;
+            weaponController.AttackStart();
+    }
+    public void OnAttackEnd() {
+        Debug.Log("Attack End");
+        if (HotbarSlots[selectedWeapon].GetChild(0).TryGetComponent<WeaponController>(out WeaponController weaponController))
+            weaponController.AttackEnd();
     }
 
     private void CreateWeapon(Transform weapon, int hotbarSlot) {
@@ -69,7 +93,7 @@ public class InventoryController : MonoBehaviour
     #region Hotbar Inputs
 
     private void SwitchHotBar(int hotbarNum) {
-        if (player.IsOwner && CanAttack && !IsAttacking) {
+        if (player.IsOwner && !IsAttacking) {
             selectedWeapon = hotbarNum;
             SelectWeapon();
         }
@@ -82,30 +106,15 @@ public class InventoryController : MonoBehaviour
     private void OnHotbar6() { SwitchHotBar(5); }
     #endregion
 
-    private void Update() {
-        if (starterAssetsInputs.attack && !IsAttacking) {
-            IsAttacking = true;
-            if (HotbarSlots[selectedWeapon].GetChild(0).TryGetComponent<WeaponController>(out WeaponController weaponController))
-                weaponController.Attack();
-        }
-
-        //if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome) {
-        //   lineRenderer.SetPositions(new Vector3[] { player._projectileSpawn.position, player.mouseWorldPosition});
-        //}
-    }
 
 
 
     #region On Attack Input
-    //public void OnAttack()s
-    //{
-    //    switch (Hotbar[selectedWeapon].weaponType)
-    //    {
+    //public void OnAttack() {
+    //    switch (Hotbar[selectedWeapon].weaponType) {
     //        case WeaponType.None:
     //            Debug.Log("Wait stop should be NONE");
     //            break;
-
-
     //        case WeaponType.Bow:
     //            if (!IsChannelingAttack) {
     //                player.IsAttacking = true;
@@ -116,8 +125,7 @@ public class InventoryController : MonoBehaviour
     //                currentBowCharge = 0;
     //                InvokeRepeating("BowCharge", 0f, (1f / currentWeapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
 
-    //            }
-    //            else {
+    //            } else {
     //                IsChannelingAttack = false;
     //                CancelInvoke("BowCharge");
     //                if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
@@ -126,7 +134,8 @@ public class InventoryController : MonoBehaviour
     //            break;
 
     //        case WeaponType.Pickaxe:
-    //            if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner) {
+    //            if (CanAttack && !IsAttacking && player.Grounded && player.IsOwner)
+    //            {
     //                player.IsAttacking = true;
     //                player.IsConstantAim = false;
     //                player.aimTarget = player.mouseWorldPosition;
@@ -137,7 +146,8 @@ public class InventoryController : MonoBehaviour
     //            break;
 
     //        case WeaponType.Tome:
-    //            if (!IsChannelingAttack) {
+    //            if (!IsChannelingAttack)
+    //            {
     //                player.IsAttacking = true;
     //                player.IsConstantAim = true;
 
@@ -146,7 +156,8 @@ public class InventoryController : MonoBehaviour
     //                CancelInvoke("TomeCharge");
     //                InvokeRepeating("TomeDrain", 0, (1f / currentWeapon.chargeLostRate)); // Invokes the func TomeDrain(), instantly once, then once every (1 sec/TomeChargeRate)
     //            }
-    //            else {
+    //            else
+    //            {
     //                player.IsAttacking = false;
     //                player.IsConstantAim = false;
 
@@ -160,7 +171,9 @@ public class InventoryController : MonoBehaviour
     //            break;
     //    }
     //}
+    //}
     #endregion
+
 
     #region Charge Functions
     //private void BowCharge()
@@ -204,27 +217,7 @@ public class InventoryController : MonoBehaviour
     #endregion
 
     #region Weapon Attack Functions
-    //private IEnumerator BowAttack(float chargeValue) {
-    //    CanAttack = false;
-    //    IsAttacking = true;
-
-    //    player.IsAttacking = false;
-    //    player.IsConstantAim = false; 
-    //    player.TriggerAim(0.5f); // Calculate Seconds to aim out
-
-
-    //    Vector3 aimDir = (player.mouseWorldPosition - player._projectileSpawn.position).normalized;
-    //    Transform tempArrow = Instantiate(currentWeapon._arrowType.arrowModel, player._projectileSpawn.position, Quaternion.LookRotation(aimDir, Vector3.up));
-    //    tempArrow.GetComponent<ArrowFunction>().Create(
-    //        currentWeapon._arrowType.travelSpeed * (currentBowCharge / 100), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
-    //        (currentWeapon._arrowType.damageValue + (currentWeapon.damageValue * (currentBowCharge / 100))) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
-    //        );
-
-    //    yield return new WaitForSeconds(AttackingTime);
-    //    IsAttacking = false;
-    //    yield return new WaitForSeconds(AttackingCooldown);
-    //    CanAttack = true;
-    //}
+    
     //private IEnumerator PickaxeAttack() {
     //    CanAttack = false;
     //    IsAttacking = true;

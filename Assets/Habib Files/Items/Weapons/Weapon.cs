@@ -39,6 +39,7 @@ public class Weapon : ScriptableObject
 
     public float attackSpeed;
 
+
     #region AxeVariables
 
     public int cutLevel;
@@ -46,10 +47,6 @@ public class Weapon : ScriptableObject
     #endregion
 
     #region BowVariables
-
-    public float Max_Charge;
-    public float currentCharge;
-    public float chargeGainedRate;
 
     public Arrow _arrowType;
 
@@ -63,10 +60,15 @@ public class Weapon : ScriptableObject
     
     #region TomeVariables
 
-    public float Max_Held_Charge;
-    public float currentHeldCharge;
-    public float chargeLostRate;
+    public float chargeDrainedRate;
 
     #endregion
 
+    #region Charge Variables
+
+    public float maxCharge;
+    public float startingCharge;
+    public float chargeGainedRate;
+    
+    #endregion
 }

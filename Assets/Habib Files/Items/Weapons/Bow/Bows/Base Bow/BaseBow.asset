@@ -20,16 +20,14 @@ MonoBehaviour:
   weaponModel: {fileID: 2382075212467369068, guid: b6edddb6e3c518b47b6a79ab56ab884b, type: 3}
   CanAttack: 1
   IsAttacking: 0
-  attackingTime: 0.8
-  attackingCooldown: 1
+  attackingTime: 0.1
+  attackingCooldown: 0.3
   damageValue: 4
   attackSpeed: 0
   cutLevel: 0
-  Max_Charge: 100
-  currentCharge: 0
-  chargeGainedRate: 20
   _arrowType: {fileID: 11400000, guid: adb07f8fce9fff847814ad5bfd31aec6, type: 2}
   mineLevel: 0
-  Max_Held_Charge: 0
-  currentHeldCharge: 0
-  chargeLostRate: 0
+  chargeDrainedRate: 0
+  maxCharge: 100
+  startingCharge: 0
+  chargeGainedRate: 20
