@@ -9,8 +9,6 @@ public class BowController : WeaponController
 {
     public Weapon weapon;
 
-    public bool CanAttack;
-    public bool IsAttacking;
     public float AttackingTime;
     public float AttackingCooldown;
 
@@ -79,7 +77,7 @@ public class BowController : WeaponController
 
     private void DisableIsAttacking() {
         IsAttacking = false;
-        this.transform.parent.parent.GetComponent<HotbarController>().IsAttacking = false;
+        //this.transform.parent.parent.GetComponent<HotbarController>().IsAttacking = false;
         owner.IsAttacking = false;
     }
 }

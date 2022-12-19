@@ -76,7 +76,7 @@ public class PickaxeController : WeaponController
 
     private void DisableIsAttacking() {
         IsAttacking = false;
-        this.transform.parent.parent.GetComponent<HotbarController>().IsAttacking = false;
+        //this.transform.parent.parent.GetComponent<HotbarController>().IsAttacking = false;
         owner.IsAttacking = false;
     }
 }

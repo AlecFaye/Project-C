@@ -200,12 +200,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
+  hotbarController: {fileID: 0}
   weapon: {fileID: 11400000, guid: e95f556e67db7494a96ca2d3e9165c56, type: 2}
   CanAttack: 1
   IsAttacking: 0
   AttackingTime: 0
   AttackingCooldown: 0
-  trail: {fileID: 5376528715498607023}
+  trailRenderer: {fileID: 5376528715498607023}
 --- !u!1001 &2221689450656342957
 PrefabInstance:
   m_ObjectHideFlags: 0

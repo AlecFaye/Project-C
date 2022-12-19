@@ -9,28 +9,32 @@ using UnityEngine.InputSystem;
 public class HotbarController : MonoBehaviour
 {
     public ThirdPersonController player; // Refrences the player it's attatched too
+    public WeaponController currentWeapon; // Refrences the current weapon's WeaponController Script
 
     [SerializeField] private Transform[] HotbarSlots;
-
-    public bool IsAttacking = false; // Used to check if player is attacking
-
     private int selectedWeapon = 0;
+
+    private bool CanAttack = true; // Used to check if player can attack
+    private bool IsAttacking = false; // Used to check if player is attacking
     
-    private StarterAssetsInputs starterAssetsInputs;
+    private bool IsHoldingAttack = false; // Used to check if player holding the button
 
+    
 
-    //private InputActionReference inputActionReference;
     [SerializeField] private Transform[] Hotbar; // this is for testing
+
+    //private StarterAssetsInputs starterAssetsInputs;
+    //private InputActionReference inputActionReference;
     //private Weapon currentWeapon;
     // Channel Variables
-    private float currentTomeCharge = 100;
-    private float tomeChargedFor = 0;
-    [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private Transform beamHitbox;
+    //private float currentTomeCharge = 100;
+    //private float tomeChargedFor = 0;
+    //[SerializeField] private LineRenderer lineRenderer;
+    //[SerializeField] private Transform beamHitbox;
 
-    private void Awake() {
-        starterAssetsInputs = player.GetComponent<StarterAssetsInputs>();
-    }
+    //private void Awake() {
+    //    starterAssetsInputs = player.GetComponent<StarterAssetsInputs>();
+    //}
 
     private void Start() {
         int hotbarSlot = 0;
@@ -41,12 +45,9 @@ public class HotbarController : MonoBehaviour
         
         SelectWeapon();
     }
-    private void Update()
-    {
-        //if (IsAttacking) {
-        //    if (HotbarSlots[selectedWeapon].GetChild(0).TryGetComponent<WeaponController>(out WeaponController weaponController))
-        //        weaponController.AttackStart();
-        //}
+    private void Update() {
+        if (CanAttack && !IsAttacking && IsHoldingAttack && currentWeapon)
+            currentWeapon.AttackStart();
 
         //if (IsChannelingAttack && currentWeapon.weaponType == WeaponType.Tome)
         //{
@@ -54,17 +55,24 @@ public class HotbarController : MonoBehaviour
         //}
     }
 
+    #region Attack Start and End
+
     public void OnAttackStart() {
         Debug.Log("Attack Start");
-        if (HotbarSlots[selectedWeapon].GetChild(0).TryGetComponent<WeaponController>(out WeaponController weaponController))
-            IsAttacking = true;
-            weaponController.AttackStart();
+        if (currentWeapon) {
+            IsHoldingAttack = true;
+            currentWeapon.AttackStart();
+        }
     }
     public void OnAttackEnd() {
         Debug.Log("Attack End");
-        if (HotbarSlots[selectedWeapon].GetChild(0).TryGetComponent<WeaponController>(out WeaponController weaponController))
-            weaponController.AttackEnd();
+        if (currentWeapon) {
+            IsHoldingAttack = false;
+            currentWeapon.AttackEnd();
+        }
     }
+
+    #endregion
 
     private void CreateWeapon(Transform weapon, int hotbarSlot) {
         Transform tempWeapon = Instantiate(weapon, this.transform.position, Quaternion.identity); // Creates the weapon in the hotbar slot
@@ -75,25 +83,34 @@ public class HotbarController : MonoBehaviour
     }
 
     private void SetOwnerofWeapon(Transform weapon) {
-        if (weapon.TryGetComponent<WeaponController>(out WeaponController weaponController))
+        if (weapon.TryGetComponent<WeaponController>(out WeaponController weaponController)) {
             weaponController.owner = player;
+            weaponController.hotbarController = this;
+        }
     }
 
     private void SelectWeapon() {
         int position = 0;
         foreach (Transform slot in HotbarSlots) {
-            if (position == selectedWeapon) 
+            if (position == selectedWeapon) {
                 slot.gameObject.SetActive(true);
+                currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
+            }
             else
                 slot.gameObject.SetActive(false);
             position++;
         }
     }
    
+    public void UpdateAttackingStates() {
+        CanAttack = currentWeapon.CanAttack;
+        IsAttacking = currentWeapon.IsAttacking;
+    }
+
     #region Hotbar Inputs
 
     private void SwitchHotBar(int hotbarNum) {
-        if (player.IsOwner && !IsAttacking) {
+        if (player.IsOwner && CanAttack && !IsAttacking && !IsHoldingAttack) {
             selectedWeapon = hotbarNum;
             SelectWeapon();
         }
@@ -104,10 +121,8 @@ public class HotbarController : MonoBehaviour
     private void OnHotbar4() { SwitchHotBar(3); }
     private void OnHotbar5() { SwitchHotBar(4); }
     private void OnHotbar6() { SwitchHotBar(5); }
+   
     #endregion
-
-
-
 
     #region On Attack Input
     //public void OnAttack() {
@@ -173,7 +188,6 @@ public class HotbarController : MonoBehaviour
     //}
     //}
     #endregion
-
 
     #region Charge Functions
     //private void BowCharge()
