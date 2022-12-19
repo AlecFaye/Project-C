@@ -111,12 +111,16 @@ public class Enemy : PoolableObject, IDamageable
         if (currentHealth <= 0)
             return;
 
+        // Weakness damage multiplier
         foreach (Weapon.WeaponType weakness in weaknessTypes)
         {
             if (damageType == weakness)
                 damageTaken *= weaknessDamageMultiplier;
         }
-        damageTaken *= (1 - armourDamageReduction[armourType]);
+
+        // Armour damage reduction multiplier
+        if (damageType != Weapon.WeaponType.Pickaxe)
+            damageTaken *= (1 - armourDamageReduction[armourType]);
 
         SpawnDamagePopup(damageTaken);
 

@@ -10,6 +10,7 @@ public class EnemyScriptableObject : ScriptableObject
 {
     public Enemy enemyPrefab;
     public AttackScriptableObject attackConfiguration;
+    public ParticleSystem particleSystem;
 
     [Header("Enemy Base Stats")]
     public float health = 100.0f;
@@ -21,7 +22,8 @@ public class EnemyScriptableObject : ScriptableObject
     public EnemyState defaultState;
     public float idleLocationRadius = 6.0f;
     public float idleMovespeedMultiplier = 0.5f;
-    public float lineOfSightRange = 6.0f;
+    public float unawareLineOfSightRadius = 6.0f;
+    public float awareLineOfSightRadius = 10.0f;
     public float fieldOfView = 90.0f;
     [Range(2, 10)] public int numOfWaypoints = 4;
 
@@ -69,7 +71,9 @@ public class EnemyScriptableObject : ScriptableObject
         enemy.movement.idleMoveSpeedMultiplier = idleMovespeedMultiplier;
         enemy.movement.waypoints = new Vector3[numOfWaypoints];
         enemy.movement.lineOfSightChecker.fieldOfView = fieldOfView;
-        enemy.movement.lineOfSightChecker.sphereCollider.radius = lineOfSightRange;
+        enemy.movement.lineOfSightChecker.sphereCollider.radius = unawareLineOfSightRadius;
+        enemy.movement.lineOfSightChecker.unawareLineOfSightRadius = unawareLineOfSightRadius;
+        enemy.movement.lineOfSightChecker.awareLineOfSightRadius = awareLineOfSightRadius;
         enemy.movement.lineOfSightChecker.lineOfSightLayers = attackConfiguration.lineOfSightLayers;
 
         attackConfiguration.SetupEnemy(enemy);
