@@ -2031,7 +2031,6 @@ MonoBehaviour:
   weaknessDamageMultiplier: 1.5
   damage: 0
   attackDelay: 0
-  skinnedMeshRenderer: {fileID: 0}
   damagePopupSpawn: {fileID: 8628385960315902808}
 --- !u!114 &4400257077152178341
 MonoBehaviour:

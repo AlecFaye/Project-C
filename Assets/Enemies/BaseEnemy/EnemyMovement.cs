@@ -67,8 +67,11 @@ public class EnemyMovement : MonoBehaviour
     {
         this.player = player;
         
-        if (TryGetComponent<Enemy>(out Enemy enemy))
+        if (TryGetComponent(out Enemy enemy))
         {
+            if (lineOfSightChecker.sphereCollider.radius == lineOfSightChecker.unawareLineOfSightRadius)
+                lineOfSightChecker.sphereCollider.radius = lineOfSightChecker.awareLineOfSightRadius;
+
             if (enemy.enemyScriptableObject.attackConfiguration.isFleeing)
             {
                 State = EnemyState.Flee;
@@ -84,41 +87,59 @@ public class EnemyMovement : MonoBehaviour
     {
         this.player = null;
         State = defaultState;
+
+        if (lineOfSightChecker.sphereCollider.radius == lineOfSightChecker.awareLineOfSightRadius)
+            lineOfSightChecker.sphereCollider.radius = lineOfSightChecker.unawareLineOfSightRadius;
     }
     
     private void Update()
     {
-        if (currentState == EnemyState.Chase)
-        {
-            if (animatorParameters.TryGetValue(IS_WALKING, out _))
-                animator.SetBool(IS_WALKING, false);
-
-            if (animatorParameters.TryGetValue(IS_RUNNING, out _))
-                animator.SetBool(IS_RUNNING, agent.velocity.magnitude > 0.01f);
-            else
-                animator.SetBool(IS_WALKING, agent.velocity.magnitude > 0.01f);
-        }
-        else if (currentState == EnemyState.Flee)
-        {
-            if (animatorParameters.TryGetValue(IS_WALKING, out _))
-                animator.SetBool(IS_WALKING, false);
-
-            if (animatorParameters.TryGetValue(IS_RUNNING, out _))
-                animator.SetBool(IS_RUNNING, agent.velocity.magnitude > 0.01f);
-        }
-        else
-        {
-            if (animatorParameters.TryGetValue(IS_RUNNING, out _))
-                animator.SetBool(IS_RUNNING, false);
-
-            if (animatorParameters.TryGetValue(IS_WALKING, out _))
-                animator.SetBool(IS_WALKING, agent.velocity.magnitude > 0.01f);
-        }
+        UpdateMovementAnimator();
     }
 
     private void OnDisable()
     {
         currentState = defaultState;
+    }
+
+    private void UpdateMovementAnimator()
+    {
+        animatorParameters.TryGetValue(IS_WALKING, out bool hasWalkAnimation);
+        animatorParameters.TryGetValue(IS_RUNNING, out bool hasRunAnimation);
+
+        switch (currentState)
+        {
+            case EnemyState.Chase: case EnemyState.Flee:
+                if (hasWalkAnimation && hasRunAnimation)
+                {
+                    animator.SetBool(IS_WALKING, false);
+                    animator.SetBool(IS_RUNNING, agent.velocity.magnitude > 0.01f);
+                }
+                else if (hasWalkAnimation)
+                {
+                    animator.SetBool(IS_WALKING, agent.velocity.magnitude > 0.01f);
+                }
+                else if (hasRunAnimation)
+                {
+                    animator.SetBool(IS_RUNNING, agent.velocity.magnitude > 0.01f);
+                }
+                break;
+            default:
+                if (hasWalkAnimation && hasRunAnimation)
+                {
+                    animator.SetBool(IS_RUNNING, false);
+                    animator.SetBool(IS_WALKING, agent.velocity.magnitude > 0.01f);
+                }
+                else if (hasWalkAnimation)
+                {
+                    animator.SetBool(IS_WALKING, agent.velocity.magnitude > 0.01f);
+                }
+                else if (hasRunAnimation)
+                {
+                    animator.SetBool(IS_RUNNING, agent.velocity.magnitude > 0.01f);
+                }
+                break;
+        }
     }
 
     public void Spawn()
@@ -134,7 +155,6 @@ public class EnemyMovement : MonoBehaviour
                 Debug.LogError("Unable to find position for NavMesh near Triangulation!");
             }
         }
-
         OnStateChange?.Invoke(EnemyState.Spawn, defaultState);
     }
 

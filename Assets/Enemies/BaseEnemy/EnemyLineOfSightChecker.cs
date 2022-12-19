@@ -9,6 +9,9 @@ public class EnemyLineOfSightChecker : MonoBehaviour
     public float fieldOfView = 90.0f;
     public LayerMask lineOfSightLayers;
 
+    public float awareLineOfSightRadius;
+    public float unawareLineOfSightRadius;
+
     public delegate void GainSightEvent(Player player);
     public GainSightEvent OnGainSight;
 
@@ -38,6 +41,10 @@ public class EnemyLineOfSightChecker : MonoBehaviour
         if (other.TryGetComponent(out Player player))
         {
             OnLoseSight?.Invoke(player);
+
+            if (sphereCollider.radius == awareLineOfSightRadius)
+                sphereCollider.radius = unawareLineOfSightRadius;
+            
             if (checkForLineOfSightCoroutine != null)
             {
                 StopCoroutine(checkForLineOfSightCoroutine);
