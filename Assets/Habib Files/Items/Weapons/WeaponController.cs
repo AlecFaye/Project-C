@@ -17,8 +17,6 @@ public class WeaponController : MonoBehaviour
 
     #endregion
 
-    //public HotbarController hotbarController;
-
     private void Update() { if (CanAttack && !IsAttacking && IsHoldingAttack && weapon) AttackStart(); }
 
     #region Attack Start and End

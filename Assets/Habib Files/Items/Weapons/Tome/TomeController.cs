@@ -18,6 +18,7 @@ public class TomeController : WeaponController
     private string tomeChargeGain = "TomeChargeGain";
     private string tomeChargeDrain = "TomeChargeDrain";
 
+    [SerializeField] private Transform projectileSpawn;
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Transform beam;
 
@@ -39,6 +40,13 @@ public class TomeController : WeaponController
     }
 
     #endregion
+
+    private void Update() {
+        if (IsAttacking) {
+            lineRenderer.SetPositions(new Vector3[] { projectileSpawn.position, owner.mouseWorldPosition });
+        }
+
+    }
 
     #region Attack Functions
 
@@ -66,7 +74,7 @@ public class TomeController : WeaponController
         if (owner.IsOwner) { Attack(); }
         if (currentTomeCharge < 0) {
             currentTomeCharge = 0;
-            CancelInvoke("TomeDrain");
+            CancelInvoke(tomeChargeDrain);
             Debug.Log("Out of Energy");
         }
         Debug.Log("Current tome charge: " + currentTomeCharge);
@@ -76,13 +84,17 @@ public class TomeController : WeaponController
         currentTomeCharge++;
         if (currentTomeCharge >= weapon.maxCharge) {
             currentTomeCharge = weapon.maxCharge;
-            CancelInvoke("TomeCharge");
+            CancelInvoke(tomeChargeGain);
         } 
         Debug.Log("Current tome charge: " + currentTomeCharge);
     }
 
     private void Attack() {
-        Vector3 point0 = owner._projectileSpawn.position;
+        BeamCreate();
+    }
+
+    private void BeamCreate() {
+        Vector3 point0 = projectileSpawn.position;
         Vector3 point1 = owner.mouseWorldPosition;
         Vector3 aimDir = (point1 - point0).normalized;
         Transform tempBeam = Instantiate(beam, point0, Quaternion.LookRotation(aimDir, Vector3.up));
@@ -91,7 +103,6 @@ public class TomeController : WeaponController
         tempBeam.position = Vector3.Lerp(point0, point1, 0.5f);
         tempBeam.localScale = new Vector3(0.1f, 0.1f, Vector3.Distance(point0, point1));
     }
-
 
     private void OnTriggerEnter(Collider other) {
         if (!IsAttacking) return;

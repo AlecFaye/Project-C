@@ -15,10 +15,12 @@ public class BowController : WeaponController
 
     private string bowCharge = "BowCharge";
 
+    [SerializeField] private Transform projectileSpawn;
+
     #endregion
 
     #region Start Functions
-    
+
     private void Start() { SetWeaponStats(); }
     private void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
@@ -66,13 +68,15 @@ public class BowController : WeaponController
     }
 
     private void CreateArrow() {
-        Vector3 aimDir = (owner.mouseWorldPosition - owner._projectileSpawn.position).normalized;
+        Vector3 point0 = projectileSpawn.position;
+        Vector3 point1 = owner.mouseWorldPosition;
+        Vector3 aimDir = (point1 - point0).normalized;
         Arrow arrow = weapon._arrowType;
-        Transform tempArrow = Instantiate(arrow.arrowModel, owner._projectileSpawn.position, Quaternion.LookRotation(aimDir, Vector3.up));
+        Transform tempArrow = Instantiate(arrow.arrowModel, point0, Quaternion.LookRotation(aimDir, Vector3.up));
 
         tempArrow.GetComponent<ArrowFunction>().Create(
-            arrow.travelSpeed * (currentBowCharge / 100), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
-            arrow.damageValue + (weapon.damageValue * (currentBowCharge / 100)) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
+            arrow.travelSpeed * (currentBowCharge / weapon.maxCharge), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
+            arrow.damageValue + (weapon.damageValue * (currentBowCharge / weapon.maxCharge)) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
             );
 
         currentBowCharge = weapon.startingCharge;
