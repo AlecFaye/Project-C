@@ -11,9 +11,9 @@ public class WeaponController : MonoBehaviour
 
     [SerializeField] protected Weapon weapon;
 
-    protected bool CanAttack = true; // Used to check if player can attack
-    protected bool IsAttacking = false; // Used to check if player is attacking
-    protected bool IsHoldingAttack = false; // Used to check if player holding the button
+    public bool CanAttack = true;
+    public bool IsAttacking = false;
+    public bool IsHoldingAttack = false;
 
     #endregion
 

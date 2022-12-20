@@ -66,21 +66,17 @@ public class HotbarController : MonoBehaviour
     private void OnHotbar6() { SwitchHotBar(5); }
 
     private void SwitchHotBar(int hotbarNum) {
-        if (player.IsOwner && CanAttack && !IsAttacking && !IsHoldingAttack) {
+        if (player.IsOwner && currentWeapon.CanAttack && !currentWeapon.IsAttacking && !currentWeapon.IsHoldingAttack) {
             selectedWeapon = hotbarNum;
             SelectWeapon();
         }
     }
- 
-    private void SelectWeapon()
-    {
+    private void SelectWeapon() {
         int position = 0;
-        foreach (Transform slot in HotbarSlots)
-        {
-            if (position == selectedWeapon)
-            {
+        foreach (Transform slot in HotbarSlots) {
+            if (position == selectedWeapon) {
                 slot.gameObject.SetActive(true);
-                //currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
+                currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
             }
             else slot.gameObject.SetActive(false);
 

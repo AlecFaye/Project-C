@@ -139,7 +139,7 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
-  m_Emitting: 1
+  m_Emitting: 0
 --- !u!1 &6214889968840792126
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,6 +201,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
   weapon: {fileID: 11400000, guid: 76115dd882159704fa65e435c39bbe90, type: 2}
+  CanAttack: 1
+  IsAttacking: 0
+  IsHoldingAttack: 0
   IsAimConstant: 0
   attackTrigger: Pickaxe Attack
   trailRenderer: {fileID: 821272650869984041}
