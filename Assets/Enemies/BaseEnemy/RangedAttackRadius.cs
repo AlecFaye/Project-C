@@ -7,12 +7,15 @@ public class RangedAttackRadius : AttackRadius
     public Projectile projectilePrefab;
     public Vector3 projectileSpawnOffset = new(0, 1, 0);
     public LayerMask mask;
+    public bool isDropAttack;
 
     private ObjectPool projectilePool;
     [SerializeField] private float sphereCastRadius = 0.1f;
     private RaycastHit hit;
     private IDamageable targetDamageable;
     private Projectile projectile;
+    [SerializeField] private GameObject fallingObjectIndicator;
+    [SerializeField] private LayerMask indicatorMask;
 
     public void CreateBulletPool()
     {
@@ -30,20 +33,53 @@ public class RangedAttackRadius : AttackRadius
         {
             for (int index = 0; index < damageables.Count; index++)
             {
-                if (HasLineOfSightTo(damageables[index].GetTransform()))
+                targetDamageable = damageables[index];
+
+                if (isDropAttack)
                 {
-                    targetDamageable = damageables[index];
-                    OnAttack?.Invoke(damageables[index]);
-                    agent.enabled = false;
-                    break;
+                    if (HasDropAttackLineOfSightTo(targetDamageable.GetTransform()))
+                    {
+                        if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out RaycastHit raycastHit, 20.0f, indicatorMask))
+                        {
+                            Instantiate(fallingObjectIndicator, raycastHit.point, Quaternion.identity);
+                        }
+
+                        OnAttack?.Invoke(damageables[index]);
+                        agent.enabled = false;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (HasLineOfSightTo(targetDamageable.GetTransform()))
+                    {
+                        OnAttack?.Invoke(damageables[index]);
+                        agent.enabled = false;
+                        break;
+                    }
                 }
             }
 
             yield return waitAttackCooldown;
 
-            if (targetDamageable == null || !HasLineOfSightTo(targetDamageable.GetTransform()))
+            if (targetDamageable == null)
             {
                 agent.enabled = true;
+            }
+
+            if (isDropAttack)
+            {
+                if (!HasDropAttackLineOfSightTo(targetDamageable.GetTransform()))
+                {
+                    agent.enabled = true;
+                }
+            }
+            else
+            {
+                if (!HasLineOfSightTo(targetDamageable.GetTransform()))
+                {
+                    agent.enabled = true;
+                }
             }
 
             damageables.RemoveAll(DisabledDamageables);
@@ -53,11 +89,23 @@ public class RangedAttackRadius : AttackRadius
         attackCoroutine = null;
     }
 
+    private bool HasDropAttackLineOfSightTo(Transform target)
+    {
+        if (Physics.Raycast(transform.position, ((target.position) - (transform.position)).normalized, out RaycastHit raycastHit, 20.0f, mask))
+        {
+            if (raycastHit.collider.TryGetComponent(out IDamageable damageable))
+            {
+                return damageable.GetTransform() == target;
+            }
+        }
+        return false;
+    }
+
     private bool HasLineOfSightTo(Transform target)
     {
         if (Physics.SphereCast(transform.position + projectileSpawnOffset, sphereCastRadius, ((target.position + projectileSpawnOffset) - (transform.position + projectileSpawnOffset)).normalized, out hit, sphereCollider.radius, mask))
         {
-            if (hit.collider.TryGetComponent<IDamageable>(out IDamageable damageable))
+            if (hit.collider.TryGetComponent(out IDamageable damageable))
             {
                 return damageable.GetTransform() == target;
             }
