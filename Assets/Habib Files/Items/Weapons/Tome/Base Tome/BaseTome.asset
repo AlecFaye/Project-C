@@ -22,7 +22,7 @@ MonoBehaviour:
   IsAttacking: 0
   attackingTime: 0.1
   attackingCooldown: 0.3
-  damageValue: 2
+  damageValue: 0.4
   attackSpeed: 0
   cutLevel: 0
   _arrowType: {fileID: 0}

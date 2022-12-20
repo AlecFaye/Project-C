@@ -1,7 +1,6 @@
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Services.Lobbies.Models;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -11,12 +10,12 @@ public class TomeController : WeaponController
     #region Variables
 
     private float currentTomeCharge = 100f;
-    private float aimSpeed = 1f;
+    private readonly float aimSpeed = 1f;
 
     [SerializeField] private bool IsAimConstant = true;
 
-    private string tomeChargeGain = "TomeChargeGain";
-    private string tomeChargeDrain = "TomeChargeDrain";
+    private readonly string tomeChargeGain = "TomeChargeGain";
+    private readonly string tomeChargeDrain = "TomeChargeDrain";
 
     [SerializeField] private Transform projectileSpawn;
     [SerializeField] private LineRenderer lineRenderer;
@@ -26,7 +25,7 @@ public class TomeController : WeaponController
 
     #endregion
 
-    #region Start Functions
+    #region Start/Update Functions
     private void Start() { SetWeaponStats(); }
 
     protected void SetWeaponStats() {
@@ -39,14 +38,13 @@ public class TomeController : WeaponController
         }
     }
 
-    #endregion
-
     private void Update() {
         if (IsAttacking) {
             lineRenderer.SetPositions(new Vector3[] { projectileSpawn.position, owner.mouseWorldPosition });
         }
-
     }
+
+    #endregion
 
     #region Attack Functions
 

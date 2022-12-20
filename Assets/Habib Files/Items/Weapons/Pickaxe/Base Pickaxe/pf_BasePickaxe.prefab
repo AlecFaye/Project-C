@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3484465251042867442}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.19359997, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -77,7 +77,7 @@ TrailRenderer:
   m_Time: 0.7
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.4
+    widthMultiplier: 0.6
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -139,7 +139,7 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
-  m_Emitting: 0
+  m_Emitting: 1
 --- !u!1 &6214889968840792126
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,11 +201,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
   weapon: {fileID: 11400000, guid: 76115dd882159704fa65e435c39bbe90, type: 2}
-  CanAttack: 0
-  IsAttacking: 0
-  AttackingTime: 0
-  AttackingCooldown: 0
-  trail: {fileID: 821272650869984041}
+  IsAimConstant: 0
+  attackTrigger: Pickaxe Attack
+  trailRenderer: {fileID: 821272650869984041}
 --- !u!1001 &5642683256914994886
 PrefabInstance:
   m_ObjectHideFlags: 0
