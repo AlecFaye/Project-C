@@ -17,12 +17,13 @@ MonoBehaviour:
   health: 15
   armourType: 2
   weaknessTypes: 04000000
-  weaknessDamageMultiplier: 1.5
+  weaknessDamageMultiplier: 2
   defaultState: 2
   idleLocationRadius: 6
-  idleMovespeedMultiplayer: 0.5
-  lineOfSightRange: 6
-  fieldOfView: 90
+  idleMovespeedMultiplier: 0.5
+  unawareLineOfSightRadius: 4
+  awareLineOfSightRadius: 6
+  fieldOfView: 75
   numOfWaypoints: 4
   aiUpdateInterval: 0.1
   acceleration: 8

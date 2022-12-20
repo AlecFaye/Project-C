@@ -16,12 +16,13 @@ MonoBehaviour:
   attackConfiguration: {fileID: 11400000, guid: f8b758ef5223e0a4091d6464987e4b08, type: 2}
   health: 15
   armourType: 1
-  weaknessTypes: 010000000200000003000000
+  weaknessTypes: 00000000
   weaknessDamageMultiplier: 1.5
   defaultState: 2
   idleLocationRadius: 10
   idleMovespeedMultiplier: 0.5
-  lineOfSightRange: 10
+  unawareLineOfSightRadius: 8
+  awareLineOfSightRadius: 12
   fieldOfView: 120
   numOfWaypoints: 6
   aiUpdateInterval: 0.1

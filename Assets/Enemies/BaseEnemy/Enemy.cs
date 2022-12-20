@@ -20,6 +20,7 @@ public class Enemy : PoolableObject, IDamageable
     public float attackDelay;
 
     private const string IS_ATTACKING = "isAttacking";
+    private const string IS_DEAD = "die";
 
     private Coroutine lookCoroutine;
 
@@ -69,8 +70,11 @@ public class Enemy : PoolableObject, IDamageable
 
         if (!enemyScriptableObject.attackConfiguration.isRanged)
             agent.enabled = true;
+    }
 
-
+    public void Die()
+    {
+        gameObject.SetActive(false);
     }
     #endregion
 
@@ -104,21 +108,26 @@ public class Enemy : PoolableObject, IDamageable
 
     public void TakeDamage(float damageTaken, Weapon.WeaponType damageType)
     {
+        if (currentHealth <= 0)
+            return;
+
+        // Weakness damage multiplier
         foreach (Weapon.WeaponType weakness in weaknessTypes)
         {
             if (damageType == weakness)
                 damageTaken *= weaknessDamageMultiplier;
         }
-        damageTaken *= (1 - armourDamageReduction[armourType]);
+
+        // Armour damage reduction multiplier
+        if (damageType != Weapon.WeaponType.Pickaxe)
+            damageTaken *= (1 - armourDamageReduction[armourType]);
 
         SpawnDamagePopup(damageTaken);
 
         currentHealth -= damageTaken;
 
         if (currentHealth <= 0)
-        {
-            gameObject.SetActive(false);
-        }
+            animator.SetTrigger(IS_DEAD);
     }
 
     public Transform GetTransform()

@@ -11,6 +11,10 @@ public class AttackScriptableObject : ScriptableObject
     public float attackRadius = 1.5f;
     public LayerMask lineOfSightLayers;
 
+    // Fleeing Enemy configurations
+    [Header("Fleeing Enemy Configurations")]
+    public bool isFleeing = false;
+    
     // Flying configurations
     [Header("Flying Configurations")]
     public bool isFlying = false;

@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8895499069331996431}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &413740741473992561
 SphereCollider:
@@ -88,13 +88,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7611579589305235557}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.5884047, y: -0.40042073, z: -0.6084558, w: -0.3510339}
+  m_LocalPosition: {x: 1.048827, y: -0.08471954, z: -0.052606925}
+  m_LocalScale: {x: 1.0027827, y: 1.0027828, z: 1.0027828}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8895499069331996431}
-  m_RootOrder: 2
+  m_Father: {fileID: 8839205043965738852}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &4267980277316130964
 SphereCollider:
@@ -108,7 +108,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0.75, z: 0.75}
+  m_Center: {x: 0, y: 0.75, z: 0.9}
 --- !u!114 &1934661577906183541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,6 +348,7 @@ Transform:
   - {fileID: 8839205043965738836}
   - {fileID: 8839205043965738850}
   - {fileID: 8839205043965738876}
+  - {fileID: 191118250812787345}
   m_Father: {fileID: 8839205043965738766}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1804,6 +1805,7 @@ GameObject:
   - component: {fileID: 8775905901119270227}
   - component: {fileID: 9117628854952477543}
   - component: {fileID: 4400257077152178341}
+  - component: {fileID: 2702099712419409546}
   m_Layer: 15
   m_Name: Wolf1.0
   m_TagString: Untagged
@@ -1825,7 +1827,6 @@ Transform:
   m_Children:
   - {fileID: 8839205043965738854}
   - {fileID: 8839205043965738868}
-  - {fileID: 191118250812787345}
   - {fileID: 5113526146727362976}
   - {fileID: 8628385960315902808}
   m_Father: {fileID: 0}
@@ -2050,6 +2051,52 @@ MonoBehaviour:
   idleMoveSpeedMultiplier: 0.5
   waypoints: []
   waypointIndex: 0
+--- !u!114 &2702099712419409546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8896904685623557615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f3f856eba544347b193cc3853bfff6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Method: 3
+  m_Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.21352348
+      value: 0.93892705
+      inSlope: 3.0109224
+      outSlope: 3.0109224
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &8897139657378866701
 GameObject:
   m_ObjectHideFlags: 0
@@ -2184,7 +2231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4401343411006537970, guid: 1ab453995142ae24984a4299908966ee, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4401343411006537970, guid: 1ab453995142ae24984a4299908966ee, type: 3}
       propertyPath: m_LocalPosition.x

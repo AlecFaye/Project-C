@@ -9,6 +9,9 @@ public class EnemyLineOfSightChecker : MonoBehaviour
     public float fieldOfView = 90.0f;
     public LayerMask lineOfSightLayers;
 
+    public float awareLineOfSightRadius;
+    public float unawareLineOfSightRadius;
+
     public delegate void GainSightEvent(Player player);
     public GainSightEvent OnGainSight;
 
@@ -26,7 +29,7 @@ public class EnemyLineOfSightChecker : MonoBehaviour
     {
         if (other.TryGetComponent(out Player player))
         {
-            if (!CheckLineOfSight(player))
+            if (!CheckLineOfSight(player, fieldOfView))
             {
                 checkForLineOfSightCoroutine = StartCoroutine(CheckForLineOfSight(player));
             }
@@ -38,6 +41,10 @@ public class EnemyLineOfSightChecker : MonoBehaviour
         if (other.TryGetComponent(out Player player))
         {
             OnLoseSight?.Invoke(player);
+
+            if (sphereCollider.radius == awareLineOfSightRadius)
+                sphereCollider.radius = unawareLineOfSightRadius;
+            
             if (checkForLineOfSightCoroutine != null)
             {
                 StopCoroutine(checkForLineOfSightCoroutine);
@@ -45,12 +52,12 @@ public class EnemyLineOfSightChecker : MonoBehaviour
         }
     }
 
-    private bool CheckLineOfSight(Player player)
+    private bool CheckLineOfSight(Player player, float fov)
     {
-        Vector3 playerOffset = new(0, player.GetComponent<CharacterController>().height / 2, 0);
+        Vector3 playerOffset = new(0, player.GetComponent<CharacterController>().height / 2.0f, 0);
         Vector3 direction = (player.transform.position + playerOffset - transform.position).normalized;
 
-        if (Vector3.Dot(transform.forward, direction) >= Mathf.Cos(fieldOfView))
+        if (Vector3.Dot(transform.forward, direction) >= Mathf.Cos(fov))
         {
             if (Physics.Raycast(transform.position, direction, out RaycastHit hit, sphereCollider.radius, lineOfSightLayers))
             {
@@ -69,7 +76,7 @@ public class EnemyLineOfSightChecker : MonoBehaviour
     {
         WaitForSeconds wait = new(0.1f);
 
-        while (!CheckLineOfSight(player))
+        while (!CheckLineOfSight(player, 180.0f))
         {
             yield return wait;
         }
