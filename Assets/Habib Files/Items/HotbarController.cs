@@ -56,31 +56,8 @@ public class HotbarController : MonoBehaviour
 
     #endregion
 
-    #region Weapon Creation Functions
+    #region Hotbar Functions
 
-    private void SelectWeapon() {
-        int position = 0;
-        foreach (Transform slot in HotbarSlots) {
-            if (position == selectedWeapon) {
-                slot.gameObject.SetActive(true);
-                //currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
-            }
-            else slot.gameObject.SetActive(false);
-            
-            position++;
-        }
-    }
-
-    #endregion
-   
-    #region Hotbar Inputs
-
-    private void SwitchHotBar(int hotbarNum) {
-        if (player.IsOwner && CanAttack && !IsAttacking && !IsHoldingAttack) {
-            selectedWeapon = hotbarNum;
-            SelectWeapon();
-        }
-    }
     private void OnHotbar1() { SwitchHotBar(0); }
     private void OnHotbar2() { SwitchHotBar(1); }
     private void OnHotbar3() { SwitchHotBar(2); }
@@ -88,5 +65,28 @@ public class HotbarController : MonoBehaviour
     private void OnHotbar5() { SwitchHotBar(4); }
     private void OnHotbar6() { SwitchHotBar(5); }
 
+    private void SwitchHotBar(int hotbarNum) {
+        if (player.IsOwner && CanAttack && !IsAttacking && !IsHoldingAttack) {
+            selectedWeapon = hotbarNum;
+            SelectWeapon();
+        }
+    }
+ 
+    private void SelectWeapon()
+    {
+        int position = 0;
+        foreach (Transform slot in HotbarSlots)
+        {
+            if (position == selectedWeapon)
+            {
+                slot.gameObject.SetActive(true);
+                //currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
+            }
+            else slot.gameObject.SetActive(false);
+
+            position++;
+        }
+    }
+    
     #endregion
 }

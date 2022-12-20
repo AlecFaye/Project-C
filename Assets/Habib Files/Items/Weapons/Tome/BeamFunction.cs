@@ -1,28 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BeamFunction : MonoBehaviour
 {
     public float damageValue;
 
-    public List<Collider> enemiesHitList = new List<Collider>(); // Checks if the arrow has hit a target (true == max one target hit, false == max one target not hit yet)
+    private List<IDamageable> enemiesHitList = new List<IDamageable>(); // Makes a list to keep track of which enemies were hit
 
-    public IEnumerator Create(float damage)
-    {
+    public IEnumerator Create(float damage) {
         damageValue = damage;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
-    {   
-        if (!enemiesHitList.Contains(other)) {
-            if (other.TryGetComponent(out IDamageable damageable))
-            {
-                damageable.TakeDamage(damageValue, Weapon.WeaponType.Tome);
-                enemiesHitList.Add(other); // Adds current enemy to enemiesHitList to keep track of
-            }
-        }
+    {
+        if (!other.TryGetComponent(out IDamageable damageable)) return;
+        if (enemiesHitList.Contains(damageable)) return;
+
+        damageable.TakeDamage(damageValue, Weapon.WeaponType.Tome);
+        enemiesHitList.Add(damageable);
     }
 }

@@ -28,6 +28,6 @@ MonoBehaviour:
   _arrowType: {fileID: 0}
   mineLevel: 0
   chargeDrainedRate: 20
-  maxCharge: 100
-  startingCharge: 100
+  maxCharge: 300
+  startingCharge: 300
   chargeGainedRate: 20

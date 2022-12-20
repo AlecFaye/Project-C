@@ -53,12 +53,16 @@ public class BowController : WeaponController
             Attack();
     }
 
+    #region Charge Functions
+
     private void BowCharge() {
         currentBowCharge++;
         if (currentBowCharge > weapon.maxCharge)
             currentBowCharge = weapon.maxCharge;
         Debug.Log("Current bow charge: " + currentBowCharge);
     }
+
+    #endregion
 
     private void Attack() {
         ToggleCanAttack(); // true

@@ -21,9 +21,7 @@ public class TomeController : WeaponController
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Transform beam;
 
-    private List<IDamageable> enemiesHitList = new List<IDamageable>(); // Makes a list to keep track of which enemies were hit
-
-    #endregion
+     #endregion
 
     #region Start/Update Functions
     private void Start() { SetWeaponStats(); }
@@ -67,6 +65,8 @@ public class TomeController : WeaponController
         InvokeRepeating(tomeChargeGain, 0f, (1f / weapon.chargeGainedRate)); // Invokes the func TomeCharge(), instantly once, then once every (1 sec/TomeChargeRate)
     }
 
+    #region Charge Functions
+
     private void TomeChargeDrain() {
         currentTomeCharge--;
         if (owner.IsOwner) { Attack(); }
@@ -87,6 +87,8 @@ public class TomeController : WeaponController
         Debug.Log("Current tome charge: " + currentTomeCharge);
     }
 
+    #endregion
+
     private void Attack() {
         BeamCreate();
     }
@@ -95,20 +97,13 @@ public class TomeController : WeaponController
         Vector3 point0 = projectileSpawn.position;
         Vector3 point1 = owner.mouseWorldPosition;
         Vector3 aimDir = (point1 - point0).normalized;
-        Transform tempBeam = Instantiate(beam, point0, Quaternion.LookRotation(aimDir, Vector3.up));
+        var rotation = Quaternion.LookRotation(aimDir, Vector3.up);
+        rotation *= Quaternion.Euler(90f, 0f, 0f); // this adds a 90 degrees Y rotation
+        Transform tempBeam = Instantiate(beam, point0, rotation);
 
         tempBeam.GetComponent<BeamFunction>().StartCoroutine("Create", weapon.damageValue);
         tempBeam.position = Vector3.Lerp(point0, point1, 0.5f);
-        tempBeam.localScale = new Vector3(0.1f, 0.1f, Vector3.Distance(point0, point1));
-    }
-
-    private void OnTriggerEnter(Collider other) {
-        if (!IsAttacking) return;
-        if (!other.TryGetComponent(out IDamageable damageable)) return;
-        if (enemiesHitList.Contains(damageable)) return;
-
-        damageable.TakeDamage(weapon.damageValue, weapon.weaponType);
-        enemiesHitList.Add(damageable);
+        tempBeam.localScale = new Vector3(0.1f, Vector3.Distance(point0, point1)/2, 0.1f);
     }
 
     #endregion
