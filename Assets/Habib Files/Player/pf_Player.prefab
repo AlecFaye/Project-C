@@ -1982,7 +1982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c430f382484144e925c097c2d33cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 1
+  m_Weight: 0.7
   m_Data:
     m_ConstrainedObject: {fileID: 5884600824808125487}
     m_SourceObjects:
@@ -2794,7 +2794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c430f382484144e925c097c2d33cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 0.8
+  m_Weight: 0.6
   m_Data:
     m_ConstrainedObject: {fileID: 2381375990482341239}
     m_SourceObjects:
@@ -2824,8 +2824,8 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -90
-    m_MaxLimit: 90
+    m_MinLimit: -65
+    m_MaxLimit: 65
     m_AimAxis: 2
     m_UpAxis: 1
     m_WorldUpType: 0
@@ -5336,12 +5336,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'Wrist_L'\n\tTransform 'Root_M'\n\tTransform
-    'Elbow_L'\n\tTransform 'Head_M'\n\tTransform 'Elbow_R'\n\tTransform 'Shoulder_R'\n\tTransform
-    'Shoulder_L'\n\tTransform 'Spine1_M'\n\tTransform 'Wrist_R'\n\tTransform 'Neck_M'\n\tand
-    more ..."
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
