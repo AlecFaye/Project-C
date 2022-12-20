@@ -4065,11 +4065,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fc9524357f9d8c48b8bf3465babf400, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfEnemiesToSpawn: 5
+  numberOfEnemiesToSpawn: 1
   spawnDelay: 1
   enemies:
-  - {fileID: 11400000, guid: 968f29f8fd2bc654485883917f69e0af, type: 2}
   - {fileID: 11400000, guid: 767ff04eb4ede2c48ae69b53c46b1071, type: 2}
+  - {fileID: 11400000, guid: 968f29f8fd2bc654485883917f69e0af, type: 2}
   - {fileID: 11400000, guid: bb402fe277f479a4c80d5b47357c6a17, type: 2}
   - {fileID: 11400000, guid: 1b1bf7bd58b1290478c5f4dd1fa71284, type: 2}
   - {fileID: 11400000, guid: d194f790744daad4b83a2b6554d9a10f, type: 2}

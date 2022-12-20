@@ -28,7 +28,7 @@ public class ObjectPool
     {
         for (int i = 0; i < size; i++)
         {
-            PoolableObject poolableObject = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity, parent.transform);
+            PoolableObject poolableObject = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity, parent.transform);
             poolableObject.Parent = this;
             poolableObject.gameObject.SetActive(false); 
         }
