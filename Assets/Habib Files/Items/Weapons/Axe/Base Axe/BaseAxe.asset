@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cf2a6a74806cc44a8bf28b7cba100da, type: 3}
+  m_Name: BaseAxe
+  m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  weaponType: 1
+  weaponName: Base Axe
+  description: This is the Base for a Axe
+  inventorySprite: {fileID: 0}
+  weaponModel: {fileID: 7197912442079774620, guid: 9a39a60708e685a4ea999a559273dee0, type: 3}
+  CanAttack: 1
+  IsAttacking: 0
+  attackingTime: 0.8
+  attackingCooldown: 1
+  damageValue: 5
+  attackSpeed: 0
+  cutLevel: 0
+  Max_Charge: 0
+  currentCharge: 0
+  chargeGainedRate: 0
+  _arrowType: {fileID: 0}
+  mineLevel: 0
+  Max_Held_Charge: 0
+  currentHeldCharge: 0
+  chargeLostRate: 0

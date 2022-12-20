@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MultiplayerTester.unity
+    path: Assets/Habib Files/Scenes/HabibTestScene.unity
     guid: 0ceeaa17f5b3b5a4a83aab2e4571e906
   - enabled: 1
     path: Assets/Enemies/EnemyTester.unity
