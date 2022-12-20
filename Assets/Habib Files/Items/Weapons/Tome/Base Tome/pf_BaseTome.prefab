@@ -47,6 +47,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
   weapon: {fileID: 11400000, guid: 54bff555f7b93c44dba4f55107aac954, type: 2}
+  CanAttack: 1
+  IsAttacking: 0
+  IsHoldingAttack: 0
   IsAimConstant: 1
   projectileSpawn: {fileID: 4347035149678277719}
   lineRenderer: {fileID: 1137255639463703768}
@@ -322,7 +325,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &965515956358767890
 Transform:
   m_ObjectHideFlags: 0
