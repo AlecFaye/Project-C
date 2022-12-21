@@ -37,7 +37,7 @@ public class TomeController : WeaponController
     }
 
     private void Update() {
-        if (IsAttacking) {
+        if (IsAttacking && currentTomeCharge > 0) {
             lineRenderer.SetPositions(new Vector3[] { projectileSpawn.position, owner.mouseWorldPosition });
         }
     }
@@ -47,22 +47,26 @@ public class TomeController : WeaponController
     #region Attack Functions
 
     protected override void AttackStart() {
-        ToggleCanAttack(); // false
-        ToggleIsAttacking(); // true
-        TogglePlayerAim(IsAimConstant, aimSpeed);
+        if (CanAttack && !IsAttacking && owner.IsOwner) {
+            ToggleCanAttack(); // false
+            ToggleIsAttacking(); // true
+            TogglePlayerAim(IsAimConstant, aimSpeed);
 
-        CancelInvoke(tomeChargeGain);
-        InvokeRepeating(tomeChargeDrain, 0, (1f / weapon.chargeDrainedRate)); // Invokes the func TomeDrain(), instantly once, then once every (1 sec/TomeChargeRate)
+            CancelInvoke(tomeChargeGain);
+            InvokeRepeating(tomeChargeDrain, 0, (1f / weapon.chargeDrainedRate)); // Invokes the func TomeDrain(), instantly once, then once every (1 sec/TomeChargeRate)
+        }
     }
 
     protected override void AttackEnd() {
-        ToggleCanAttack(); // true
-        ToggleIsAttacking(); // false
-        TogglePlayerAim(IsAimConstant, aimSpeed);
+        if (!CanAttack && IsAttacking && owner.IsOwner) {
+            ToggleCanAttack(); // true
+            ToggleIsAttacking(); // false
+            TogglePlayerAim(IsAimConstant, aimSpeed);
 
-        lineRenderer.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
-        CancelInvoke(tomeChargeDrain);
-        InvokeRepeating(tomeChargeGain, 0f, (1f / weapon.chargeGainedRate)); // Invokes the func TomeCharge(), instantly once, then once every (1 sec/TomeChargeRate)
+            lineRenderer.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
+            CancelInvoke(tomeChargeDrain);
+            InvokeRepeating(tomeChargeGain, 0f, (1f / weapon.chargeGainedRate)); // Invokes the func TomeCharge(), instantly once, then once every (1 sec/TomeChargeRate)
+        }
     }
 
     #region Charge Functions
@@ -73,6 +77,7 @@ public class TomeController : WeaponController
         if (currentTomeCharge < 0) {
             currentTomeCharge = 0;
             CancelInvoke(tomeChargeDrain);
+            lineRenderer.SetPositions(new Vector3[] { projectileSpawn.position, projectileSpawn.position });
             Debug.Log("Out of Energy");
         }
         Debug.Log("Current tome charge: " + currentTomeCharge);
