@@ -85,9 +85,8 @@ public class AxeController : WeaponController
     }
     private void ToggleCanAttack() { CanAttack = !CanAttack; }
     private void TogglePlayerAim(bool isConstantAim) {
-        owner.IsConstantAim = isConstantAim;
         owner.aimTarget = owner.mouseWorldPosition;
-        owner.RotatePlayerToCamera();
+        owner.IsConstantAim = isConstantAim;
     }
     private void ToggleTrailRenderer() { trailRenderer.emitting = !trailRenderer.emitting; }
 

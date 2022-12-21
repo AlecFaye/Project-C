@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 2346875544790657686}
   - component: {fileID: 2465443469343389152}
   m_Layer: 8
-  m_Name: DebugTransform
+  m_Name: MouseWorldPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5372,6 +5372,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: 5
   SprintSpeed: 8
+  AimSpeed: 3
   RotationSpeed: 1
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
@@ -5419,10 +5420,10 @@ MonoBehaviour:
   aimColliderLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  _projectileSpawn: {fileID: 0}
   _animator: {fileID: 0}
-  DebugTransform: {fileID: 3496814987382873948}
-  WeaponContoller: {fileID: 1708232174136693401}
+  MouseWorldTransform: {fileID: 3496814987382873948}
+  HotbarContoller: {fileID: 4578528991930918991}
+  Self: {fileID: 7319152783785580175}
 --- !u!114 &160270697750488773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5608,6 +5609,12 @@ MonoBehaviour:
     DestinationState: -999270597
     TransitionDuration: 0.25
     TriggerNameHash: 153482222
+    TransitionIndex: 0
+  - Layer: 3
+    OriginatingState: 753088835
+    DestinationState: 1598963233
+    TransitionDuration: 0.25
+    TriggerNameHash: -2136351482
     TransitionIndex: 0
   m_Animator: {fileID: 3707296443420380405}
 --- !u!114 &5543242803281681185

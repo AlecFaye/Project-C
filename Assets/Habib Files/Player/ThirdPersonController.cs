@@ -6,6 +6,7 @@ using UnityEngine;
 using QFSW.QC;
 using Unity.Services.Lobbies.Models;
 using UnityEngine.UIElements;
+using Mono.CSharp;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -20,13 +21,20 @@ namespace StarterAssets {
     [RequireComponent(typeof(PlayerInput))]
 #endif
     public class ThirdPersonController : NetworkBehaviour {
-        // Player Stats
+        //s;
+        #region Player Variables
+
+        #region Player Movement Stat Variables
+
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
+
+        [Tooltip("Speed of the character during aim in m/s")]
+        public float AimSpeed = 1f;
 
         [Tooltip("Rotation speed of the character")]
         public float RotationSpeed = 1.0f;
@@ -38,9 +46,17 @@ namespace StarterAssets {
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
 
+        #endregion
+        
+        #region Audio Variables
+
         public AudioClip LandingAudioClip;
         public AudioClip[] FootstepAudioClips;
         [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
+
+        #endregion
+
+        #region Player Jump Stat Variables
 
         [Space(10)]
         [Tooltip("The height the player can jump")]
@@ -56,7 +72,10 @@ namespace StarterAssets {
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
         public float FallTimeout = 0.15f;
 
-        // Player Dash Stats
+        #endregion
+
+        #region Player Dash Stat Variables
+
         [Header("Dash")]
         [Tooltip("Trail Renderer.")]
         [SerializeField] public GameObject TR;
@@ -78,8 +97,11 @@ namespace StarterAssets {
                 
         [Tooltip("Dash Cooldown value (float).")]
         public float DashingCooldown = 1f;
-        
-        // Player Ground Variables
+
+        #endregion
+
+        #region Player Ground Stat Variables
+
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool Grounded = true;
@@ -93,7 +115,10 @@ namespace StarterAssets {
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
 
-        // Player Camera Variables
+        #endregion
+
+        #region Player Camera Variables
+        
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         [SerializeField] private Transform cameraRoot;
@@ -116,23 +141,43 @@ namespace StarterAssets {
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
-        // Player Aim Variables
+        #endregion
+
+        #region Player Aim Variables
+        
         [Header("Attack/Camera-Aim Variables")]
         [Tooltip("Checks if the player is Attacking or not")]
         public bool IsAttacking = false;
+        
         [Tooltip("Checks if the player's aim is constant or not")]
         public bool IsConstantAim = false;
+        
         [Tooltip("Checks if the player's aim is constant or not")]
         public Vector3 aimTarget = Vector3.zero;
     
+        [Tooltip("Reuturns the player's aim is constant or not")]
         public Vector3 mouseWorldPosition = Vector3.zero;
 
         [Tooltip("Layer Mask for aiming")]
         [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
 
-        [Tooltip("Where the projectiles will spawn")]
-        public Transform _projectileSpawn;
+        #endregion
 
+        #region Player Animation Parameter Variables
+
+        private int _animIDSpeed;
+        private int _animIDGrounded;
+        private int _animIDJump;
+        private int _animIDFreeFall;
+        private int _animIDMotionSpeed;
+        // My variables Below
+        private int _animIDBowStartAim;
+        private int _animIDTomeStartAim;
+        private int _animIDAiming;
+
+        #endregion
+
+        #region LOL No Clue what these are for
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -150,16 +195,9 @@ namespace StarterAssets {
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
 
-        // animation IDs
-        private int _animIDSpeed;
-        private int _animIDGrounded;
-        private int _animIDJump;
-        private int _animIDFreeFall;
-        private int _animIDMotionSpeed;
-
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+        #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
-#endif
+        #endif
         public Animator _animator; // change to private and fix errors later
         private CharacterController _controller;
         private StarterAssetsInputs _input;
@@ -172,24 +210,31 @@ namespace StarterAssets {
 
         private bool _hasAnimator;
 
-        // Debug Transforms
-        public Transform DebugTransform; 
+        #endregion
+
+        #region Additional Transforms/GameObjects
+
+        public Transform MouseWorldTransform; // Gets the position of where the player is aiming 
         
-        public Transform WeaponContoller;
+        public GameObject HotbarContoller; // Lets the editor grab the Hotbar Controller
 
+        public Transform Self;
 
-        private bool IsCurrentDeviceMouse
-        {
-            get
-            {
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+        #endregion
+
+        #endregion
+
+        #region (Awake, Start, Update) Functions
+
+        private bool IsCurrentDeviceMouse {
+            get {
+            #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
                 return _playerInput.currentControlScheme == "KeyboardMouse";
-#else
+            #else
                 return false;
-#endif
+            #endif
             }
         }
-
 
         private void Awake()
         {
@@ -249,6 +294,8 @@ namespace StarterAssets {
             CameraRotation();
         }
 
+        #endregion
+
         private void AssignAnimationIDs()
         {
             if (!IsOwner) return; // Checks if you are owner of this Player
@@ -257,6 +304,9 @@ namespace StarterAssets {
             _animIDJump = Animator.StringToHash("Is Jumping");
             _animIDFreeFall = Animator.StringToHash("Is FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+            _animIDBowStartAim = Animator.StringToHash("Bow Aim");
+            _animIDTomeStartAim = Animator.StringToHash("Tome Aim");
+            _animIDAiming = Animator.StringToHash("IsAiming");
         }
 
         private void GroundedCheck()
@@ -275,8 +325,8 @@ namespace StarterAssets {
         }
 
         #region Camera Stuff (Camera and Player rotations)
-        private void CameraRotation()
-        {
+        
+        private void CameraRotation() {
             // if there is an input and camera position is not fixed
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) {
                 //Don't multiply mouse input by Time.deltaTime;
@@ -296,46 +346,61 @@ namespace StarterAssets {
         }
 
         // Function Used for getting position of players mouse
-        private void RaycastMouse()
-        {
+        private void RaycastMouse() {
             Vector2 screenCentrePoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
             Ray ray = Camera.main.ScreenPointToRay(screenCentrePoint);
 
             if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask)) {
-                DebugTransform.position = raycastHit.point;
                 mouseWorldPosition = raycastHit.point;
+                MouseWorldTransform.position = mouseWorldPosition;
             }
 
-            if (IsAttacking) {
-                RotatePlayerToCamera();
-            }
+            if (!IsAttacking) return;
+
+            if (IsConstantAim)
+                ConstantPlayerRotate();
+            else
+                OneTimePlayerRotate();
         }
-        public void RotatePlayerToCamera() {
-            Vector3 worldAimTarget;
-            if (IsConstantAim) worldAimTarget = mouseWorldPosition; 
-            else worldAimTarget = aimTarget;
-            worldAimTarget.y = transform.position.y;
-            Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
-            transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
+        public void ConstantPlayerRotate() {
+            Vector3 worldAimTarget = mouseWorldPosition;
+            worldAimTarget.y = Self.position.y;
+            
+            Vector3 aimDirection = (worldAimTarget - Self.position).normalized;
+            Self.forward = Vector3.Lerp(Self.forward, aimDirection, Time.deltaTime * 20f);
+        }
+        
+        public void OneTimePlayerRotate() {
+            Vector3 worldAimTarget = aimTarget; 
+            worldAimTarget.y = Self.position.y;
+            
+            Vector3 aimDirection = (worldAimTarget - Self.position).normalized;
+            Self.forward = Vector3.Lerp(Self.forward, aimDirection, Time.deltaTime * 20f);
         }
 
-        // Change to run and edit the camera zoom so that it matches the charge rate of the bow being used {P.S. maybe the Tome can zoom a little while charging}
-        // Have the Zoom apply slowly overtime to match with aim and reduce the sway to zero -> then to zoom out with a different transitional value to reset camera faster
+        // {P.S. maybe the Tome can zoom a little while charging}
+        // reduce the sway to zero
         // Have player move slower while they do this aswell
-        public void TriggerAim(float seconds)
-        {
-            if (IsAttacking) _animator.SetTrigger("Aim");
-            _animator.SetBool("Aiming", IsAttacking);
-
-            // Sets the main camera to a slower or faster zoom depending on required speed
-            Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = seconds;
-            // Sets the camera to follow the next one
+        public void TriggerAim(float aimTime, Weapon.WeaponType weapon) {
+            switch (weapon) {
+                case Weapon.WeaponType.Bow:
+                    _animator.SetTrigger(_animIDBowStartAim);
+                    break;
+                case Weapon.WeaponType.Tome:
+                    _animator.SetTrigger(_animIDTomeStartAim);
+                    break;
+            }
+            
+            Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = aimTime; // Sets the main camera to a slower or faster zoom depending on required speed
+            
             _aimCamera.gameObject.SetActive(IsAttacking);
             _followCamera.gameObject.SetActive(!IsAttacking);
-
         }
+
         #endregion
 
+        #region Movement and Jump Functions
+        
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
@@ -474,6 +539,8 @@ namespace StarterAssets {
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
         }
+
+        #endregion
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {

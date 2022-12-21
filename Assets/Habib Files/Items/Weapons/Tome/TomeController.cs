@@ -117,7 +117,7 @@ public class TomeController : WeaponController
     private void ToggleCanAttack() { CanAttack = !CanAttack; }
     private void TogglePlayerAim(bool isConstantAim, float aimTime) {
         owner.IsConstantAim = isConstantAim;
-        owner.TriggerAim(aimTime); // Calculate Seconds to aim in
+        owner.TriggerAim(aimTime, weapon.weaponType); // Calculate Seconds to aim in
     }
 
     #endregion
