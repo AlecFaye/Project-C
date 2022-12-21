@@ -4,12 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - PlayerFollowCamera
   - CinemachineTarget
   - TrainingDummy
   - Enemy
   - Item
-  - PlayerAimCamera
+  - NoAimCamera
+  - BowAimCamera
+  - TomeAimCamera
   layers:
   - Default
   - TransparentFX

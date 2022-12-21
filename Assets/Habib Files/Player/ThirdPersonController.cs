@@ -203,8 +203,9 @@ namespace StarterAssets {
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
-        private CinemachineVirtualCamera _followCamera;
-        private CinemachineVirtualCamera _aimCamera;
+        private CinemachineVirtualCamera _noAimCamera;
+        private CinemachineVirtualCamera _bowAimCamera;
+        private CinemachineVirtualCamera _tomeAimCamera;
 
         private const float _threshold = 0.01f;
 
@@ -236,16 +237,13 @@ namespace StarterAssets {
             }
         }
 
-        private void Awake()
-        {
+        private void Awake() {
             // get a reference to our main camera and the player follow camera
-            if (_mainCamera == null)
-            {
+            if (_mainCamera == null) {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-                                
-                _followCamera = GameObject.FindGameObjectWithTag("PlayerFollowCamera").GetComponent<CinemachineVirtualCamera>();
-                
-                _aimCamera = GameObject.FindGameObjectWithTag("PlayerAimCamera").GetComponent<CinemachineVirtualCamera>();
+                _noAimCamera = GameObject.FindGameObjectWithTag("NoAimCamera").GetComponent<CinemachineVirtualCamera>();
+                _bowAimCamera = GameObject.FindGameObjectWithTag("BowAimCamera").GetComponent<CinemachineVirtualCamera>();
+                _tomeAimCamera = GameObject.FindGameObjectWithTag("TomeAimCamera").GetComponent<CinemachineVirtualCamera>();
             }
         }
 
@@ -256,9 +254,10 @@ namespace StarterAssets {
                 _controller = GetComponent<CharacterController>();
                 _input = GetComponent<StarterAssetsInputs>();
                 _cinemachineTargetYaw = cameraRoot.rotation.eulerAngles.y; // Grabs Something related to rotation speed
-                
-                _followCamera.m_Follow = cameraRoot; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
-                _aimCamera.m_Follow = cameraRoot; // Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
+                // vvv Will set PlayerCameraRoot (Where the camera should be looking) to be followed by the main camera
+                _noAimCamera.m_Follow = cameraRoot;
+                _bowAimCamera.m_Follow = cameraRoot;
+                _tomeAimCamera.m_Follow = cameraRoot;
             }
 
 
@@ -345,7 +344,6 @@ namespace StarterAssets {
             cameraRoot.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
         }
 
-        // Function Used for getting position of players mouse
         private void RaycastMouse() {
             Vector2 screenCentrePoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
             Ray ray = Camera.main.ScreenPointToRay(screenCentrePoint);
@@ -358,43 +356,34 @@ namespace StarterAssets {
             if (!IsAttacking) return;
 
             if (IsConstantAim)
-                ConstantPlayerRotate();
+                PlayerRotateToAim(mouseWorldPosition);
             else
-                OneTimePlayerRotate();
+                PlayerRotateToAim(aimTarget);
         }
-        public void ConstantPlayerRotate() {
-            Vector3 worldAimTarget = mouseWorldPosition;
-            worldAimTarget.y = Self.position.y;
-            
-            Vector3 aimDirection = (worldAimTarget - Self.position).normalized;
-            Self.forward = Vector3.Lerp(Self.forward, aimDirection, Time.deltaTime * 20f);
-        }
-        
-        public void OneTimePlayerRotate() {
-            Vector3 worldAimTarget = aimTarget; 
+
+        public void PlayerRotateToAim(Vector3 worldAimTarget) {
             worldAimTarget.y = Self.position.y;
             
             Vector3 aimDirection = (worldAimTarget - Self.position).normalized;
             Self.forward = Vector3.Lerp(Self.forward, aimDirection, Time.deltaTime * 20f);
         }
 
-        // {P.S. maybe the Tome can zoom a little while charging}
-        // reduce the sway to zero
-        // Have player move slower while they do this aswell
+        // {P.S. maybe the Tome can zoom a little while charging} || reduce the sway to zero || Have player move slower while they do this aswell
         public void TriggerAim(float aimTime, Weapon.WeaponType weapon) {
             switch (weapon) {
                 case Weapon.WeaponType.Bow:
                     _animator.SetTrigger(_animIDBowStartAim);
+                    _bowAimCamera.gameObject.SetActive(IsAttacking);
                     break;
                 case Weapon.WeaponType.Tome:
                     _animator.SetTrigger(_animIDTomeStartAim);
+                    _tomeAimCamera.gameObject.SetActive(IsAttacking);
                     break;
             }
             
             Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = aimTime; // Sets the main camera to a slower or faster zoom depending on required speed
             
-            _aimCamera.gameObject.SetActive(IsAttacking);
-            _followCamera.gameObject.SetActive(!IsAttacking);
+            _noAimCamera.gameObject.SetActive(!IsAttacking);
         }
 
         #endregion
