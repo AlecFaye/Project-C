@@ -5336,7 +5336,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Wrist_L'\n\tTransform 'Root_M'\n\tTransform
+    'Elbow_L'\n\tTransform 'Head_M'\n\tTransform 'Elbow_R'\n\tTransform 'Shoulder_R'\n\tTransform
+    'Shoulder_L'\n\tTransform 'Spine1_M'\n\tTransform 'Wrist_R'\n\tTransform 'Neck_M'\n\tand
+    more ..."
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -5606,9 +5611,15 @@ MonoBehaviour:
     TransitionIndex: 0
   - Layer: 2
     OriginatingState: 753088835
-    DestinationState: -999270597
+    DestinationState: 1199069550
     TransitionDuration: 0.25
-    TriggerNameHash: 153482222
+    TriggerNameHash: -1426145348
+    TransitionIndex: 0
+  - Layer: 2
+    OriginatingState: -784978085
+    DestinationState: 1347052342
+    TransitionDuration: 0.25
+    TriggerNameHash: -1426145348
     TransitionIndex: 0
   - Layer: 3
     OriginatingState: 753088835
@@ -5672,7 +5683,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7987426414551469109}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
   m_Name: 

@@ -173,7 +173,6 @@ namespace StarterAssets {
         // My variables Below
         private int _animIDBowStartAim;
         private int _animIDTomeStartAim;
-        private int _animIDAiming;
 
         #endregion
 
@@ -305,7 +304,6 @@ namespace StarterAssets {
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
             _animIDBowStartAim = Animator.StringToHash("Bow Aim");
             _animIDTomeStartAim = Animator.StringToHash("Tome Aim");
-            _animIDAiming = Animator.StringToHash("IsAiming");
         }
 
         private void GroundedCheck()
@@ -380,7 +378,7 @@ namespace StarterAssets {
                     _tomeAimCamera.gameObject.SetActive(IsAttacking);
                     break;
             }
-            
+
             Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = aimTime; // Sets the main camera to a slower or faster zoom depending on required speed
             
             _noAimCamera.gameObject.SetActive(!IsAttacking);
