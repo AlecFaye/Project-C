@@ -321,7 +321,7 @@ namespace StarterAssets {
             }
         }
 
-        #region Camera Stuff (Camera and Player rotations)
+      #region Camera Stuff (Camera and Player rotations)
         
         private void CameraRotation() {
             // if there is an input and camera position is not fixed

@@ -9,6 +9,9 @@ public class WeaponController : MonoBehaviour
 
     public ThirdPersonController owner;
 
+    public Transform ref_RightHand;
+    public Transform ref_LeftHand;
+
     [SerializeField] protected Weapon weapon;
 
     public bool CanAttack = true;
