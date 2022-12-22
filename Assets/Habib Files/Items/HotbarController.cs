@@ -13,8 +13,8 @@ public class HotbarController : MonoBehaviour
     public ThirdPersonController player; // Refrences the player it's attatched too
     public WeaponController currentWeapon; // Refrences the current weapon's WeaponController Script
 
-    [SerializeField] private Transform ref_RightHand;
-    [SerializeField] private Transform ref_LeftHand;
+    [SerializeField] private Transform ref_RightHand; // Decide if this should be a transform or the target
+    [SerializeField] private Transform ref_LeftHand; // Might keep only left hand changes and apply those
 
     [SerializeField] private Transform[] HotbarSlots;
     private int selectedWeapon = 0;
