@@ -36,7 +36,7 @@ public class BowController : WeaponController
 
     #region Attack Functions
 
-    protected override void AttackStart() {
+    public override void AttackStart() {
         if (CanAttack && !IsAttacking && owner.IsOwner) { // Cut out -> owner.Grounded (Checked if player was grounded)
             currentBowCharge = 0;
 
@@ -47,7 +47,7 @@ public class BowController : WeaponController
         }
     }
 
-    protected override void AttackEnd() {
+    public override void AttackEnd() {
         CancelInvoke(bowCharge);
         if (!CanAttack && IsAttacking && owner.IsOwner && currentBowCharge > 0)
             Attack();

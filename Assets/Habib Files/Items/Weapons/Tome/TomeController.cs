@@ -46,7 +46,7 @@ public class TomeController : WeaponController
 
     #region Attack Functions
 
-    protected override void AttackStart() {
+    public override void AttackStart() {
         if (CanAttack && !IsAttacking && owner.IsOwner) {
             ToggleCanAttack(); // false
             ToggleIsAttacking(); // true
@@ -57,7 +57,7 @@ public class TomeController : WeaponController
         }
     }
 
-    protected override void AttackEnd() {
+    public override void AttackEnd() {
         if (!CanAttack && IsAttacking && owner.IsOwner) {
             ToggleCanAttack(); // true
             ToggleIsAttacking(); // false

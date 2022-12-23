@@ -80,6 +80,7 @@ public class HotbarController : MonoBehaviour
             if (position == selectedWeapon) {
                 slot.gameObject.SetActive(true);
                 currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
+                player.currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
             }
             else slot.gameObject.SetActive(false);
 

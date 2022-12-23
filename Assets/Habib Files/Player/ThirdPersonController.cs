@@ -212,13 +212,15 @@ namespace StarterAssets {
 
         #endregion
 
-        #region Additional Transforms/GameObjects
+        #region Additional Transforms/GameObjects/Components
 
         public Transform MouseWorldTransform; // Gets the position of where the player is aiming 
         
         public GameObject HotbarContoller; // Lets the editor grab the Hotbar Controller
 
         public Transform Self;
+
+        public WeaponController currentWeapon;
 
         #endregion
 
@@ -294,6 +296,8 @@ namespace StarterAssets {
 
         #endregion
 
+        #region Animation Functions
+
         private void AssignAnimationIDs()
         {
             if (!IsOwner) return; // Checks if you are owner of this Player
@@ -305,6 +309,16 @@ namespace StarterAssets {
             _animIDBowStartAim = Animator.StringToHash("Bow Aim");
             _animIDTomeStartAim = Animator.StringToHash("Tome Aim");
         }
+        
+        // These will run when triggered by the animation event
+        public void WeaponAttackStart() { currentWeapon.AttackStart(); }
+        public void WeaponAttackStop() { currentWeapon.AttackStop(); }
+        public void WeaponAttackEnd() { 
+            currentWeapon.ToggleIsAnimating(); // false 
+            currentWeapon.AttackEnd(); 
+        }
+
+        #endregion
 
         private void GroundedCheck()
         {

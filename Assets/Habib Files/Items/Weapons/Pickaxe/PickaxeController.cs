@@ -14,8 +14,6 @@ public class PickaxeController : WeaponController
 
     [SerializeField] private bool IsAimConstant = false;
 
-    [SerializeField] private string attackTrigger = "Pickaxe Attack";
-
     [SerializeField] private TrailRenderer trailRenderer;
 
     private List<IDamageable> enemiesHitList = new List<IDamageable>(); // Makes a list to keep track of which enemies were hit
@@ -42,7 +40,7 @@ public class PickaxeController : WeaponController
 
     #region Attack Functions
 
-    protected override void AttackStart() {
+    public override void AttackStart() {
         if (CanAttack && !IsAttacking && owner.IsOwner) {
             ToggleCanAttack(); // false
             ToggleIsAttacking(); // true
@@ -51,12 +49,12 @@ public class PickaxeController : WeaponController
         }
     }
 
-    protected override void AttackEnd() {
+    public override void AttackEnd() {
         return;
     }
 
     private IEnumerator Attack() {
-        owner._animator.SetTrigger(attackTrigger); // Will call the currently selected weapon's attack animation
+        owner._animator.SetTrigger(_animIDStartAttack); // Will call the currently selected weapon's attack animation
         ToggleTrailRenderer();
 
         yield return new WaitForSeconds(attackingTime);
