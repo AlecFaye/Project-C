@@ -16,15 +16,11 @@ public class PickaxeController : WeaponController
 
     [SerializeField] private TrailRenderer trailRenderer;
 
-    private List<IDamageable> enemiesHitList = new List<IDamageable>(); // Makes a list to keep track of which enemies were hit
-
-
-    private void Start() { SetWeaponStats(); }
-
     #endregion
 
     #region Start Functions
 
+    private void Start() { SetWeaponStats(); }
     private void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
         else
@@ -33,6 +29,8 @@ public class PickaxeController : WeaponController
             IsAttacking = weapon.IsAttacking;
             attackingTime = weapon.attackingTime;
             attackingCooldown = weapon.attackingCooldown;
+
+            _animIDStartAttack = "Pickaxe Attack";
         }
     }
 
@@ -40,39 +38,27 @@ public class PickaxeController : WeaponController
 
     #region Attack Functions
 
-    public override void AttackStart() {
+    public override void AttackWindup() {
         if (CanAttack && !IsAttacking && owner.IsOwner) {
+            ToggleIsAnimating(true); // true
             ToggleCanAttack(); // false
-            ToggleIsAttacking(); // true
             TogglePlayerAim(IsAimConstant);
-            StartCoroutine(Attack());
         }
+    }
+    public override void AttackStart() {
+        ToggleIsAttacking(); // true
+        ToggleTrailRenderer();
+    }
+    public override void AttackStop() {
+        ToggleTrailRenderer();
+        ToggleIsAttacking(); // false
     }
 
     public override void AttackEnd() {
-        return;
-    }
-
-    private IEnumerator Attack() {
-        owner._animator.SetTrigger(_animIDStartAttack); // Will call the currently selected weapon's attack animation
-        ToggleTrailRenderer();
-
-        yield return new WaitForSeconds(attackingTime);
-        ToggleIsAttacking(); // false
-        ToggleTrailRenderer();
-
-        yield return new WaitForSeconds(attackingCooldown);
-        enemiesHitList = new List<IDamageable>(); // Resets the list of enemies so that they can be hit again
-        ToggleCanAttack(); // true
-    }
-   
-    private void OnTriggerEnter(Collider other) {
-        if (!IsAttacking) return;
-        if (!other.TryGetComponent(out IDamageable damageable)) return;
-        if (enemiesHitList.Contains(damageable)) return; 
-
-        damageable.TakeDamage(weapon.damageValue, weapon.weaponType);
-        enemiesHitList.Add(damageable);
+        if (!IsAnimating) {
+            enemiesHitList = new List<IDamageable>(); // Resets the list of enemies so that they can be hit again
+            ToggleCanAttack(); // true
+        }
     }
 
     #endregion

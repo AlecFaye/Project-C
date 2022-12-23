@@ -9,28 +9,26 @@ public class WeaponController : MonoBehaviour
 
     public ThirdPersonController owner;
 
-    public Transform ref_RightHand;
     public Transform ref_LeftHand;
+    public Transform ref_RightHand;
 
-    [SerializeField] protected Weapon weapon;
+    public Weapon weapon;
 
     public bool CanAttack = true;
     public bool IsAttacking = false;
     public bool IsHoldingAttack = false;
 
     // Animation Variables
-    protected string _animIDStartAttack = "Start Attack";
+    protected string _animIDStartAttack = "None Attack";
 
     protected bool IsAnimating = false;
 
-    protected const int axeAttackLayer = 1;
-    protected const int bowAttackLayer = 2;
-    protected const int pickaxeAttackLayer = 3;
-    protected const int tomeAttackLayer = 4;
+    // Melee Specific Variables
+    protected List<IDamageable> enemiesHitList = new List<IDamageable>(); // Makes a list to keep track of which enemies were hit
 
     #endregion
 
-    private void Update() { if (CanAttack && !IsAttacking && IsHoldingAttack && weapon) AttackStart(); }
+    private void Update() { if (CanAttack && !IsAttacking && IsHoldingAttack && !IsAnimating && weapon) AttackStart(); }
 
     #region Attack Start and End
 
@@ -50,6 +48,35 @@ public class WeaponController : MonoBehaviour
     public virtual void AttackStop() { Debug.Log("Stop Attack Hitbox"); }
     public virtual void AttackEnd() { Debug.Log("Start Attack Finished"); }
 
-    public void ToggleIsAnimating() { IsAnimating = !IsAnimating; } // Called by the owner
+    public virtual void UpdateOwnerRig() { Debug.Log("Update Player Rig to reflect this"); }
+    
+    public bool SwitchableCheck() {
+        if (!owner.IsOwner) return false;
+        if (!CanAttack) return false;
+        if (IsAttacking) return false;
+        if (IsHoldingAttack) return false;
+        if (IsAnimating) return false;
+
+        else return true;
+    }
+    
+    public void ToggleIsAnimating(bool triggerAnim) { 
+        IsAnimating = !IsAnimating;
+        if (triggerAnim) owner._animator.SetTrigger(_animIDStartAttack); // Will call the currently selected weapon's attack animation
+    }
+
+
+    #region Melee Functions
+
+    private void OnTriggerEnter(Collider other) {
+        if (!IsAttacking) return;
+        if (!other.TryGetComponent(out IDamageable damageable)) return;
+        if (enemiesHitList.Contains(damageable)) return;
+
+        damageable.TakeDamage(weapon.damageValue, weapon.weaponType);
+        enemiesHitList.Add(damageable);
+    }
+
+    #endregion
 
 }

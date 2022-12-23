@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.UI.GridLayoutGroup;
 
 
 public class HotbarController : MonoBehaviour
@@ -23,6 +24,11 @@ public class HotbarController : MonoBehaviour
     private bool IsAttacking = false; // Used to check if player is attacking
     
     private bool IsHoldingAttack = false; // Used to check if player holding the button
+
+    // private const int axeAttackLayer = 1;
+    // private const int bowAttackLayer = 2;
+    // private const int pickaxeAttackLayer = 3;
+    // private const int tomeAttackLayer = 4;
 
     #endregion
 
@@ -69,24 +75,39 @@ public class HotbarController : MonoBehaviour
     private void OnHotbar6() { SwitchHotBar(5); }
 
     private void SwitchHotBar(int hotbarNum) {
-        if (player.IsOwner && currentWeapon.CanAttack && !currentWeapon.IsAttacking && !currentWeapon.IsHoldingAttack) {
+        if (currentWeapon.SwitchableCheck()) {
             selectedWeapon = hotbarNum;
             SelectWeapon();
         }
     }
     private void SelectWeapon() {
+        Transform selectedSlot = null;
         int position = 0;
         foreach (Transform slot in HotbarSlots) {
-            if (position == selectedWeapon) {
-                slot.gameObject.SetActive(true);
-                currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
-                player.currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
-            }
-            else slot.gameObject.SetActive(false);
+            if (position == selectedWeapon)
+                selectedSlot = slot;
+            else
+                DisableWeapon(slot);
 
             position++;
         }
+        EnableWeapon(selectedSlot);
     }
-    
+
+    private void EnableWeapon(Transform slot) {
+        slot.gameObject.SetActive(true);
+        currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
+        player.currentWeapon = slot.GetChild(0).GetComponent<WeaponController>();
+
+        SetAnimationLayers((int)currentWeapon.weapon.weaponType);
+    }
+    private void DisableWeapon(Transform slot) { slot.gameObject.SetActive(false); }
+
+    private void SetAnimationLayers(int selectedLayer) {
+        for (int layer = 1; layer <= player._animator.layerCount; layer++) { player._animator.SetLayerWeight(layer, 0); }
+
+        player._animator.SetLayerWeight(selectedLayer, 1);
+    }
+
     #endregion
 }

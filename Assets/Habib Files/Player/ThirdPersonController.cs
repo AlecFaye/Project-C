@@ -7,6 +7,7 @@ using QFSW.QC;
 using Unity.Services.Lobbies.Models;
 using UnityEngine.UIElements;
 using Mono.CSharp;
+using UnityEngine.Animations.Rigging;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -224,6 +225,21 @@ namespace StarterAssets {
 
         #endregion
 
+        #region Rig Components
+
+        [Space(10)]
+        [Header("Rig Components")]
+        public MultiAimConstraint Head;
+        public MultiAimConstraint Body;
+
+        public TwoBoneIKConstraint LeftArm;
+        public MultiAimConstraint LeftHand;
+
+        public TwoBoneIKConstraint RightArm;
+        public MultiAimConstraint RightHand;
+
+        #endregion
+
         #endregion
 
         #region (Awake, Start, Update) Functions
@@ -298,8 +314,7 @@ namespace StarterAssets {
 
         #region Animation Functions
 
-        private void AssignAnimationIDs()
-        {
+        private void AssignAnimationIDs() {
             if (!IsOwner) return; // Checks if you are owner of this Player
             _animIDSpeed = Animator.StringToHash("Speed");
             _animIDGrounded = Animator.StringToHash("Is Grounded");
@@ -314,7 +329,7 @@ namespace StarterAssets {
         public void WeaponAttackStart() { currentWeapon.AttackStart(); }
         public void WeaponAttackStop() { currentWeapon.AttackStop(); }
         public void WeaponAttackEnd() { 
-            currentWeapon.ToggleIsAnimating(); // false 
+            currentWeapon.ToggleIsAnimating(false); // false
             currentWeapon.AttackEnd(); 
         }
 
@@ -380,15 +395,13 @@ namespace StarterAssets {
             Self.forward = Vector3.Lerp(Self.forward, aimDirection, Time.deltaTime * 20f);
         }
 
-        // {P.S. maybe the Tome can zoom a little while charging} || reduce the sway to zero || Have player move slower while they do this aswell
+        // reduce the sway to zero || Have player move slower while they do this aswell
         public void TriggerAim(float aimTime, Weapon.WeaponType weapon) {
             switch (weapon) {
                 case Weapon.WeaponType.Bow:
-                    _animator.SetTrigger(_animIDBowStartAim);
                     _bowAimCamera.gameObject.SetActive(IsAttacking);
                     break;
                 case Weapon.WeaponType.Tome:
-                    _animator.SetTrigger(_animIDTomeStartAim);
                     _tomeAimCamera.gameObject.SetActive(IsAttacking);
                     break;
             }

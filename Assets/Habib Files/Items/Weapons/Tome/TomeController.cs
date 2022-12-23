@@ -21,11 +21,11 @@ public class TomeController : WeaponController
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Transform beam;
 
-     #endregion
+    #endregion
 
     #region Start/Update Functions
-    private void Start() { SetWeaponStats(); }
 
+    private void Start() { SetWeaponStats(); }
     protected void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
         else {
@@ -33,6 +33,7 @@ public class TomeController : WeaponController
             IsAttacking = weapon.IsAttacking;
             
             currentTomeCharge = weapon.startingCharge;
+            _animIDStartAttack = "Tome Attack";
         }
     }
 
@@ -46,19 +47,25 @@ public class TomeController : WeaponController
 
     #region Attack Functions
 
-    public override void AttackStart() {
+    public override void AttackWindup() {
         if (CanAttack && !IsAttacking && owner.IsOwner) {
+            ToggleIsAnimating(true); // true
             ToggleCanAttack(); // false
-            ToggleIsAttacking(); // true
             TogglePlayerAim(IsAimConstant, aimSpeed);
-
-            CancelInvoke(tomeChargeGain);
-            InvokeRepeating(tomeChargeDrain, 0, (1f / weapon.chargeDrainedRate)); // Invokes the func TomeDrain(), instantly once, then once every (1 sec/TomeChargeRate)
         }
+    }
+    public override void AttackStart() {
+        ToggleIsAttacking(); // true
+        CancelInvoke(tomeChargeGain);
+        InvokeRepeating(tomeChargeDrain, 0, (1f / weapon.chargeDrainedRate)); // Invokes the func TomeDrain(), instantly once, then once every (1 sec/TomeChargeRate)
+    }
+    public override void AttackStop() {
+        Debug.Log("Uneeded Funtion For Tome");
     }
 
     public override void AttackEnd() {
         if (!CanAttack && IsAttacking && owner.IsOwner) {
+            ToggleIsAnimating(true); // false
             ToggleCanAttack(); // true
             ToggleIsAttacking(); // false
             TogglePlayerAim(IsAimConstant, aimSpeed);

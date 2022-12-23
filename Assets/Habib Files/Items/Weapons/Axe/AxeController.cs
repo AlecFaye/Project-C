@@ -16,8 +16,6 @@ public class AxeController : WeaponController
 
     [SerializeField] private TrailRenderer trailRenderer;
 
-    private List<IDamageable> enemiesHitList = new List<IDamageable>(); // Makes a list to keep track of which enemies were hit
-
     #endregion
 
     #region Start Functions
@@ -31,6 +29,8 @@ public class AxeController : WeaponController
             IsAttacking = weapon.IsAttacking;
             attackingTime = weapon.attackingTime;
             attackingCooldown = weapon.attackingCooldown;
+ 
+            _animIDStartAttack = "Axe Attack";
         }
     }
 
@@ -40,11 +40,9 @@ public class AxeController : WeaponController
 
     public override void AttackWindup() {
         if (CanAttack && !IsAttacking && owner.IsOwner) {
-            ToggleIsAnimating(); // true
+            ToggleIsAnimating(true); // true
             ToggleCanAttack(); // false
             TogglePlayerAim(IsAimConstant);
-            owner._animator.SetLayerWeight(axeAttackLayer, 1);
-            owner._animator.SetTrigger(_animIDStartAttack); // Will call the currently selected weapon's attack animation
         }
     }
     public override void AttackStart() {
@@ -55,23 +53,12 @@ public class AxeController : WeaponController
         ToggleTrailRenderer();
         ToggleIsAttacking(); // false
     }
-    // This will be called if the button is released again Fix later
+
     public override void AttackEnd() {
         if (!IsAnimating) {
-            owner._animator.SetLayerWeight(axeAttackLayer, 0);
             enemiesHitList = new List<IDamageable>(); // Resets the list of enemies so that they can be hit again
             ToggleCanAttack(); // true
         }
-    }
-
-
-    private void OnTriggerEnter(Collider other) {
-        if (!IsAttacking) return;
-        if (!other.TryGetComponent(out IDamageable damageable)) return;
-        if (enemiesHitList.Contains(damageable)) return;
-
-        damageable.TakeDamage(weapon.damageValue, weapon.weaponType);
-        enemiesHitList.Add(damageable);
     }
 
     #endregion
