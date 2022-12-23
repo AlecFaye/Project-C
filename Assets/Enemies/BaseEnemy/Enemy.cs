@@ -51,6 +51,7 @@ public class Enemy : PoolableObject, IDamageable
     #region Animation Triggers
     public void StartMeleeDamage()
     {
+        attackRadius.DealDamage();
         Debug.Log("START dealing Melee Damage");
     }
 

@@ -9,52 +9,45 @@ public class AttackRadius : MonoBehaviour
     public NavMeshAgent agent;
     public SphereCollider sphereCollider;
 
-    protected List<IDamageable> damageables = new();
-
     public float damage = 10.0f;
     public float attackDelay = 0.5f;
 
     public delegate void AttackEvent(IDamageable target);
     public AttackEvent OnAttack;
 
+    protected List<IDamageable> damageables = new();
     protected Coroutine attackCoroutine;
-
-    protected IDamageable closestDamageable = null;
 
     protected virtual void Awake()
     {
-        sphereCollider = GetComponent<SphereCollider>();
+        TryGetComponent(out sphereCollider);
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        IDamageable damageable = other.GetComponent<IDamageable>();
+        if (!other.TryGetComponent(out IDamageable damageable))
+            return;
 
-        if (damageable != null)
+        damageables.Add(damageable);
+
+        if (attackCoroutine == null)
         {
-            damageables.Add(damageable);
-
-            if (attackCoroutine == null)
-            {
-                agent.enabled = false;
-                attackCoroutine = StartCoroutine(Attack());
-            }
+            agent.enabled = false;
+            attackCoroutine = StartCoroutine(Attack());
         }
     }
 
     protected virtual void OnTriggerExit(Collider other)
     {
-        IDamageable damageable = other.GetComponent<IDamageable>();
+        if (!other.TryGetComponent(out IDamageable damageable))
+            return;
 
-        if (damageable != null)
+        damageables.Remove(damageable);
+
+        if (damageables.Count <= 0)
         {
-            damageables.Remove(damageable);
-
-            if (damageables.Count == 0)
-            {
-                StopCoroutine(attackCoroutine);
-                attackCoroutine = null;
-            }
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
         }
     }
 
@@ -62,7 +55,7 @@ public class AttackRadius : MonoBehaviour
     {
         WaitForSeconds wait = new(attackDelay);
 
-        closestDamageable = null;
+        IDamageable closestDamageable = null;
         float closestDistance = float.MaxValue;
 
         while (damageables.Count > 0)
@@ -80,9 +73,7 @@ public class AttackRadius : MonoBehaviour
             }
             
             if (closestDamageable != null)
-            {
                 OnAttack?.Invoke(closestDamageable);
-            }
 
             yield return wait;
 
@@ -102,9 +93,9 @@ public class AttackRadius : MonoBehaviour
 
     public void DealDamage()
     {
-        if (closestDamageable != null)
+        foreach (IDamageable damageable in damageables)
         {
-            closestDamageable.TakeDamage(damage);
+            damageable.TakeDamage(damage);
         }
     }
 }

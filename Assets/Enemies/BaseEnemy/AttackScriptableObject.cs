@@ -17,7 +17,6 @@ public class AttackScriptableObject : ScriptableObject
     
     // Flying configurations
     [Header("Flying Configurations")]
-    public bool isFlying = false;
     public bool isDropAttack = false;
 
     // Ranged configurations

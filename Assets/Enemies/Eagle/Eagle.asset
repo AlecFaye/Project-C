@@ -27,7 +27,7 @@ MonoBehaviour:
   fieldOfView: 120
   numOfWaypoints: 6
   aiUpdateInterval: 0.1
-  acceleration: 12
+  acceleration: 6
   angularSpeed: 120
   areaMask: -1
   avoidancePriority: 50
@@ -35,5 +35,5 @@ MonoBehaviour:
   height: 4.75
   obstacleAvoidanceType: 0
   radius: 0.42
-  speed: 5
+  speed: 4
   stoppingDistance: 0.001

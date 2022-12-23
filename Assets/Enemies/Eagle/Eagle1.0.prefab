@@ -73,8 +73,8 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 0.75
-  m_Radius: 0.19
+  m_Height: 0.99
+  m_Radius: 0.4
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -4175,8 +4175,8 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 2113
-  isDropAttack: 0
   sphereCastRadius: 0.1
+  isDropAttack: 0
   fallingObjectIndicator: {fileID: 5360909386618543157, guid: 18845f1dfe1805748800ef174b947ee1, type: 3}
   indicatorMask:
     serializedVersion: 2
