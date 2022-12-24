@@ -108,7 +108,6 @@ public class BowController : WeaponController
     }
 
     public override void ToggleOwnerRig(bool turnOn) {
-        Debug.Log("Before: " + owner.Body.data.offset);
         if (turnOn) {
             owner.Body.weight = 0.6f;
             owner.Head.weight = 0.7f;
@@ -118,7 +117,6 @@ public class BowController : WeaponController
             owner.Head.weight = 0.4f;
             owner.RightArm.weight = 0f;
         }
-        Debug.Log("After: " + owner.Body.data.offset);
     }
 
     #endregion

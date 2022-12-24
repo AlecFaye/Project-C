@@ -87,7 +87,7 @@ public class TomeController : WeaponController
             lineRenderer.SetPositions(new Vector3[] { projectileSpawn.position, projectileSpawn.position });
             Debug.Log("Out of Energy");
         }
-        Debug.Log("Current tome charge: " + currentTomeCharge);
+        //Debug.Log("Current tome charge: " + currentTomeCharge);
     }
 
     private void TomeChargeGain() {
@@ -96,7 +96,7 @@ public class TomeController : WeaponController
             currentTomeCharge = weapon.maxCharge;
             CancelInvoke(tomeChargeGain);
         } 
-        Debug.Log("Current tome charge: " + currentTomeCharge);
+        //Debug.Log("Current tome charge: " + currentTomeCharge);
     }
 
     #endregion
