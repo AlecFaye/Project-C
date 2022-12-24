@@ -12,6 +12,8 @@ public class EnemyScriptableObject : ScriptableObject
     public AttackScriptableObject attackConfiguration;
     public ParticleSystem particleSystem;
 
+    [Range(1, 10)] public int groupingCount = 1;
+
     [Header("Enemy Base Stats")]
     public float health = 100.0f;
     public ArmourType armourType = ArmourType.Medium;
@@ -52,8 +54,6 @@ public class EnemyScriptableObject : ScriptableObject
         enemy.armourType = armourType;
         enemy.weaknessTypes = weaknessTypes;
         enemy.weaknessDamageMultiplier = weaknessDamageMultiplier;
-        enemy.damage = attackConfiguration.damage;
-        enemy.attackDelay = attackConfiguration.attackDelay;
 
         enemy.agent.acceleration = acceleration;
         enemy.agent.angularSpeed = angularSpeed;

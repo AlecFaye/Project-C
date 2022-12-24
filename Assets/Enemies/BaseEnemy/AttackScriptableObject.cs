@@ -21,8 +21,8 @@ public class AttackScriptableObject : ScriptableObject
 
     public void SetupEnemy(Enemy enemy)
     {
-        enemy.attackRadius.attackDelay = attackDelay;
         enemy.attackRadius.damage = damage;
+        enemy.attackRadius.attackDelay = attackDelay;
 
         switch (attackType)
         {

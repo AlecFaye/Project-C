@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class FallingObjectIndicator : MonoBehaviour
 {
+    [SerializeField] private float autoDestroyTime = 1.5f;
+
     void Start()
     {
-        Destroy(gameObject, 2.5f);
+        Destroy(gameObject, autoDestroyTime);
     }
 }
