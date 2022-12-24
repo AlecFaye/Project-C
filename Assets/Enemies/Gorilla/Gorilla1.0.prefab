@@ -44,7 +44,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 6
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2854406098295750320
 MonoBehaviour:
@@ -62,7 +62,9 @@ MonoBehaviour:
   fieldOfView: 90
   lineOfSightLayers:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 2113
+  awareLineOfSightRadius: 0
+  unawareLineOfSightRadius: 0
 --- !u!1 &6711541208653039376
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,9 +124,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 7170165442718566054}
-  sphereCollider: {fileID: 2848675454404222373}
   damage: 10
   attackDelay: 0.5
+  sphereCollider: {fileID: 2848675454404222373}
   projectilePrefab: {fileID: 1178512139573940946, guid: 5dc85d91cdbc48f48b5e377d2558c574, type: 3}
   projectileSpawnOffset: {x: 0, y: 1, z: 0}
   mask:

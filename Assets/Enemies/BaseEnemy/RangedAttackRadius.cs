@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public class RangedAttackRadius : AttackRadius
 {
+    public SphereCollider sphereCollider;
     public Projectile projectilePrefab;
     public Vector3 projectileSpawnOffset = new(0, 1, 0);
     public LayerMask mask;
@@ -13,10 +15,6 @@ public class RangedAttackRadius : AttackRadius
     private RaycastHit hit;
     private IDamageable targetDamageable;
     private Projectile projectile;
-
-    public bool isDropAttack;
-    [SerializeField] private GameObject fallingObjectIndicator;
-    [SerializeField] private LayerMask indicatorMask;
 
     protected override void OnTriggerExit(Collider other)
     {
@@ -28,7 +26,7 @@ public class RangedAttackRadius : AttackRadius
         }
     }
 
-    public void CreateBulletPool()
+    public void CreateProjectilePool()
     {
         if (projectilePool == null)
         {
@@ -36,7 +34,7 @@ public class RangedAttackRadius : AttackRadius
         }
     }
 
-    protected override IEnumerator Attack()
+    public override IEnumerator Attack()
     {
         WaitForSeconds waitAttackCooldown = new(attackDelay);
        
@@ -46,46 +44,19 @@ public class RangedAttackRadius : AttackRadius
             {
                 targetDamageable = damageables[index];
 
-                if (isDropAttack)
+                if (HasLineOfSightTo(targetDamageable.GetTransform()))
                 {
-                    if (HasDropAttackLineOfSightTo(targetDamageable.GetTransform()))
-                    {
-                        OnAttack?.Invoke(damageables[index]);
-                        agent.enabled = false;
-                        break;
-                    }
-                }
-                else
-                {
-                    if (HasLineOfSightTo(targetDamageable.GetTransform()))
-                    {
-                        OnAttack?.Invoke(damageables[index]);
-                        agent.enabled = false;
-                        break;
-                    }
+                    OnAttack?.Invoke(damageables[index]);
+                    agent.enabled = false;
+                    break;
                 }
             }
 
             yield return waitAttackCooldown;
 
-            if (targetDamageable == null)
+            if (targetDamageable == null || !HasLineOfSightTo(targetDamageable.GetTransform()))
             {
                 agent.enabled = true;
-            }
-
-            if (isDropAttack)
-            {
-                if (!HasDropAttackLineOfSightTo(targetDamageable.GetTransform()))
-                {
-                    agent.enabled = true;
-                }
-            }
-            else
-            {
-                if (!HasLineOfSightTo(targetDamageable.GetTransform()))
-                {
-                    agent.enabled = true;
-                }
             }
 
             damageables.RemoveAll(DisabledDamageables);
@@ -95,20 +66,15 @@ public class RangedAttackRadius : AttackRadius
         attackCoroutine = null;
     }
 
-    private bool HasDropAttackLineOfSightTo(Transform target)
-    {
-        if (!Physics.Raycast(transform.position, ((target.position) - (transform.position)).normalized, out RaycastHit raycastHit, 20.0f, mask))
-            return false;
-
-        if (!raycastHit.collider.TryGetComponent(out IDamageable damageable))
-            return false;
-        
-        return damageable.GetTransform() == target;
-    }
-
     private bool HasLineOfSightTo(Transform target)
     {
-        if (!Physics.SphereCast(transform.position + projectileSpawnOffset, sphereCastRadius, (target.position - (transform.position + projectileSpawnOffset)).normalized, out hit, sphereCollider.radius, mask))
+        if (!Physics.SphereCast(
+                transform.position + projectileSpawnOffset, 
+                sphereCastRadius, 
+                ((target.position + projectileSpawnOffset) - (transform.position + projectileSpawnOffset)).normalized, 
+                out hit, 
+                sphereCollider.radius, 
+                mask))
             return false;
 
         if (!hit.collider.TryGetComponent(out IDamageable damageable))
@@ -121,14 +87,6 @@ public class RangedAttackRadius : AttackRadius
     {
         if (targetDamageable != null)
         {
-            if (isDropAttack)
-            {
-                if (Physics.Raycast(transform.position, new Vector3(0, -1, 0), out RaycastHit raycastHit, 20.0f, indicatorMask))
-                {
-                    Instantiate(fallingObjectIndicator, raycastHit.point, Quaternion.identity);
-                }
-            }
-
             PoolableObject poolableObject = projectilePool.GetObject();
 
             if (poolableObject)
@@ -137,8 +95,7 @@ public class RangedAttackRadius : AttackRadius
 
                 projectile.damage = damage;
                 projectile.transform.position = transform.position + projectileSpawnOffset;
-                if (!isDropAttack)
-                    projectile.transform.LookAt(targetDamageable.GetTransform().position + projectileSpawnOffset);
+                projectile.transform.LookAt(targetDamageable.GetTransform().position + projectileSpawnOffset);
                 projectile.rb.AddForce(projectile.transform.forward * projectilePrefab.moveSpeed, ForceMode.VelocityChange);
             }
         }

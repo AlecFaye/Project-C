@@ -51,13 +51,7 @@ public class Enemy : PoolableObject, IDamageable
     #region Animation Triggers
     public void StartMeleeDamage()
     {
-        attackRadius.DealDamage();
-        Debug.Log("START dealing Melee Damage");
-    }
-
-    public void StopMeleeDamage()
-    {
-        Debug.Log("STOP dealing Melee Damage");
+        GetComponentInChildren<MeleeAttackRadius>().DealDamage();
     }
 
     public void ReleaseProjectile()
@@ -65,11 +59,16 @@ public class Enemy : PoolableObject, IDamageable
         GetComponentInChildren<RangedAttackRadius>().ReleaseProjectile();
     }
 
+    public void DropProjectile()
+    {
+        GetComponentInChildren<DropAttackRadius>().DropProjectile();
+    }
+
     public void FinishedAttacking()
     {
         animator.SetBool(IS_ATTACKING, false);
 
-        if (!enemyScriptableObject.attackConfiguration.isRanged)
+        if (enemyScriptableObject.attackConfiguration.attackType != AttackType.Ranged)
             agent.enabled = true;
     }
 
