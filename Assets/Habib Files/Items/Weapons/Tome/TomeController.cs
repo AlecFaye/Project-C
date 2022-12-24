@@ -80,7 +80,7 @@ public class TomeController : WeaponController
 
     private void TomeChargeDrain() {
         currentTomeCharge--;
-        if (owner.IsOwner) { Attack(); }
+        if (owner.IsOwner) { BeamCreate(); }
         if (currentTomeCharge < 0) {
             currentTomeCharge = 0;
             CancelInvoke(tomeChargeDrain);
@@ -100,10 +100,6 @@ public class TomeController : WeaponController
     }
 
     #endregion
-
-    private void Attack() {
-        BeamCreate();
-    }
 
     private void BeamCreate() {
         Vector3 point0 = projectileSpawn.position;

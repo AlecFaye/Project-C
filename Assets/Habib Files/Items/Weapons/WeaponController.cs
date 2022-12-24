@@ -28,7 +28,7 @@ public class WeaponController : MonoBehaviour
 
     #endregion
 
-    private void Update() { if (CanAttack && !IsAttacking && IsHoldingAttack && !IsAnimating && weapon) AttackStart(); }
+    private void Update() { if (CanAttack && !IsAttacking && IsHoldingAttack && !IsAnimating && weapon) AttackWindup(); }
 
     #region Attack Start and End
 

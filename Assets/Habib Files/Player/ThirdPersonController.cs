@@ -383,7 +383,7 @@ namespace StarterAssets {
             if (!IsAttacking) return;
 
             if (IsConstantAim)
-                PlayerRotateToAim(mouseWorldPosition, 90f);
+                PlayerRotateToAim(mouseWorldPosition, -80f);
             else
                 PlayerRotateToAim(aimTarget, 0f);
         }
@@ -391,25 +391,25 @@ namespace StarterAssets {
         public void PlayerRotateToAim(Vector3 worldAimTarget, float offset) {
             worldAimTarget.y = Self.position.y;
             
-            Vector3 aimDirection = Quaternion.Euler(offset, 0f, 0f) * (worldAimTarget - Self.position).normalized;
+            Vector3 aimDirection = Quaternion.AngleAxis(offset, Vector3.up) * (worldAimTarget - Self.position).normalized;
 
             Self.forward = Vector3.Lerp(Self.forward, aimDirection, Time.deltaTime * 20f);
         }
 
         // reduce the sway to zero || Have player move slower while they do this aswell
         public void TriggerAim(float aimTime, Weapon.WeaponType weapon) {
-            switch (weapon) {
-                case Weapon.WeaponType.Bow:
-                    _bowAimCamera.gameObject.SetActive(IsAttacking);
-                    break;
-                case Weapon.WeaponType.Tome:
-                    _tomeAimCamera.gameObject.SetActive(IsAttacking);
-                    break;
-            }
+            //switch (weapon) {
+            //    case Weapon.WeaponType.Bow:
+            //        _bowAimCamera.gameObject.SetActive(IsAttacking);
+            //        break;
+            //    case Weapon.WeaponType.Tome:
+            //        _tomeAimCamera.gameObject.SetActive(IsAttacking);
+            //        break;
+            //}
 
-            Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = aimTime; // Sets the main camera to a slower or faster zoom depending on required speed
+            //Camera.main.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = aimTime; // Sets the main camera to a slower or faster zoom depending on required speed
             
-            _noAimCamera.gameObject.SetActive(!IsAttacking);
+            //_noAimCamera.gameObject.SetActive(!IsAttacking);
         }
 
         #endregion
