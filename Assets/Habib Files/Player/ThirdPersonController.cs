@@ -256,7 +256,7 @@ namespace StarterAssets {
 
         private void Awake() {
             // get a reference to our main camera and the player follow camera
-            if (_mainCamera == null) {
+            if (!_mainCamera) {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
                 _noAimCamera = GameObject.FindGameObjectWithTag("NoAimCamera").GetComponent<CinemachineVirtualCamera>();
                 _bowAimCamera = GameObject.FindGameObjectWithTag("BowAimCamera").GetComponent<CinemachineVirtualCamera>();

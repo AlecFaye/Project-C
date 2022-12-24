@@ -11,12 +11,6 @@ public class BowController : WeaponController
 
     private bool IsAimConstant = true;
 
-    private float currentBowCharge = 0;
-
-    private string bowCharge = "BowCharge";
-
-    [SerializeField] private Transform projectileSpawn;
-
     #endregion
 
     #region Start Functions
@@ -66,17 +60,6 @@ public class BowController : WeaponController
             CreateArrow();
         }
     }
-
-    #region Charge Functions
-
-    private void BowCharge() {
-        currentBowCharge++;
-        if (currentBowCharge > weapon.maxCharge)
-            currentBowCharge = weapon.maxCharge;
-        //Debug.Log("Current bow charge: " + currentBowCharge);
-    }
-
-    #endregion
 
     private void CreateArrow() {
         Vector3 point0 = projectileSpawn.position;

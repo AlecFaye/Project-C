@@ -5307,6 +5307,7 @@ GameObject:
   - component: {fileID: 3707296443420380405}
   - component: {fileID: 7987426414551469119}
   - component: {fileID: 7987426414551469118}
+  - component: {fileID: 3106989885459478796}
   - component: {fileID: 160270697750488773}
   - component: {fileID: 5942311889240281161}
   - component: {fileID: 7987426414551469113}
@@ -5360,12 +5361,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'Wrist_L'\n\tTransform 'Root_M'\n\tTransform
-    'Elbow_L'\n\tTransform 'Head_M'\n\tTransform 'Elbow_R'\n\tTransform 'Shoulder_R'\n\tTransform
-    'Spine1_M'\n\tTransform 'Wrist_R'\n\tTransform 'Neck_M'\n\tTransform 'Wrist_L'\n\tand
-    more ..."
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -5460,6 +5456,19 @@ MonoBehaviour:
   LeftHand: {fileID: 8677845954184063045}
   RightArm: {fileID: 8007968717859584219}
   RightHand: {fileID: 5390993098821368183}
+--- !u!114 &3106989885459478796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7987426414551469109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2563dccaf3c6ca64e8f0c9174e67bf60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 7987426414551469118}
 --- !u!114 &160270697750488773
 MonoBehaviour:
   m_ObjectHideFlags: 0
