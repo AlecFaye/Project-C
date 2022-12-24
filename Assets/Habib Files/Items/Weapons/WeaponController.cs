@@ -48,7 +48,7 @@ public class WeaponController : MonoBehaviour
     public virtual void AttackStop() { Debug.Log("Stop Attack Hitbox"); }
     public virtual void AttackEnd() { Debug.Log("Start Attack Finished"); }
 
-    public virtual void UpdateOwnerRig() { Debug.Log("Update Player Rig to reflect this"); }
+    public virtual void ToggleOwnerRig(bool turnOn) { Debug.Log("Update Player Rig to reflect this"); }
     
     public bool SwitchableCheck() {
         if (!owner.IsOwner) return false;

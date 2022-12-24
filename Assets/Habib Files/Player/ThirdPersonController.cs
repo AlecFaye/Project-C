@@ -383,15 +383,16 @@ namespace StarterAssets {
             if (!IsAttacking) return;
 
             if (IsConstantAim)
-                PlayerRotateToAim(mouseWorldPosition);
+                PlayerRotateToAim(mouseWorldPosition, 90f);
             else
-                PlayerRotateToAim(aimTarget);
+                PlayerRotateToAim(aimTarget, 0f);
         }
 
-        public void PlayerRotateToAim(Vector3 worldAimTarget) {
+        public void PlayerRotateToAim(Vector3 worldAimTarget, float offset) {
             worldAimTarget.y = Self.position.y;
             
-            Vector3 aimDirection = (worldAimTarget - Self.position).normalized;
+            Vector3 aimDirection = Quaternion.Euler(offset, 0f, 0f) * (worldAimTarget - Self.position).normalized;
+
             Self.forward = Vector3.Lerp(Self.forward, aimDirection, Time.deltaTime * 20f);
         }
 

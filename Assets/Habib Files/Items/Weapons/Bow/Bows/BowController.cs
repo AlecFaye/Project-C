@@ -48,6 +48,7 @@ public class BowController : WeaponController
     public override void AttackStart() {
         ToggleIsAttacking(); // true
         TogglePlayerAim(IsAimConstant, weapon.maxCharge / weapon.chargeGainedRate);
+        ToggleOwnerRig(true); // true
         InvokeRepeating(bowCharge, 0f, (1f / weapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
     }
     public override void AttackStop() { 
@@ -61,6 +62,7 @@ public class BowController : WeaponController
             ToggleCanAttack(); // true
             ToggleIsAttacking(); // false
             TogglePlayerAim(IsAimConstant, 0.5f);
+            ToggleOwnerRig(false); // false
             CreateArrow();
         }
     }
@@ -71,7 +73,7 @@ public class BowController : WeaponController
         currentBowCharge++;
         if (currentBowCharge > weapon.maxCharge)
             currentBowCharge = weapon.maxCharge;
-        Debug.Log("Current bow charge: " + currentBowCharge);
+        //Debug.Log("Current bow charge: " + currentBowCharge);
     }
 
     #endregion
@@ -103,15 +105,20 @@ public class BowController : WeaponController
     private void TogglePlayerAim(bool isConstantAim, float aimTime) {
         owner.IsConstantAim = isConstantAim;
         owner.TriggerAim(aimTime, weapon.weaponType); // Calculate Seconds to aim in
-
-        UpdateOwnerRig();
     }
 
-    public override void UpdateOwnerRig() {
-        owner.Body.data.offset = new Vector3(100f, 0f, 0f);
-
-        owner.RightArm.weight = 1;
-        
+    public override void ToggleOwnerRig(bool turnOn) {
+        Debug.Log("Before: " + owner.Body.data.offset);
+        if (turnOn) {
+            owner.Body.weight = 0.6f;
+            owner.Head.weight = 0.7f;
+            owner.RightArm.weight = 1f;
+        } else {
+            owner.Body.weight = 0f;
+            owner.Head.weight = 0.4f;
+            owner.RightArm.weight = 0f;
+        }
+        Debug.Log("After: " + owner.Body.data.offset);
     }
 
     #endregion

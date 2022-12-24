@@ -104,7 +104,7 @@ public class HotbarController : MonoBehaviour
     private void DisableWeapon(Transform slot) { slot.gameObject.SetActive(false); }
 
     private void SetAnimationLayers(int selectedLayer) {
-        for (int layer = 1; layer <= player._animator.layerCount; layer++) { player._animator.SetLayerWeight(layer, 0); }
+        for (int layer = 1; layer < player._animator.layerCount; layer++) { player._animator.SetLayerWeight(layer, 0); }
 
         player._animator.SetLayerWeight(selectedLayer, 1);
     }
