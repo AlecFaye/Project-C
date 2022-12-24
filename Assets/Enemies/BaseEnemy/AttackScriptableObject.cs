@@ -18,6 +18,7 @@ public class AttackScriptableObject : ScriptableObject
     // Flying configurations
     [Header("Flying Configurations")]
     public bool isFlying = false;
+    public bool isDropAttack = false;
 
     // Ranged configurations
     [Header("Ranged Configurations")]
@@ -38,6 +39,8 @@ public class AttackScriptableObject : ScriptableObject
             rangedAttackRadius.projectilePrefab = projectilePrefab;
             rangedAttackRadius.projectileSpawnOffset = projectileSpawnOffset;
             rangedAttackRadius.mask = lineOfSightLayers;
+
+            rangedAttackRadius.isDropAttack = isDropAttack;
 
             rangedAttackRadius.CreateBulletPool();
         }

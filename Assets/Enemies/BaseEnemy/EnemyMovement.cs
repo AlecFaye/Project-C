@@ -44,7 +44,6 @@ public class EnemyMovement : MonoBehaviour
     private const string IS_RUNNING = "isRunning";
 
     private Coroutine followCoroutine = null;
-    private Coroutine changeBaseOffsetCoroutine = null;
 
     private void Awake()
     {
@@ -165,16 +164,6 @@ public class EnemyMovement : MonoBehaviour
             if (followCoroutine != null)
                 StopCoroutine(followCoroutine);
 
-            if (oldState == EnemyState.Chase)
-            {
-                if (IsFlyingEnemy())
-                {
-                    if (changeBaseOffsetCoroutine != null)
-                        StopCoroutine(changeBaseOffsetCoroutine);
-                    changeBaseOffsetCoroutine = StartCoroutine(ChangeBaseOffset(4.0f));
-                }
-            }
-
             if (oldState == EnemyState.Idle)
                 agent.speed /= idleMoveSpeedMultiplier;
 
@@ -252,29 +241,11 @@ public class EnemyMovement : MonoBehaviour
     {
         WaitForSeconds wait = new(updateRate);
 
-        if (changeBaseOffsetCoroutine != null)
-        {
-            StopCoroutine(changeBaseOffsetCoroutine);
-            changeBaseOffsetCoroutine = null;
-        }
-
         while (true)
         {
             if (agent.enabled)
             {
                 agent.SetDestination(player.transform.position);
-
-                if (IsFlyingEnemy())
-                {
-                    Vector3 playerPosition = new(player.transform.position.x, 0, player.transform.position.z);
-                    Vector3 enemyPosition = new(transform.position.x, 0, transform.position.z);
-
-                    if (Vector3.Distance(playerPosition, enemyPosition) < 5.0f)
-                    {
-                        if (changeBaseOffsetCoroutine == null)
-                            changeBaseOffsetCoroutine = StartCoroutine(ChangeBaseOffset(1.2f));
-                    }
-                }
             }
             yield return wait;
         }
@@ -295,39 +266,6 @@ public class EnemyMovement : MonoBehaviour
             }
             yield return wait;
         }
-    }
-
-    private IEnumerator ChangeBaseOffset(float targetHeight)
-    {
-        WaitForSeconds wait = new(updateRate);
-
-        while (animator.GetCurrentAnimatorStateInfo(0).IsName("FlyingAttack"))
-            yield return wait;
-
-        float timeElapsed = 0;
-        float duration = 2.0f;
-
-        while (timeElapsed < duration)
-        {
-            while (animator.GetCurrentAnimatorStateInfo(0).IsName("FlyingAttack"))
-                yield return wait;
-
-            float t = timeElapsed / duration;
-            t = t * t * (3f - 2f * t);
-
-            agent.baseOffset = Mathf.Lerp(agent.baseOffset, targetHeight, t);
-            timeElapsed += Time.deltaTime;
-            yield return null;
-        }
-        agent.baseOffset = targetHeight;
-    }
-
-    private bool IsFlyingEnemy()
-    {
-        Enemy enemy = agent.GetComponentInParent<Enemy>();
-        if (enemy)
-            return enemy.enemyScriptableObject.attackConfiguration.isFlying;
-        return false;
     }
 
     private void OnDrawGizmosSelected()

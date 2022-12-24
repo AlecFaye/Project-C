@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c694dfb14057904dbcd4473fb0813ba, type: 3}
   m_Name: EagleAttackConfiguration
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 25
   attackDelay: 2.5
   attackRadius: 0.5
   lineOfSightLayers:
@@ -20,6 +20,7 @@ MonoBehaviour:
     m_Bits: 2113
   isFleeing: 0
   isFlying: 1
-  isRanged: 0
-  projectilePrefab: {fileID: 0}
-  projectileSpawnOffset: {x: 0, y: 1, z: 0}
+  isDropAttack: 1
+  isRanged: 1
+  projectilePrefab: {fileID: 949949854279064009, guid: aae46b7cf61257546b0138574fa8f9cf, type: 3}
+  projectileSpawnOffset: {x: 0, y: 0, z: 0}

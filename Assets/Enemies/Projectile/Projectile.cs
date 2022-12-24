@@ -26,7 +26,7 @@ public class Projectile : PoolableObject
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<IDamageable>(out IDamageable damageable))
+        if (other.TryGetComponent(out IDamageable damageable))
         {
             damageable.TakeDamage(damage);
         }
