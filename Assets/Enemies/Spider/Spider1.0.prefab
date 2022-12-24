@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7135146764876627928}
   - component: {fileID: 5404545867071211741}
-  - component: {fileID: 1433076153437943993}
+  - component: {fileID: 1018533210792400642}
   m_Layer: 16
   m_Name: AttackRadius
   m_TagString: Untagged
@@ -46,7 +46,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0.5}
---- !u!114 &1433076153437943993
+--- !u!114 &1018533210792400642
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,13 +55,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1440984336333616931}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c7897fe295db7e4da56c5de40170403, type: 3}
+  m_Script: {fileID: 11500000, guid: 8cb58882b1b295146be18b1d53893545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 9094786312953461451}
-  sphereCollider: {fileID: 5404545867071211741}
   damage: 10
   attackDelay: 0.5
+  sphereCollider: {fileID: 5404545867071211741}
 --- !u!1 &2737701201271424009
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +125,8 @@ MonoBehaviour:
   lineOfSightLayers:
     serializedVersion: 2
     m_Bits: 65
+  awareLineOfSightRadius: 0
+  unawareLineOfSightRadius: 0
 --- !u!1 &8971193906501231913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1582,7 +1584,7 @@ MonoBehaviour:
   animator: {fileID: 9066393861060065765}
   agent: {fileID: 9094786312953461451}
   enemyScriptableObject: {fileID: 11400000, guid: d194f790744daad4b83a2b6554d9a10f, type: 2}
-  attackRadius: {fileID: 1433076153437943993}
+  attackRadius: {fileID: 1018533210792400642}
   currentHealth: 1
   maxHealth: 1
   armourType: 2

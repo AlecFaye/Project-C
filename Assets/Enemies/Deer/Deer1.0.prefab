@@ -2225,6 +2225,8 @@ MonoBehaviour:
   lineOfSightLayers:
     serializedVersion: 2
     m_Bits: 65
+  awareLineOfSightRadius: 0
+  unawareLineOfSightRadius: 0
 --- !u!1 &9206601963434687363
 GameObject:
   m_ObjectHideFlags: 0
@@ -2280,13 +2282,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 9206601963434687363}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c7897fe295db7e4da56c5de40170403, type: 3}
+  m_Script: {fileID: 11500000, guid: 8cb58882b1b295146be18b1d53893545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 7828942975611927192}
-  sphereCollider: {fileID: 7398567356908142921}
   damage: 10
   attackDelay: 0.5
+  sphereCollider: {fileID: 7398567356908142921}
 --- !u!1001 &3963383755658533873
 PrefabInstance:
   m_ObjectHideFlags: 0

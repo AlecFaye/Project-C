@@ -71,7 +71,7 @@ public class EnemyMovement : MonoBehaviour
             if (lineOfSightChecker.sphereCollider.radius == lineOfSightChecker.unawareLineOfSightRadius)
                 lineOfSightChecker.sphereCollider.radius = lineOfSightChecker.awareLineOfSightRadius;
 
-            if (enemy.enemyScriptableObject.attackConfiguration.isFleeing)
+            if (enemy.enemyScriptableObject.attackConfiguration.attackType == AttackType.Fleeing)
             {
                 State = EnemyState.Flee;
             }
