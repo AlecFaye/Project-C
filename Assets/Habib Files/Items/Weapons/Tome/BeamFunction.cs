@@ -10,7 +10,7 @@ public class BeamFunction : MonoBehaviour
     private List<IDamageable> enemiesHitList = new List<IDamageable>(); // Makes a list to keep track of which enemies were hit
 
     public IEnumerator Create(float damage) {
-        this.gameObject.SetActive(true);
+        this.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true; // Testing stuff
         damageValue = damage;
         yield return new WaitForSeconds(0.1f);
         Destroy(gameObject);

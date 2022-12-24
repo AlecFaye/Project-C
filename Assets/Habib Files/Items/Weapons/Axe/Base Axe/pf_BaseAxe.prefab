@@ -140,6 +140,37 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 0
+--- !u!1 &5945738970391499729
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 876817227207143410}
+  m_Layer: 0
+  m_Name: Ref_RightHand
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &876817227207143410
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5945738970391499729}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7197912442079774620}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6214889968840792126
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,6 +202,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1828390760884978758}
+  - {fileID: 876817227207143410}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -200,12 +232,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  hotbarController: {fileID: 0}
+  ref_RightHand: {fileID: 876817227207143410}
+  ref_LeftHand: {fileID: 0}
   weapon: {fileID: 11400000, guid: e95f556e67db7494a96ca2d3e9165c56, type: 2}
   CanAttack: 1
   IsAttacking: 0
-  AttackingTime: 0
-  AttackingCooldown: 0
+  IsHoldingAttack: 0
+  IsAimConstant: 0
+  attackTrigger: Axe Attack
   trailRenderer: {fileID: 5376528715498607023}
 --- !u!1001 &2221689450656342957
 PrefabInstance:

@@ -14,19 +14,13 @@ public class PickaxeController : WeaponController
 
     [SerializeField] private bool IsAimConstant = false;
 
-    [SerializeField] private string attackTrigger = "Pickaxe Attack";
-
     [SerializeField] private TrailRenderer trailRenderer;
-
-    private List<IDamageable> enemiesHitList = new List<IDamageable>(); // Makes a list to keep track of which enemies were hit
-
-
-    private void Start() { SetWeaponStats(); }
 
     #endregion
 
     #region Start Functions
 
+    private void Start() { SetWeaponStats(); }
     private void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
         else
@@ -35,6 +29,8 @@ public class PickaxeController : WeaponController
             IsAttacking = weapon.IsAttacking;
             attackingTime = weapon.attackingTime;
             attackingCooldown = weapon.attackingCooldown;
+
+            _animIDStartAttack = "Pickaxe Attack";
         }
     }
 
@@ -42,39 +38,27 @@ public class PickaxeController : WeaponController
 
     #region Attack Functions
 
-    protected override void AttackStart() {
+    public override void AttackWindup() {
         if (CanAttack && !IsAttacking && owner.IsOwner) {
+            ToggleIsAnimating(true); // true
             ToggleCanAttack(); // false
-            ToggleIsAttacking(); // true
             TogglePlayerAim(IsAimConstant);
-            StartCoroutine(Attack());
         }
     }
-
-    protected override void AttackEnd() {
-        return;
-    }
-
-    private IEnumerator Attack() {
-        owner._animator.SetTrigger(attackTrigger); // Will call the currently selected weapon's attack animation
+    public override void AttackStart() {
+        ToggleIsAttacking(); // true
         ToggleTrailRenderer();
-
-        yield return new WaitForSeconds(attackingTime);
+    }
+    public override void AttackStop() {
+        ToggleTrailRenderer();
         ToggleIsAttacking(); // false
-        ToggleTrailRenderer();
-
-        yield return new WaitForSeconds(attackingCooldown);
-        enemiesHitList = new List<IDamageable>(); // Resets the list of enemies so that they can be hit again
-        ToggleCanAttack(); // true
     }
-   
-    private void OnTriggerEnter(Collider other) {
-        if (!IsAttacking) return;
-        if (!other.TryGetComponent(out IDamageable damageable)) return;
-        if (enemiesHitList.Contains(damageable)) return; 
 
-        damageable.TakeDamage(weapon.damageValue, weapon.weaponType);
-        enemiesHitList.Add(damageable);
+    public override void AttackEnd() {
+        if (!IsAnimating) {
+            enemiesHitList = new List<IDamageable>(); // Resets the list of enemies so that they can be hit again
+            ToggleCanAttack(); // true
+        }
     }
 
     #endregion
@@ -87,9 +71,8 @@ public class PickaxeController : WeaponController
     }
     private void ToggleCanAttack() { CanAttack = !CanAttack; }
     private void TogglePlayerAim(bool isConstantAim) {
-        owner.IsConstantAim = isConstantAim;
         owner.aimTarget = owner.mouseWorldPosition;
-        owner.RotatePlayerToCamera();
+        owner.IsConstantAim = isConstantAim;
     }
     private void ToggleTrailRenderer() { trailRenderer.emitting = !trailRenderer.emitting; }
 
