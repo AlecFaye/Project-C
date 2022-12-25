@@ -18,17 +18,17 @@ public class AxeController : WeaponController
 
     #endregion
 
-    #region Start Functions
+    #region Enable Functions
 
-    private void Start() { SetWeaponStats(); }
-
+    private void OnEnable() {
+        SetWeaponStats();
+        UpdateWeaponChargeBar(false); // false
+    }
     private void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
         else {
             CanAttack = weapon.CanAttack;
             IsAttacking = weapon.IsAttacking;
-            attackingTime = weapon.attackingTime;
-            attackingCooldown = weapon.attackingCooldown;
  
             _animIDStartAttack = "Axe Attack";
         }

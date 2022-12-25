@@ -15,15 +15,21 @@ public class TomeController : WeaponController
 
     #endregion
 
-    #region Start/Update Functions
+    #region (Enable, Disable, Update) Functions
 
-    private void Start() { SetWeaponStats(); }
+    private void OnEnable() { 
+        SetWeaponStats();
+        UpdateWeaponChargeBar(true); // true
+    }
+    private void OnDisable() {
+        CancelInvoke();
+    }
     protected void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
         else {
             CanAttack = weapon.CanAttack;
             IsAttacking = weapon.IsAttacking;
-            
+
             currentTomeCharge = weapon.startingCharge;
             _animIDStartAttack = "Tome Attack";
         }

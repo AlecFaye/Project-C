@@ -42,6 +42,7 @@ public class PlayerStats : MonoBehaviour
     #region Health Bar Functions
  
     private void GrabHealthBar() {
+        //Debug.Log("Health Bar: " + healthBar);
         if (player.IsOwner && !healthBar)
             healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<SliderBar>();
     }

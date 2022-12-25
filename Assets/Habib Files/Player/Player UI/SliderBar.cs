@@ -15,5 +15,11 @@ public class SliderBar : MonoBehaviour
         slider.value = value;
     }
 
+    public void Hide(bool hide) {
+        foreach (Image image in this.gameObject.GetComponentsInChildren<Image>()) {
+            image.enabled = hide;
+        }
+    }
+
 
 }

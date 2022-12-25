@@ -1,6 +1,7 @@
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -29,6 +30,7 @@ public class WeaponController : MonoBehaviour
 
     // Ranged Specific Variables
     [SerializeField] protected Transform projectileSpawn;
+    protected SliderBar weaponChargeBar;
 
     // Tome Specific Variables
     protected float currentTomeCharge = 100f;
@@ -38,15 +40,31 @@ public class WeaponController : MonoBehaviour
     [SerializeField] protected LineRenderer lineRenderer;
 
     // Bow Specific Variables
-    protected float currentBowCharge = 0;
+    protected float currentBowCharge = 0f;
     protected string bowCharge = "BowCharge";
 
     #endregion
 
 
-    private void Update() { if (CanAttack && !IsAttacking && IsHoldingAttack && !IsAnimating && weapon) AttackWindup(); }
+    #region (Awake, Start, Update) Functions
 
-    #region Attack Start and End
+    private void Awake() {
+        if (!weaponChargeBar) {
+            weaponChargeBar = GameObject.FindGameObjectWithTag("WeaponChargeBar").GetComponent<SliderBar>();
+        }
+    }
+
+    private void Start() {
+        //Debug.Log("Start: " + this.name);
+    }
+
+    private void Update() { 
+        if (CanAttack && !IsAttacking && IsHoldingAttack && !IsAnimating && weapon) AttackWindup();
+    }
+
+    #endregion
+
+    #region Attack Functions
 
     public void OnAttackStart() {
         IsHoldingAttack = true;
@@ -57,14 +75,14 @@ public class WeaponController : MonoBehaviour
         AttackEnd();
     }
 
-    #endregion
-
     public virtual void AttackWindup() { Debug.Log("Start Attack Windup"); }
     public virtual void AttackStart() { Debug.Log("Start Attack Hitbox"); }
     public virtual void AttackStop() { Debug.Log("Stop Attack Hitbox"); }
     public virtual void AttackEnd() { Debug.Log("Start Attack Finished"); }
 
     public virtual void ToggleOwnerRig(bool turnOn) { Debug.Log("Update Player Rig to reflect this"); }
+
+    #endregion
     
     public bool SwitchableCheck() {
         if (!owner.IsOwner) return false;
@@ -73,7 +91,7 @@ public class WeaponController : MonoBehaviour
         if (IsHoldingAttack) return false;
         if (IsAnimating) return false;
 
-        else return true;
+        return true;
     }
     
     public void ToggleIsAnimating(bool triggerAnim) { 
@@ -95,14 +113,14 @@ public class WeaponController : MonoBehaviour
 
     #endregion
 
-
-
     #region Charge Functions
 
     private void BowCharge() {
         currentBowCharge++;
         if (currentBowCharge > weapon.maxCharge)
             currentBowCharge = weapon.maxCharge;
+
+        weaponChargeBar.SetCurrentValue(currentBowCharge);
         //Debug.Log("Current bow charge: " + currentBowCharge);
     }
 
@@ -115,6 +133,8 @@ public class WeaponController : MonoBehaviour
             lineRenderer.SetPositions(new Vector3[] { projectileSpawn.position, projectileSpawn.position });
             Debug.Log("Out of Energy");
         }
+
+        weaponChargeBar.SetCurrentValue(currentTomeCharge);
         //Debug.Log("Current tome charge: " + currentTomeCharge);
     }
 
@@ -124,11 +144,29 @@ public class WeaponController : MonoBehaviour
             currentTomeCharge = weapon.maxCharge;
             CancelInvoke(tomeChargeGain);
         }
+        
+        weaponChargeBar.SetCurrentValue(currentTomeCharge);
         //Debug.Log("Current tome charge: " + currentTomeCharge);
     }
 
     #endregion
 
+    #region Create Functions
+
+    protected void CreateArrow() {
+        Vector3 point0 = projectileSpawn.position;
+        Vector3 point1 = owner.mouseWorldPosition;
+        Vector3 aimDir = (point1 - point0).normalized;
+        Arrow arrow = weapon._arrowType;
+        Transform tempArrow = Instantiate(arrow.arrowModel, point0, Quaternion.LookRotation(aimDir, Vector3.up));
+
+        tempArrow.GetComponent<ArrowFunction>().Create(
+            arrow.travelSpeed * (currentBowCharge / weapon.maxCharge), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
+            arrow.damageValue + (weapon.damageValue * (currentBowCharge / weapon.maxCharge)) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
+            );
+
+        currentBowCharge = weapon.startingCharge;
+    }
     private void BeamCreate() {
         Vector3 point0 = projectileSpawn.position;
         Vector3 point1 = owner.mouseWorldPosition;
@@ -141,5 +179,20 @@ public class WeaponController : MonoBehaviour
         tempBeam.position = Vector3.Lerp(point0, point1, 0.5f);
         tempBeam.localScale = new Vector3(0.1f, Vector3.Distance(point0, point1) / 2, 0.1f);
     }
+
+    #endregion
+
+    #region Bar Functions
+
+    protected void UpdateWeaponChargeBar(bool active) {
+        weaponChargeBar.Hide(active);
+
+        if (active) {
+            weaponChargeBar.SetMaxValue(weapon.maxCharge);
+            weaponChargeBar.SetCurrentValue(weapon.startingCharge);
+        }
+    }
+
+    #endregion
 
 }

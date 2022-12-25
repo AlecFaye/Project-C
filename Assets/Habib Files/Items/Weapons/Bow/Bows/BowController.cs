@@ -13,9 +13,12 @@ public class BowController : WeaponController
 
     #endregion
 
-    #region Start Functions
+    #region Enable Functions
 
-    private void Start() { SetWeaponStats(); }
+    private void OnEnable() { 
+        SetWeaponStats();
+        UpdateWeaponChargeBar(true); // true
+    }
     private void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
         else {
@@ -58,22 +61,8 @@ public class BowController : WeaponController
             TogglePlayerAim(IsAimConstant, 0.5f);
             ToggleOwnerRig(false); // false
             CreateArrow();
+            UpdateWeaponChargeBar(true);
         }
-    }
-
-    private void CreateArrow() {
-        Vector3 point0 = projectileSpawn.position;
-        Vector3 point1 = owner.mouseWorldPosition;
-        Vector3 aimDir = (point1 - point0).normalized;
-        Arrow arrow = weapon._arrowType;
-        Transform tempArrow = Instantiate(arrow.arrowModel, point0, Quaternion.LookRotation(aimDir, Vector3.up));
-
-        tempArrow.GetComponent<ArrowFunction>().Create(
-            arrow.travelSpeed * (currentBowCharge / weapon.maxCharge), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
-            arrow.damageValue + (weapon.damageValue * (currentBowCharge / weapon.maxCharge)) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
-            );
-
-        currentBowCharge = weapon.startingCharge;
     }
 
     #endregion
