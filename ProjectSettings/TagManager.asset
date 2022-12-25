@@ -12,6 +12,7 @@ TagManager:
   - BowAimCamera
   - TomeAimCamera
   - HealthBar
+  - WeaponBar
   layers:
   - Default
   - TransparentFX

@@ -13,7 +13,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] ThirdPersonController player;
 
     // Bars
-    private HealthBar healthBar;
+    private SliderBar healthBar;
 
     // Min/Max Stats
     private float maxHealth = 100;
@@ -43,7 +43,7 @@ public class PlayerStats : MonoBehaviour
  
     private void GrabHealthBar() {
         if (player.IsOwner && !healthBar)
-            healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<HealthBar>();
+            healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<SliderBar>();
     }
 
     private void SetMaxHealth(float health, bool fullHeal = false) {
