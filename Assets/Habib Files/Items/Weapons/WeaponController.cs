@@ -51,6 +51,7 @@ public class WeaponController : MonoBehaviour
     private void Awake() {
         if (!weaponChargeBar) {
             weaponChargeBar = GameObject.FindGameObjectWithTag("WeaponChargeBar").GetComponent<SliderBar>();
+            weaponChargeBar.Hide(false);
         }
     }
 
