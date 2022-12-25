@@ -1,11 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public enum ArmourType { None, VeryLow, Low, Medium, High, VeryHigh }
 
-[CreateAssetMenu(fileName = "EnemyConfiguration", menuName = "ScriptableObject/EnemyConfiguration")]
+[CreateAssetMenu(fileName = "Enemy Configuration", menuName = "ScriptableObject/Enemy Configuration")]
 public class EnemyScriptableObject : ScriptableObject
 {
     public Enemy enemyPrefab;
@@ -31,21 +30,56 @@ public class EnemyScriptableObject : ScriptableObject
 
     [Header("NavMeshAgent Configurations")]
     public float aiUpdateInterval = 0.1f;
-
     public float acceleration = 8.0f;
     public float angularSpeed = 120.0f;
-
     public int areaMask = -1;
     public int avoidancePriority = 50;
-
     public float baseOffset = 0.0f;
     public float height = 2.0f;
-
     public ObstacleAvoidanceType obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
-
     public float radius = 0.5f;
     public float speed = 3.0f;
     public float stoppingDistance = 0.5f;
+
+    public EnemyScriptableObject ScaleUpForLevel(ScalingScriptableObject scaling, int level)
+    {
+        EnemyScriptableObject scaledUpEnemy = CreateInstance<EnemyScriptableObject>();
+
+        scaledUpEnemy.name = name;
+        scaledUpEnemy.enemyPrefab = enemyPrefab;
+
+        scaledUpEnemy.attackConfiguration = attackConfiguration.ScaleUpForLevel(scaling, level);
+        scaledUpEnemy.particleSystem = particleSystem;
+
+        scaledUpEnemy.groupingCount = groupingCount;
+
+        scaledUpEnemy.health = Mathf.FloorToInt(health * scaling.healthCurve.Evaluate(level));
+        scaledUpEnemy.armourType = armourType;
+        scaledUpEnemy.weaknessTypes = weaknessTypes;
+        scaledUpEnemy.weaknessDamageMultiplier = weaknessDamageMultiplier;
+
+        scaledUpEnemy.defaultState = defaultState;
+        scaledUpEnemy.idleLocationRadius = idleLocationRadius;
+        scaledUpEnemy.idleMovespeedMultiplier = idleMovespeedMultiplier;
+        scaledUpEnemy.unawareLineOfSightRadius = unawareLineOfSightRadius;
+        scaledUpEnemy.awareLineOfSightRadius = awareLineOfSightRadius;
+        scaledUpEnemy.fieldOfView = fieldOfView;
+        scaledUpEnemy.numOfWaypoints = numOfWaypoints;
+
+        scaledUpEnemy.aiUpdateInterval = aiUpdateInterval;
+        scaledUpEnemy.acceleration = acceleration;
+        scaledUpEnemy.angularSpeed = angularSpeed;
+        scaledUpEnemy.areaMask = areaMask;
+        scaledUpEnemy.avoidancePriority = avoidancePriority;
+        scaledUpEnemy.baseOffset = baseOffset;
+        scaledUpEnemy.height = height;
+        scaledUpEnemy.obstacleAvoidanceType = obstacleAvoidanceType;
+        scaledUpEnemy.radius = radius;
+        scaledUpEnemy.speed = speed * scaling.speedCurve.Evaluate(level);
+        scaledUpEnemy.stoppingDistance = stoppingDistance;
+
+        return scaledUpEnemy;
+    }
 
     public void SetupEnemy(Enemy enemy)
     {

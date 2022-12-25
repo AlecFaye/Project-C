@@ -8,15 +8,28 @@ public class EnemySpawner : MonoBehaviour
     public enum SpawnMethod { Random, RoundRobin }
 
     [SerializeField] private int numberOfEnemiesToSpawn = 3;
-    [SerializeField] private float spawnDelay = 1.0f;
+    [SerializeField] private float spawnDelay = 2.5f;
+    [SerializeField] private float waveDelay = 5.0f;
     [SerializeField] private List<EnemyScriptableObject> enemies = new();
     [SerializeField] private SpawnMethod enemySpawnMethod = SpawnMethod.Random;
+    [SerializeField] private bool continuousSpawning = false;
+    [SerializeField] private ScalingScriptableObject scaling;
+
+    [Space]
+
+    [Header("Read at Runtime")]
+    [SerializeField] private int level = 0;
+    [SerializeField] private List<EnemyScriptableObject> scaledEnemies = new();
+
+    [SerializeField] private int enemiesAlive = 0;
+    [SerializeField] private int spawnedEnemies = 0;
+
+    private int initialEnemiesToSpawn;
+    private float initialSpawnDelay;
 
     private NavMeshTriangulation triangulation;
     private Dictionary<int, ObjectPool> enemyObjectPools = new();
     private Dictionary<int, int> enemyGroupings = new();
-    
-    private int activeEnemies = 0;
 
     private void Awake()
     {
@@ -25,73 +38,77 @@ public class EnemySpawner : MonoBehaviour
             enemyObjectPools.Add(index, ObjectPool.CreateInstance(enemies[index].enemyPrefab, numberOfEnemiesToSpawn));
             enemyGroupings.Add(index, enemies[index].groupingCount);
         }
+
+        initialEnemiesToSpawn = numberOfEnemiesToSpawn;
+        initialSpawnDelay = spawnDelay;
     }
 
     private void Start()
     {
         triangulation = NavMesh.CalculateTriangulation();
+
+        for (int index = 0; index < enemies.Count; index++)
+        {
+            scaledEnemies.Add(enemies[index].ScaleUpForLevel(scaling, 0));
+        }
+
         StartCoroutine(SpawnEnemies());
     }
 
-    public void SetMaxEnemiesToSpawn(int spawnCount)
+    private IEnumerator StartWaveCountdown()
     {
-        numberOfEnemiesToSpawn = spawnCount;
-    }
+        yield return new WaitForSeconds(waveDelay);
 
-    public void DecreaseEnemyCount(int count = 1)
-    {
-        activeEnemies -= count;
+        StartCoroutine(SpawnEnemies());
     }
 
     private IEnumerator SpawnEnemies()
     {
+        level++;
+        spawnedEnemies = 0;
+        enemiesAlive = 0;
+
+        ScaleUpEnemies();
+
         WaitForSeconds waitSpawnDelay = new(spawnDelay);
-        WaitForSeconds wait = new(5.0f);
 
         int currentRoundRobinIndex = 0;
 
-        while(true)
+        while (spawnedEnemies < numberOfEnemiesToSpawn)
         {
-            while (activeEnemies < numberOfEnemiesToSpawn)
+            switch (enemySpawnMethod)
             {
-                int newlySpawnedEnemies = 0;
-
-                switch (enemySpawnMethod)
-                {
-                    case SpawnMethod.Random:
-                        newlySpawnedEnemies = SpawnRandomEnemy();
-                        break;
-                    case SpawnMethod.RoundRobin:
-                        newlySpawnedEnemies = SpawnRoundRobinEnemy(currentRoundRobinIndex);
-                        currentRoundRobinIndex = currentRoundRobinIndex >= enemies.Count - 1 ? 0 : currentRoundRobinIndex + 1;
-                        break;
-                }
-
-                activeEnemies += newlySpawnedEnemies;
-
-                yield return waitSpawnDelay;
+                case SpawnMethod.Random:
+                    SpawnRandomEnemy();
+                    break;
+                case SpawnMethod.RoundRobin:
+                    SpawnRoundRobinEnemy(currentRoundRobinIndex);
+                    currentRoundRobinIndex = currentRoundRobinIndex >= enemies.Count - 1 ? 0 : currentRoundRobinIndex + 1;
+                    break;
             }
-            yield return wait;
+            yield return waitSpawnDelay;
+        }
+
+        if (continuousSpawning)
+        {
+            ScaleUpSpawns();
+            StartCoroutine(StartWaveCountdown());
         }
     }
 
-    private int SpawnRoundRobinEnemy(int spawnIndex)
+    private void SpawnRoundRobinEnemy(int spawnIndex)
     {
         int numberOfEnemiesToSpawn = enemyGroupings[spawnIndex];
 
         DoSpawnEnemy(spawnIndex, numberOfEnemiesToSpawn);
-
-        return numberOfEnemiesToSpawn;
     }
 
-    private int SpawnRandomEnemy()
+    private void SpawnRandomEnemy()
     {
         int spawnIndex = Random.Range(0, enemies.Count);
         int numberOfEnemiesToSpawn = enemyGroupings[spawnIndex];
 
         DoSpawnEnemy(spawnIndex, numberOfEnemiesToSpawn);
-
-        return numberOfEnemiesToSpawn;
     }
 
     private void DoSpawnEnemy(int spawnIndex, int numberOfEnemiesToSpawn)
@@ -105,7 +122,7 @@ public class EnemySpawner : MonoBehaviour
             if (poolableObject)
             {
                 Enemy enemy = poolableObject.GetComponent<Enemy>();
-                enemies[spawnIndex].SetupEnemy(enemy);
+                scaledEnemies[spawnIndex].SetupEnemy(enemy);
 
                 if (NavMesh.SamplePosition(triangulation.vertices[vertexIndex], out NavMeshHit hit, 2f, -1))
                 {
@@ -114,6 +131,11 @@ public class EnemySpawner : MonoBehaviour
 
                     enemy.movement.triangulation = triangulation;
                     enemy.movement.Spawn();
+
+                    enemy.OnDie += HandleDeathEvent;
+
+                    enemiesAlive++;
+                    spawnedEnemies++;
                 }
                 else
                 {
@@ -125,6 +147,30 @@ public class EnemySpawner : MonoBehaviour
                 Debug.LogError($"Unable to fetch enemy of type {spawnIndex} from object pool. Out of objects.");
             }
         }
+    }
 
+    private void ScaleUpEnemies()
+    {
+        for (int index = 0; index < enemies.Count; index++)
+        {
+            scaledEnemies[index] = enemies[index].ScaleUpForLevel(scaling, level);
+        }
+    }
+
+    private void ScaleUpSpawns()
+    {
+        numberOfEnemiesToSpawn = Mathf.FloorToInt(initialEnemiesToSpawn * scaling.spawnCountCurve.Evaluate(level + 1));
+        spawnDelay = initialSpawnDelay * scaling.spawnRateCurve.Evaluate(level + 1);
+    }
+
+    private void HandleDeathEvent(Enemy enemy)
+    {
+        enemiesAlive--;
+
+        if (enemiesAlive == 0 && spawnedEnemies >= numberOfEnemiesToSpawn)
+        {
+            ScaleUpSpawns();
+            StartCoroutine(StartWaveCountdown());
+        }
     }
 }

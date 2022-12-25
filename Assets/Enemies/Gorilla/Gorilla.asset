@@ -16,8 +16,8 @@ MonoBehaviour:
   attackConfiguration: {fileID: 11400000, guid: 6af42d989f74a1b41ac8126eb2f9dee5, type: 2}
   particleSystem: {fileID: 0}
   groupingCount: 2
-  health: 30
-  armourType: 3
+  health: 5
+  armourType: 4
   weaknessTypes: 00000000
   weaknessDamageMultiplier: 1.5
   defaultState: 1

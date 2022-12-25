@@ -12,6 +12,9 @@ public class Enemy : PoolableObject, IDamageable
     public AttackRadius attackRadius;
     public EnemySpawner enemySpawner;
 
+    public delegate void DeathEvent(Enemy enemy);
+    public DeathEvent OnDie;
+
     public float currentHealth = 1;
     public float maxHealth = 1;
     public ArmourType armourType = ArmourType.Medium;
@@ -51,7 +54,9 @@ public class Enemy : PoolableObject, IDamageable
     {
         base.OnDisable();
 
+        attackRadius.attackCoroutine = null;
         agent.enabled = false;
+        OnDie = null;
     }
     #endregion
 
@@ -82,9 +87,6 @@ public class Enemy : PoolableObject, IDamageable
     public void Die()
     {
         gameObject.SetActive(false);
-
-        if (enemySpawner)
-            enemySpawner.DecreaseEnemyCount();
     }
     #endregion
 
@@ -110,7 +112,11 @@ public class Enemy : PoolableObject, IDamageable
         currentHealth -= damageTaken;
 
         if (currentHealth <= 0)
+        {
+            OnDie?.Invoke(this);
+            agent.enabled = false;
             animator.SetTrigger(IS_DEAD);
+        }
     }
 
     public Transform GetTransform()
