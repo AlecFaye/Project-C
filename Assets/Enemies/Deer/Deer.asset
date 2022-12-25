@@ -14,14 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 7646705840927912351, guid: a75589f09117d9b4a87785d3cb75d8d8, type: 3}
   attackConfiguration: {fileID: 11400000, guid: 815bbdb9aa75bd64cbdecf055e879dd8, type: 2}
-  health: 15
+  particleSystem: {fileID: 0}
+  groupingCount: 1
+  health: 2
   armourType: 2
   weaknessTypes: 00000000
   weaknessDamageMultiplier: 1.5
   defaultState: 1
   idleLocationRadius: 8
   idleMovespeedMultiplier: 0.5
-  lineOfSightRange: 8
+  unawareLineOfSightRadius: 6
+  awareLineOfSightRadius: 10
   fieldOfView: 135
   numOfWaypoints: 4
   aiUpdateInterval: 0.1

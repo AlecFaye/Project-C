@@ -13,8 +13,9 @@ abstract public class AttackRadius : MonoBehaviour
     public delegate void AttackEvent(IDamageable target);
     public AttackEvent OnAttack;
 
+    public Coroutine attackCoroutine;
+
     protected List<IDamageable> damageables = new();
-    protected Coroutine attackCoroutine;
 
     protected virtual void OnTriggerEnter(Collider other)
     {
@@ -23,8 +24,12 @@ abstract public class AttackRadius : MonoBehaviour
 
         damageables.Add(damageable);
 
+        Debug.Log($"Found player at: {Time.realtimeSinceStartup}");
+
         if (attackCoroutine == null)
         {
+            Debug.Log($"Coroutine works: {Time.realtimeSinceStartup}");
+
             agent.enabled = false;
             attackCoroutine = StartCoroutine(Attack());
         }

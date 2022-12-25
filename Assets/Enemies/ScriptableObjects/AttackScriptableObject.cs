@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum AttackType { Melee, Ranged, Fleeing, Dropping }
 
-[CreateAssetMenu(fileName = "AttackConfiguration", menuName = "ScriptableObject/AttackConfiguration")]
+[CreateAssetMenu(fileName = "Attack Configuration", menuName = "ScriptableObject/Attack Configuration")]
 public class AttackScriptableObject : ScriptableObject
 {
     [Header("Base Attack Configurations")]
@@ -19,10 +19,26 @@ public class AttackScriptableObject : ScriptableObject
     public Projectile projectilePrefab;
     public Vector3 projectileSpawnOffset = new(0, 1, 0);
 
+    public AttackScriptableObject ScaleUpForLevel(ScalingScriptableObject scaling, int level)
+    {
+        AttackScriptableObject scaledUpConfiguration = CreateInstance<AttackScriptableObject>();
+
+        scaledUpConfiguration.damage = damage * scaling.damageCurve.Evaluate(level);
+        scaledUpConfiguration.attackDelay = attackDelay;
+        scaledUpConfiguration.attackRadius = attackRadius;
+        scaledUpConfiguration.lineOfSightLayers = lineOfSightLayers;
+
+        scaledUpConfiguration.attackType = attackType;
+        scaledUpConfiguration.projectilePrefab = projectilePrefab;
+        scaledUpConfiguration.projectileSpawnOffset = projectileSpawnOffset;
+
+        return scaledUpConfiguration;
+    }
+
     public void SetupEnemy(Enemy enemy)
     {
-        enemy.attackRadius.attackDelay = attackDelay;
         enemy.attackRadius.damage = damage;
+        enemy.attackRadius.attackDelay = attackDelay;
 
         switch (attackType)
         {
