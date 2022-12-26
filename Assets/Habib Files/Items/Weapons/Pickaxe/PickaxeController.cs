@@ -66,15 +66,6 @@ public class PickaxeController : WeaponController
 
     #region Toggle Functions
 
-    private void ToggleIsAttacking() {
-        IsAttacking = !IsAttacking;
-        owner.IsAttacking = IsAttacking;
-    }
-    private void ToggleCanAttack() { CanAttack = !CanAttack; }
-    private void TogglePlayerAim(bool isConstantAim) {
-        owner.aimTarget = owner.mouseWorldPosition;
-        owner.IsConstantAim = isConstantAim;
-    }
     private void ToggleTrailRenderer() { trailRenderer.emitting = !trailRenderer.emitting; }
 
     #endregion

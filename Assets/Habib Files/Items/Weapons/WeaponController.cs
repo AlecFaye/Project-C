@@ -84,7 +84,9 @@ public class WeaponController : MonoBehaviour
     public virtual void ToggleOwnerRig(bool turnOn) { Debug.Log("Update Player Rig to reflect this"); }
 
     #endregion
-    
+
+    #region Toggle and Checks
+
     public bool SwitchableCheck() {
         if (!owner.IsOwner) return false;
         if (!CanAttack) return false;
@@ -94,12 +96,28 @@ public class WeaponController : MonoBehaviour
 
         return true;
     }
-    
+
     public void ToggleIsAnimating(bool triggerAnim) { 
         IsAnimating = !IsAnimating;
         if (triggerAnim) owner._animator.SetTrigger(_animIDStartAttack); // Will call the currently selected weapon's attack animation
     }
+    protected void ToggleCanAttack() { CanAttack = !CanAttack; }
+    protected void ToggleIsAttacking() {
+        IsAttacking = !IsAttacking;
+        owner.IsAttacking = IsAttacking;
+    }
+    protected void TogglePlayerAim(bool isConstantAim, float aimTime = 1f) {
+        if (!isConstantAim) {
+            owner.IsConstantAim = isConstantAim;
+            owner.TriggerAim(aimTime, weapon.weaponType); // Calculate Seconds to aim in
+        }
+        if (!isConstantAim) {
+            owner.IsConstantAim = isConstantAim;
+            owner.aimTarget = owner.mouseWorldPosition;
+        }
+    }
 
+    #endregion
 
     #region Melee Functions
 

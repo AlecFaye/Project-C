@@ -78,15 +78,7 @@ public class TomeController : WeaponController
 
     #region Toggle Functions
 
-    private void ToggleIsAttacking() {
-        IsAttacking = !IsAttacking;
-        owner.IsAttacking = IsAttacking;
-    }
-    private void ToggleCanAttack() { CanAttack = !CanAttack; }
-    private void TogglePlayerAim(bool isConstantAim, float aimTime) {
-        owner.IsConstantAim = isConstantAim;
-        owner.TriggerAim(aimTime, weapon.weaponType); // Calculate Seconds to aim in
-    }
-
+    
+    
     #endregion
 }

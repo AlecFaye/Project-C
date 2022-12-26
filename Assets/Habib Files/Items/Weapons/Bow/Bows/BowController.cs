@@ -69,27 +69,7 @@ public class BowController : WeaponController
 
     #region Toggle Functions
 
-    private void ToggleIsAttacking() {
-        IsAttacking = !IsAttacking;
-        owner.IsAttacking = IsAttacking;
-    }
-    private void ToggleCanAttack() { CanAttack = !CanAttack; }
-    private void TogglePlayerAim(bool isConstantAim, float aimTime) {
-        owner.IsConstantAim = isConstantAim;
-        owner.TriggerAim(aimTime, weapon.weaponType); // Calculate Seconds to aim in
-    }
 
-    public override void ToggleOwnerRig(bool turnOn) {
-        if (turnOn) {
-            owner.Body.weight = 0.6f;
-            owner.Head.weight = 0.7f;
-            owner.RightArm.weight = 1f;
-        } else {
-            owner.Body.weight = 0f;
-            owner.Head.weight = 0.4f;
-            owner.RightArm.weight = 0f;
-        }
-    }
 
     #endregion
 }

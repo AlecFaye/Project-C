@@ -9,9 +9,6 @@ public class AxeController : WeaponController
 {
     #region Variables
 
-    private float attackingTime;
-    private float attackingCooldown;
-
     [SerializeField] private bool IsAimConstant = false;
 
     [SerializeField] private TrailRenderer trailRenderer;
@@ -65,15 +62,6 @@ public class AxeController : WeaponController
 
     #region Toggle Functions
 
-    private void ToggleCanAttack() { CanAttack = !CanAttack; }
-    private void ToggleIsAttacking() {
-        IsAttacking = !IsAttacking;
-        owner.IsAttacking = IsAttacking;
-    }
-    private void TogglePlayerAim(bool isConstantAim) {
-        owner.aimTarget = owner.mouseWorldPosition;
-        owner.IsConstantAim = isConstantAim;
-    }
     private void ToggleTrailRenderer() { trailRenderer.emitting = !trailRenderer.emitting; }
 
     #endregion
