@@ -85,7 +85,7 @@ public class WeaponController : MonoBehaviour
 
     #endregion
 
-    #region Toggle and Checks
+    #region Checks and Toggle Functions
 
     public bool SwitchableCheck() {
         if (!owner.IsOwner) return false;
@@ -107,7 +107,7 @@ public class WeaponController : MonoBehaviour
         owner.IsAttacking = IsAttacking;
     }
     protected void TogglePlayerAim(bool isConstantAim, float aimTime = 1f) {
-        if (!isConstantAim) {
+        if (isConstantAim) {
             owner.IsConstantAim = isConstantAim;
             owner.TriggerAim(aimTime, weapon.weaponType); // Calculate Seconds to aim in
         }
