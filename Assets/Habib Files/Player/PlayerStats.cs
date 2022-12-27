@@ -2,6 +2,7 @@ using QFSW.QC;
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEditor.UI;
 using UnityEngine;
@@ -13,16 +14,30 @@ public class PlayerStats : Player
 
     [SerializeField] ThirdPersonController player;
 
-    // Bars
-    [SerializeField] private SliderBar healthBar;
+    #region Weapon Variables
+    
     public SliderBar weaponChargeBar;
 
-    // Min/Max Stats
+    #endregion
+
+    #region Health Variables
+
+    [SerializeField] private SliderBar healthBar;
+
     private float maxHealth = 100;
     private float minHealth = 0;
 
-    // Current Stats
     private float currentHealth;
+
+    #endregion
+
+    #region Score Variables
+
+    [SerializeField] private TextMeshProUGUI scoreText;
+
+    private int currentScore = 0;
+
+    #endregion
 
     #endregion
 
@@ -37,11 +52,12 @@ public class PlayerStats : Player
     // Maybe Convert Stats into a dictionary
     private void SetBaseStats() {
         SetMaxHealth(maxHealth, true);
+        UpdateScoreText();
     }
 
     #endregion
 
-    #region Health Bar Functions
+    #region Health Functions
  
     private void SetMaxHealth(float health, bool fullHeal = false) {
         healthBar.SetMaxValue(health);
@@ -65,9 +81,26 @@ public class PlayerStats : Player
 
     #endregion
 
+    #region Score Functions
+
+    public void AddScore(int score) {
+        currentScore += score;
+        UpdateScoreText();
+    }
+    public void SubtractScore(int score) {
+        currentScore -= score;
+        UpdateScoreText();
+    }
+    private void UpdateScoreText() {
+        string newText = "Score: " + currentScore;
+        scoreText.text = newText;
+    }
+
+    #endregion
+
     #region Quantum Commands
 
-    [Command]
+    [Command("Stats.Damage_Player")]
     private void DamagePlayer(float damageValue) {
         if (damageValue > 0)
             Debug.Log("Ooof You Took " + damageValue + " Damage!");
@@ -75,6 +108,11 @@ public class PlayerStats : Player
             Debug.Log("Ay You Gained " + damageValue + " Health!");
 
         UpdateCurrentHealth(currentHealth - damageValue);
+    }
+
+    [Command("Stats.Player_Score")]
+    private void UpdatePlayerScore(int playerScore) {
+        AddScore(playerScore);
     }
 
     #endregion

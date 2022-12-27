@@ -10,15 +10,20 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] private Button HostBtn;
     [SerializeField] private Button ClientBtn;
 
+    [SerializeField] private GameTimer GameTimer;
+
     private void Awake() {
         ServerBtn.onClick.AddListener(() => {
             NetworkManager.Singleton.StartServer();
+            GameTimer.IsTimerStarted = true;
         });
         HostBtn.onClick.AddListener(() => {
             NetworkManager.Singleton.StartHost();
+            GameTimer.IsTimerStarted = true;
         });
         ClientBtn.onClick.AddListener(() => {
             NetworkManager.Singleton.StartClient();
+            GameTimer.IsTimerStarted = true;
         });
     }
 }
