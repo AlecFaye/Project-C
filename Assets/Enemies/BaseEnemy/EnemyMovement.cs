@@ -12,7 +12,7 @@ public class EnemyMovement : MonoBehaviour
 
     private NavMeshAgent agent;
     private Animator animator;
-    private Player player;
+    private IDamageable player;
 
     private EnemyState currentState;
     public EnemyState defaultState;
@@ -62,7 +62,7 @@ public class EnemyMovement : MonoBehaviour
             animatorParameters.Add(param.name, true);
     }
 
-    private void HandleGainSight(Player player)
+    private void HandleGainSight(IDamageable player)
     {
         this.player = player;
         
@@ -82,7 +82,7 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    private void HandleLoseSight(Player player)
+    private void HandleLoseSight(IDamageable player)
     {
         this.player = null;
         State = defaultState;
@@ -245,7 +245,7 @@ public class EnemyMovement : MonoBehaviour
         {
             if (agent.enabled)
             {
-                agent.SetDestination(player.transform.position);
+                agent.SetDestination(player.GetTransform().position);
             }
             yield return wait;
         }
@@ -259,7 +259,7 @@ public class EnemyMovement : MonoBehaviour
         {
             if (agent.enabled)
             {
-                Vector3 direction = (transform.position - player.transform.position).normalized;
+                Vector3 direction = (transform.position - player.GetTransform().position).normalized;
                 Vector3 destination = transform.position + direction * 10.0f;
 
                 agent.SetDestination(destination);

@@ -22,7 +22,7 @@ namespace StarterAssets
 		public bool cursorInputForLook = true;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-		public void OnMove(InputValue value)
+		public void OnMoveInput(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
 		}
@@ -53,7 +53,7 @@ namespace StarterAssets
 #endif
 
 
-        public void MoveInput(Vector2 newMoveDirection)
+		public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
 		} 
@@ -69,8 +69,8 @@ namespace StarterAssets
 		}
 
 		public void SprintInput(bool newSprintState)
-        {
-            sprint = newSprintState;
+		{
+			sprint = newSprintState;
 		}
 		
 		//public void AttackInput(bool newAttackState)
