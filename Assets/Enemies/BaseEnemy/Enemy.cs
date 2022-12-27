@@ -114,9 +114,7 @@ public class Enemy : PoolableObject, IDamageable
 
         if (currentHealth <= 0)
         {
-            foreach (PlayerStats playerStats in damagersList) {
-                playerStats.AddScore(100);
-            }
+            foreach (PlayerStats playerStats in damagersList) { playerStats.AddScore(100); }
 
             OnDie?.Invoke(this);
             agent.enabled = false;

@@ -12,10 +12,10 @@ public class EnemyLineOfSightChecker : MonoBehaviour
     public float awareLineOfSightRadius;
     public float unawareLineOfSightRadius;
 
-    public delegate void GainSightEvent(Player player);
+    public delegate void GainSightEvent(IDamageable player);
     public GainSightEvent OnGainSight;
 
-    public delegate void LoseSightEvent(Player player);
+    public delegate void LoseSightEvent(IDamageable player);
     public LoseSightEvent OnLoseSight;
 
     private Coroutine checkForLineOfSightCoroutine;
@@ -27,7 +27,7 @@ public class EnemyLineOfSightChecker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Player player))
+        if (other.TryGetComponent(out IDamageable player))
         {
             if (!CheckLineOfSight(player, fieldOfView))
             {
@@ -38,7 +38,7 @@ public class EnemyLineOfSightChecker : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out Player player))
+        if (other.TryGetComponent(out IDamageable player))
         {
             OnLoseSight?.Invoke(player);
 
@@ -52,16 +52,16 @@ public class EnemyLineOfSightChecker : MonoBehaviour
         }
     }
 
-    private bool CheckLineOfSight(Player player, float fov)
+    private bool CheckLineOfSight(IDamageable player, float fov)
     {
-        Vector3 playerOffset = new(0, player.GetComponent<CharacterController>().height / 2.0f, 0);
-        Vector3 direction = (player.transform.position + playerOffset - transform.position).normalized;
+        Vector3 playerOffset = new(0, player.GetTransform().GetComponent<CharacterController>().height / 2.0f, 0);
+        Vector3 direction = (player.GetTransform().position + playerOffset - transform.position).normalized;
 
         if (Vector3.Dot(transform.forward, direction) >= Mathf.Cos(fov))
         {
             if (Physics.Raycast(transform.position, direction, out RaycastHit hit, sphereCollider.radius, lineOfSightLayers))
             {
-                if (hit.transform.GetComponent<Player>() != null)
+                if (hit.transform.GetComponent<IDamageable>() != null)
                 {
                     OnGainSight?.Invoke(player);
                     return true;
@@ -72,7 +72,7 @@ public class EnemyLineOfSightChecker : MonoBehaviour
         return false;
     }
 
-    private IEnumerator CheckForLineOfSight(Player player)
+    private IEnumerator CheckForLineOfSight(IDamageable player)
     {
         WaitForSeconds wait = new(0.1f);
 

@@ -8,7 +8,7 @@ using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.InputSystem.Utilities;
 
-public class PlayerStats : Player
+public class PlayerStats : MonoBehaviour, IDamageable
 {
     #region Variables
 
@@ -57,8 +57,17 @@ public class PlayerStats : Player
 
     #endregion
 
+    #region IDamagable Functions
+
+    public void TakeDamage(IDamageable damager, float damageTaken, Weapon.WeaponType damageType = Weapon.WeaponType.None) {
+        UpdateCurrentHealth(currentHealth - damageTaken); 
+    }
+    public Transform GetTransform() { return this.transform; }
+
+    #endregion
+
     #region Health Functions
- 
+
     private void SetMaxHealth(float health, bool fullHeal = false) {
         healthBar.SetMaxValue(health);
         if (fullHeal)
@@ -66,7 +75,8 @@ public class PlayerStats : Player
     }
     private void UpdateCurrentHealth(float health) {
         currentHealth = health;
-        
+        Debug.Log("Current Health: " + currentHealth);
+
         if (currentHealth <= minHealth) {
             currentHealth = minHealth;
             Debug.Log("RIP -  Player's Health reached " + currentHealth + " and should be Dead!");
