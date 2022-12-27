@@ -45,7 +45,7 @@ public class BowController : WeaponController
     public override void AttackStart() {
         ToggleIsAttacking(); // true
         TogglePlayerAim(IsAimConstant, weapon.maxCharge / weapon.chargeGainedRate);
-        ToggleOwnerRig(true); // true
+        //ToggleOwnerRig(true); // true
         InvokeRepeating(bowCharge, 0f, (1f / weapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
     }
     public override void AttackStop() { 
@@ -59,7 +59,7 @@ public class BowController : WeaponController
             ToggleCanAttack(); // true
             ToggleIsAttacking(); // false
             TogglePlayerAim(IsAimConstant, 0.5f);
-            ToggleOwnerRig(false); // false
+            //ToggleOwnerRig(false); // false
             CreateArrow();
             UpdateWeaponChargeBar(true);
         }

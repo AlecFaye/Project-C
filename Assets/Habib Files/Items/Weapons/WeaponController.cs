@@ -51,7 +51,7 @@ public class WeaponController : MonoBehaviour
     private void Awake() {
         if (!weaponChargeBar) {
             weaponChargeBar = GameObject.FindGameObjectWithTag("WeaponChargeBar").GetComponent<SliderBar>();
-            weaponChargeBar.Hide(false);
+            UpdateWeaponChargeBar(false); // false
         }
     }
 
@@ -81,7 +81,6 @@ public class WeaponController : MonoBehaviour
     public virtual void AttackStop() { Debug.Log("Stop Attack Hitbox"); }
     public virtual void AttackEnd() { Debug.Log("Start Attack Finished"); }
 
-    public virtual void ToggleOwnerRig(bool turnOn) { Debug.Log("Update Player Rig to reflect this"); }
 
     #endregion
 
@@ -116,6 +115,7 @@ public class WeaponController : MonoBehaviour
             owner.aimTarget = owner.mouseWorldPosition;
         }
     }
+    //public virtual void ToggleOwnerRig(bool turnOn) { Debug.Log("Update Player Rig to reflect this"); }
 
     #endregion
 
@@ -203,10 +203,10 @@ public class WeaponController : MonoBehaviour
 
     #region Bar Functions
 
-    protected void UpdateWeaponChargeBar(bool active) {
-        weaponChargeBar.Hide(active);
+    protected void UpdateWeaponChargeBar(bool IsActive) {
+        weaponChargeBar.ToggleHide(IsActive);
 
-        if (active) {
+        if (IsActive) {
             weaponChargeBar.SetMaxValue(weapon.maxCharge);
             weaponChargeBar.SetCurrentValue(weapon.startingCharge);
         }

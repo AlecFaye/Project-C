@@ -6,6 +6,15 @@ using UnityEngine.UI;
 public class SliderBar : MonoBehaviour
 {
     [SerializeField] private Slider slider;
+    private List<Image> images = new List<Image>();
+
+
+    private void Awake() {
+        foreach (Image image in this.gameObject.GetComponentsInChildren<Image>()) {
+            images.Add(image);
+        }
+        
+    }
 
     public void SetMaxValue(float value) {
         slider.maxValue = value;
@@ -15,9 +24,9 @@ public class SliderBar : MonoBehaviour
         slider.value = value;
     }
 
-    public void Hide(bool hide) {
-        foreach (Image image in this.gameObject.GetComponentsInChildren<Image>()) {
-            image.enabled = hide;
+    public void ToggleHide(bool IsHide) {
+        foreach (Image image in images) {
+            image.enabled = IsHide;
         }
     }
 
