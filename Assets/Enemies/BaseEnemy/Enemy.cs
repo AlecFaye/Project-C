@@ -10,7 +10,6 @@ public class Enemy : PoolableObject, IDamageable
     public NavMeshAgent agent;
     public EnemyScriptableObject enemyScriptableObject;
     public AttackRadius attackRadius;
-    public EnemySpawner enemySpawner;
 
     public delegate void DeathEvent(Enemy enemy);
     public DeathEvent OnDie;
@@ -38,16 +37,12 @@ public class Enemy : PoolableObject, IDamageable
         { ArmourType.VeryHigh, 0.90f }
     };
 
+    private List<IDamageable> damagersList = new();
 
     #region Pipeline Functions
     private void Awake()
     {
         attackRadius.OnAttack += OnAttack;
-    }
-
-    private void Start()
-    {
-        enemySpawner = FindObjectOfType<EnemySpawner>();
     }
 
     public override void OnDisable()
@@ -91,10 +86,16 @@ public class Enemy : PoolableObject, IDamageable
     #endregion
 
     #region IDamageable Abstract Functions
-    public void TakeDamage(float damageTaken, Weapon.WeaponType damageType)
+    public void TakeDamage(IDamageable damager, float damageTaken, Weapon.WeaponType damageType)
     {
         if (currentHealth <= 0)
             return;
+
+        if (!damagersList.Contains(damager))
+        {
+            damagersList.Add(damager);
+            // SCALE HERE
+        }
 
         // Weakness damage multiplier
         foreach (Weapon.WeaponType weakness in weaknessTypes)
@@ -113,6 +114,8 @@ public class Enemy : PoolableObject, IDamageable
 
         if (currentHealth <= 0)
         {
+            
+
             OnDie?.Invoke(this);
             agent.enabled = false;
             animator.SetTrigger(IS_DEAD);

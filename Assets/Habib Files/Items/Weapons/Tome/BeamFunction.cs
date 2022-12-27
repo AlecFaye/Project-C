@@ -7,9 +7,11 @@ public class BeamFunction : MonoBehaviour
 {
     public float damageValue;
 
+    private IDamageable playerStats;
     private List<IDamageable> enemiesHitList = new List<IDamageable>(); // Makes a list to keep track of which enemies were hit
 
-    public IEnumerator Create(float damage) {
+    public IEnumerator Create(IDamageable playerStats, float damage) {
+        this.playerStats = playerStats;
         this.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true; // Testing stuff
         damageValue = damage;
         yield return new WaitForSeconds(0.1f);
@@ -21,7 +23,7 @@ public class BeamFunction : MonoBehaviour
         if (!other.TryGetComponent(out IDamageable damageable)) return;
         if (enemiesHitList.Contains(damageable)) return;
 
-        damageable.TakeDamage(damageValue, Weapon.WeaponType.Tome);
+        damageable.TakeDamage(playerStats, damageValue, Weapon.WeaponType.Tome);
         enemiesHitList.Add(damageable);
     }
 }

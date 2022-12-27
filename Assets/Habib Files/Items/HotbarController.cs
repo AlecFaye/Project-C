@@ -17,10 +17,10 @@ public class HotbarController : MonoBehaviour
     [SerializeField] private Transform[] HotbarSlots;
     private int selectedWeapon = 0;
 
-    private bool CanAttack = true; // Used to check if player can attack
-    private bool IsAttacking = false; // Used to check if player is attacking
+    //private bool CanAttack = true; // Used to check if player can attack
+    //private bool IsAttacking = false; // Used to check if player is attacking
     
-    private bool IsHoldingAttack = false; // Used to check if player holding the button
+    //private bool IsHoldingAttack = false; // Used to check if player holding the button
 
     //[SerializeField] private Transform ref_RightHand; // Decide if this should be a transform or the target
     //[SerializeField] private Transform ref_LeftHand; // Might keep only left hand changes and apply those

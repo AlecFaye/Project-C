@@ -66,7 +66,7 @@ public class MeleeAttackRadius : AttackRadius
     {
         foreach (IDamageable damageable in damageables)
         {
-            damageable.TakeDamage(damage);
+            damageable.TakeDamage(damager, damage);
         }
     }
 }

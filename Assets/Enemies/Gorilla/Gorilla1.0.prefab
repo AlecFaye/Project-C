@@ -147,7 +147,6 @@ GameObject:
   - component: {fileID: 6922395321688028854}
   - component: {fileID: 8833150201800950792}
   - component: {fileID: 7170165442718566054}
-  - component: {fileID: 8686986069671427129}
   - component: {fileID: -8485934471412321361}
   - component: {fileID: 5590864227609593972}
   - component: {fileID: 7554235466082642495}
@@ -352,19 +351,6 @@ NavMeshAgent:
   m_BaseOffset: -0.04
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &8686986069671427129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7003615246658576132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70638908042a7cf4f9f74ee093de14ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemy: {fileID: 0}
 --- !u!114 &-8485934471412321361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,8 +373,6 @@ MonoBehaviour:
   armourType: 2
   weaknessTypes: 03000000
   weaknessDamageMultiplier: 1.5
-  damage: 0
-  attackDelay: 0
   damagePopupSpawn: {fileID: 8230841719594133891}
 --- !u!114 &5590864227609593972
 MonoBehaviour:

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IDamageable
 {
-    void TakeDamage(float damageTaken, Weapon.WeaponType damageType = Weapon.WeaponType.None);
+    void TakeDamage(IDamageable damager, float damageTaken, Weapon.WeaponType damageType = Weapon.WeaponType.None);
 
     Transform GetTransform();
 }

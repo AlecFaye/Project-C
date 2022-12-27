@@ -93,6 +93,7 @@ public class RangedAttackRadius : AttackRadius
             {
                 projectile = poolableObject.GetComponent<Projectile>();
 
+                projectile.damager = damager;
                 projectile.damage = damage;
                 projectile.transform.position = transform.position + projectileSpawnOffset;
                 projectile.transform.LookAt(targetDamageable.GetTransform().position + projectileSpawnOffset);
