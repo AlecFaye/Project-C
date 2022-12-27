@@ -131,7 +131,7 @@ public class WeaponController : MonoBehaviour
         if (!other.TryGetComponent(out IDamageable damageable)) return;
         if (enemiesHitList.Contains(damageable)) return;
 
-        damageable.TakeDamage(weapon.damageValue, weapon.weaponType);
+        damageable.TakeDamage(owner.stats, weapon.damageValue, weapon.weaponType);
         enemiesHitList.Add(damageable);
     }
 
@@ -185,6 +185,7 @@ public class WeaponController : MonoBehaviour
         Transform tempArrow = Instantiate(arrow.arrowModel, point0, Quaternion.LookRotation(aimDir, Vector3.up));
 
         tempArrow.GetComponent<ArrowFunction>().Create(
+            owner.stats,
             arrow.travelSpeed * (currentBowCharge / weapon.maxCharge), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
             arrow.damageValue + (weapon.damageValue * (currentBowCharge / weapon.maxCharge)) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
             );
@@ -199,7 +200,8 @@ public class WeaponController : MonoBehaviour
         rotation *= Quaternion.Euler(90f, 0f, 0f); // this adds a 90 degrees Y rotation
         Transform tempBeam = Instantiate(beam, point0, rotation);
 
-        tempBeam.GetComponent<BeamFunction>().StartCoroutine("Create", weapon.damageValue);
+        tempBeam.TryGetComponent(out BeamFunction beamFunction);
+        StartCoroutine(beamFunction.Create(owner.stats, weapon.damageValue));
         tempBeam.position = Vector3.Lerp(point0, point1, 0.5f);
         tempBeam.localScale = new Vector3(0.1f, Vector3.Distance(point0, point1) / 2, 0.1f);
     }

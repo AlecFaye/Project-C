@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class NavigationBaker : MonoBehaviour
 {
-    [SerializeField] private float updateRate = 0.1f;
+    // [SerializeField] private float updateRate = 0.1f;
     [SerializeField] private Transform breakableGameObjectTF;
 
     private NavMeshSurface[] surfaces;

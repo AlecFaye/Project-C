@@ -9,6 +9,8 @@ public class ArrowFunction : MonoBehaviour
 
     private Rigidbody arrowRigidbody;
 
+    private IDamageable playerStats;
+
     public float damageValue;
 
     private bool IsTarget = false; // Checks if the arrow has hit a target (true == max one target hit, false == max one target not hit yet)
@@ -23,8 +25,9 @@ public class ArrowFunction : MonoBehaviour
         // Will set rotation and position based on anchor when added
     }
 
-    public void Create(float speed, float damage)
+    public void Create(IDamageable playerStats, float speed, float damage)
     {
+        this.playerStats = playerStats;
         damageValue = damage;
         arrowRigidbody.velocity = transform.forward * speed;
     }
@@ -37,7 +40,7 @@ public class ArrowFunction : MonoBehaviour
 
             if (other.TryGetComponent(out IDamageable damageable))
             {
-                damageable.TakeDamage(damageValue, Weapon.WeaponType.Bow);
+                damageable.TakeDamage(playerStats, damageValue, Weapon.WeaponType.Bow);
             }
 
             yield return new WaitForSeconds(5);

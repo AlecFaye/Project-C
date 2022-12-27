@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IDamageable
 {
-    public void TakeDamage(float damageTaken, Weapon.WeaponType damageType = Weapon.WeaponType.None) {
+    public void TakeDamage(IDamageable damager, float damageTaken, Weapon.WeaponType damageType = Weapon.WeaponType.None) {
         // Debug.Log($"Taking {damageTaken} Damage!");
     }
 

@@ -12,7 +12,7 @@ public class BreakableObject : MonoBehaviour, IDamageable
     public delegate void DestroyEvent(BreakableObject breakableObject);
     public DestroyEvent OnDestroy;
 
-    public void TakeDamage(float damageTaken, Weapon.WeaponType weaponType)
+    public void TakeDamage(IDamageable damager, float damageTaken, Weapon.WeaponType weaponType)
     {
         if (health <= 0)
             return;
