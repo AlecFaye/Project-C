@@ -15,7 +15,8 @@ MonoBehaviour:
   enemyPrefab: {fileID: 9117628854952477543, guid: da971748689689e4db9d33c8862bbf08, type: 3}
   attackConfiguration: {fileID: 11400000, guid: 0eff9105574f3e8498fdc16590a4375b, type: 2}
   particleSystem: {fileID: 0}
-  health: 15
+  groupingCount: 3
+  health: 3
   armourType: 1
   weaknessTypes: 00000000
   weaknessDamageMultiplier: 1.5
@@ -31,7 +32,7 @@ MonoBehaviour:
   angularSpeed: 200
   areaMask: -1
   avoidancePriority: 50
-  baseOffset: 0
+  baseOffset: -0.1
   height: 2
   obstacleAvoidanceType: 2
   radius: 0.5

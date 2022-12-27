@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ObjectPool
 {
+    private GameObject parent;
     private readonly PoolableObject prefab;
     private readonly int size;
     private readonly List<PoolableObject> availableObjectsPool;
@@ -18,26 +19,31 @@ public class ObjectPool
     {
         ObjectPool pool = new(Prefab, Size);
 
-        GameObject poolGameObject = new(Prefab + " Pool");
-        pool.CreateObjects(poolGameObject);
+        pool.parent = new(Prefab + " Pool");
+        pool.CreateObjects();
 
         return pool;
     }
 
-    private void CreateObjects(GameObject parent)
+    private void CreateObjects()
     {
         for (int i = 0; i < size; i++)
         {
-            PoolableObject poolableObject = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity, parent.transform);
-            poolableObject.Parent = this;
-            poolableObject.gameObject.SetActive(false); 
+            CreateObject();
         }
+    }
+
+    private void CreateObject()
+    {
+        PoolableObject poolableObject = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity, parent.transform);
+        poolableObject.Parent = this;
+        poolableObject.gameObject.SetActive(false);
     }
 
     public PoolableObject GetObject()
     {
-        if (availableObjectsPool.Count <= 0) 
-            return null;
+        if (availableObjectsPool.Count == 0)
+            CreateObject();
 
         PoolableObject instance = availableObjectsPool[0];
 

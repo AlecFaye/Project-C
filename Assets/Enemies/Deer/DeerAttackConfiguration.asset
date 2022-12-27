@@ -18,8 +18,6 @@ MonoBehaviour:
   lineOfSightLayers:
     serializedVersion: 2
     m_Bits: 2113
-  isFleeing: 1
-  isFlying: 0
-  isRanged: 0
+  attackType: 2
   projectilePrefab: {fileID: 0}
   projectileSpawnOffset: {x: 0, y: 1, z: 0}

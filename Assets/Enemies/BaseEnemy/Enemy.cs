@@ -10,19 +10,23 @@ public class Enemy : PoolableObject, IDamageable
     public NavMeshAgent agent;
     public EnemyScriptableObject enemyScriptableObject;
     public AttackRadius attackRadius;
+    public EnemySpawner enemySpawner;
+
+    public delegate void DeathEvent(Enemy enemy);
+    public DeathEvent OnDie;
 
     public float currentHealth = 1;
     public float maxHealth = 1;
     public ArmourType armourType = ArmourType.Medium;
-    public List<Weapon.WeaponType> weaknessTypes = new() { Weapon.WeaponType.Pickaxe };
+    public List<Weapon.WeaponType> weaknessTypes = new();
     public float weaknessDamageMultiplier = 1.5f;
-    public float damage;
-    public float attackDelay;
 
     private const string IS_ATTACKING = "isAttacking";
     private const string IS_DEAD = "die";
 
     private Coroutine lookCoroutine;
+
+    [SerializeField] private Transform damagePopupSpawn;
 
     private readonly Dictionary<ArmourType, float> armourDamageReduction = new()
     {
@@ -34,29 +38,32 @@ public class Enemy : PoolableObject, IDamageable
         { ArmourType.VeryHigh, 0.90f }
     };
 
-    [SerializeField] private Transform damagePopupSpawn;
 
+    #region Pipeline Functions
     private void Awake()
     {
         attackRadius.OnAttack += OnAttack;
+    }
+
+    private void Start()
+    {
+        enemySpawner = FindObjectOfType<EnemySpawner>();
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
 
+        attackRadius.attackCoroutine = null;
         agent.enabled = false;
+        OnDie = null;
     }
+    #endregion
 
     #region Animation Triggers
     public void StartMeleeDamage()
     {
-        Debug.Log("START dealing Melee Damage");
-    }
-
-    public void StopMeleeDamage()
-    {
-        Debug.Log("STOP dealing Melee Damage");
+        GetComponentInChildren<MeleeAttackRadius>().DealDamage();
     }
 
     public void ReleaseProjectile()
@@ -64,17 +71,57 @@ public class Enemy : PoolableObject, IDamageable
         GetComponentInChildren<RangedAttackRadius>().ReleaseProjectile();
     }
 
+    public void DropProjectile()
+    {
+        GetComponentInChildren<DropAttackRadius>().DropProjectile();
+    }
+
     public void FinishedAttacking()
     {
         animator.SetBool(IS_ATTACKING, false);
 
-        if (!enemyScriptableObject.attackConfiguration.isRanged)
+        if (enemyScriptableObject.attackConfiguration.attackType != AttackType.Ranged)
             agent.enabled = true;
     }
 
     public void Die()
     {
         gameObject.SetActive(false);
+    }
+    #endregion
+
+    #region IDamageable Abstract Functions
+    public void TakeDamage(float damageTaken, Weapon.WeaponType damageType)
+    {
+        if (currentHealth <= 0)
+            return;
+
+        // Weakness damage multiplier
+        foreach (Weapon.WeaponType weakness in weaknessTypes)
+        {
+            if (damageType == weakness)
+                damageTaken *= weaknessDamageMultiplier;
+        }
+
+        // Armour damage reduction multiplier
+        if (damageType != Weapon.WeaponType.Pickaxe)
+            damageTaken *= (1 - armourDamageReduction[armourType]);
+
+        SpawnDamagePopup(damageTaken);
+
+        currentHealth -= damageTaken;
+
+        if (currentHealth <= 0)
+        {
+            OnDie?.Invoke(this);
+            agent.enabled = false;
+            animator.SetTrigger(IS_DEAD);
+        }
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
     }
     #endregion
 
@@ -105,35 +152,6 @@ public class Enemy : PoolableObject, IDamageable
         transform.rotation = lookRotation;
     }
     #endregion
-
-    public void TakeDamage(float damageTaken, Weapon.WeaponType damageType)
-    {
-        if (currentHealth <= 0)
-            return;
-
-        // Weakness damage multiplier
-        foreach (Weapon.WeaponType weakness in weaknessTypes)
-        {
-            if (damageType == weakness)
-                damageTaken *= weaknessDamageMultiplier;
-        }
-
-        // Armour damage reduction multiplier
-        if (damageType != Weapon.WeaponType.Pickaxe)
-            damageTaken *= (1 - armourDamageReduction[armourType]);
-
-        SpawnDamagePopup(damageTaken);
-
-        currentHealth -= damageTaken;
-
-        if (currentHealth <= 0)
-            animator.SetTrigger(IS_DEAD);
-    }
-
-    public Transform GetTransform()
-    {
-        return transform;
-    }
 
     private void SpawnDamagePopup(float damage)
     {

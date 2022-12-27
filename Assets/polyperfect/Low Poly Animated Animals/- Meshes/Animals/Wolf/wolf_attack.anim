@@ -128638,13 +128638,6 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1
-    functionName: StopMeleeDamage
-    data: 
-    objectReferenceParameter: {fileID: 8896904685623557615, guid: da971748689689e4db9d33c8862bbf08, type: 3}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
   - time: 3.2916667
     functionName: FinishedAttacking
     data: 
