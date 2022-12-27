@@ -157,7 +157,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7197912442079774620
 Transform:
   m_ObjectHideFlags: 0
@@ -200,12 +200,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
+  hotbar: {fileID: 0}
   weapon: {fileID: 11400000, guid: 76115dd882159704fa65e435c39bbe90, type: 2}
   CanAttack: 1
   IsAttacking: 0
   IsHoldingAttack: 0
+  projectileSpawn: {fileID: 0}
+  weaponChargeBar: {fileID: 0}
+  beam: {fileID: 0}
+  lineRenderer: {fileID: 0}
   IsAimConstant: 0
-  attackTrigger: Pickaxe Attack
   trailRenderer: {fileID: 821272650869984041}
 --- !u!1001 &5642683256914994886
 PrefabInstance:

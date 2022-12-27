@@ -14,9 +14,6 @@ public class HotbarController : MonoBehaviour
     public ThirdPersonController player; // Refrences the player it's attatched too
     public WeaponController currentWeapon; // Refrences the current weapon's WeaponController Script
 
-    [SerializeField] private Transform ref_RightHand; // Decide if this should be a transform or the target
-    [SerializeField] private Transform ref_LeftHand; // Might keep only left hand changes and apply those
-
     [SerializeField] private Transform[] HotbarSlots;
     private int selectedWeapon = 0;
 
@@ -25,6 +22,8 @@ public class HotbarController : MonoBehaviour
     
     private bool IsHoldingAttack = false; // Used to check if player holding the button
 
+    //[SerializeField] private Transform ref_RightHand; // Decide if this should be a transform or the target
+    //[SerializeField] private Transform ref_LeftHand; // Might keep only left hand changes and apply those
     // private const int axeAttackLayer = 1;
     // private const int bowAttackLayer = 2;
     // private const int pickaxeAttackLayer = 3;
@@ -51,16 +50,12 @@ public class HotbarController : MonoBehaviour
     #region Weapon Creation Functions
 
     private void CreateWeapon(Transform weapon, int hotbarSlot) {
+        weapon.gameObject.SetActive(false);
         Transform tempWeapon = Instantiate(weapon, this.transform.position, Quaternion.identity); // Creates the weapon in the hotbar slot
         tempWeapon.transform.SetParent(HotbarSlots[hotbarSlot]); // Sets this gameobject to the parent of the 
         tempWeapon.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f); // Sets rotation to hand
-        
-        SetOwnerofWeapon(tempWeapon); // Set Player of weapon to weapon
-    }
 
-    private void SetOwnerofWeapon(Transform weapon) {
-        if (weapon.TryGetComponent<WeaponController>(out WeaponController weaponController))
-            weaponController.owner = player;
+        tempWeapon.gameObject.SetActive(true);
     }
 
     #endregion
@@ -84,11 +79,9 @@ public class HotbarController : MonoBehaviour
         Transform selectedSlot = null;
         int position = 0;
         foreach (Transform slot in HotbarSlots) {
+            DisableWeapon(slot);
             if (position == selectedWeapon)
                 selectedSlot = slot;
-            else
-                DisableWeapon(slot);
-
             position++;
         }
         EnableWeapon(selectedSlot);

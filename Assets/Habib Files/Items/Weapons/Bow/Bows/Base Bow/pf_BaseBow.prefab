@@ -47,7 +47,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2382075212467369068
 Transform:
   m_ObjectHideFlags: 0
@@ -79,13 +79,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  ref_LeftHand: {fileID: 734591352249168637}
-  ref_RightHand: {fileID: 3768757042920294763}
+  hotbar: {fileID: 0}
   weapon: {fileID: 11400000, guid: 3d525c4f7856cc54f8cead48a227dbc2, type: 2}
   CanAttack: 1
   IsAttacking: 0
   IsHoldingAttack: 0
   projectileSpawn: {fileID: 7538859701532355569}
+  weaponChargeBar: {fileID: 0}
+  beam: {fileID: 0}
+  lineRenderer: {fileID: 0}
 --- !u!1 &3238907036760953985
 GameObject:
   m_ObjectHideFlags: 0
