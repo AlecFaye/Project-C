@@ -8,7 +8,7 @@ public class GameTimer : MonoBehaviour
 {
     private TextMeshProUGUI timerText;
 
-    private float timeValue = 3559f;
+    private float timeValue = 0f;
     
     public bool IsTimerStarted = false;
 
