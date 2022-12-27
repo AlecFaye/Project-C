@@ -9,26 +9,25 @@ public class AxeController : WeaponController
 {
     #region Variables
 
-    private float attackingTime;
-    private float attackingCooldown;
-
     [SerializeField] private bool IsAimConstant = false;
 
     [SerializeField] private TrailRenderer trailRenderer;
 
     #endregion
 
-    #region Start Functions
+    #region Enable Functions
 
-    private void Start() { SetWeaponStats(); }
+    public override void OnEnable() {
+        base.OnEnable();
 
+        SetWeaponStats();
+        UpdateWeaponChargeBar(false); // false
+    }
     private void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
         else {
             CanAttack = weapon.CanAttack;
             IsAttacking = weapon.IsAttacking;
-            attackingTime = weapon.attackingTime;
-            attackingCooldown = weapon.attackingCooldown;
  
             _animIDStartAttack = "Axe Attack";
         }
@@ -65,15 +64,6 @@ public class AxeController : WeaponController
 
     #region Toggle Functions
 
-    private void ToggleCanAttack() { CanAttack = !CanAttack; }
-    private void ToggleIsAttacking() {
-        IsAttacking = !IsAttacking;
-        owner.IsAttacking = IsAttacking;
-    }
-    private void TogglePlayerAim(bool isConstantAim) {
-        owner.aimTarget = owner.mouseWorldPosition;
-        owner.IsConstantAim = isConstantAim;
-    }
     private void ToggleTrailRenderer() { trailRenderer.emitting = !trailRenderer.emitting; }
 
     #endregion

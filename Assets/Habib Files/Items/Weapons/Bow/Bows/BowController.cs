@@ -11,17 +11,16 @@ public class BowController : WeaponController
 
     private bool IsAimConstant = true;
 
-    private float currentBowCharge = 0;
-
-    private string bowCharge = "BowCharge";
-
-    [SerializeField] private Transform projectileSpawn;
-
     #endregion
 
-    #region Start Functions
+    #region Enable Functions
 
-    private void Start() { SetWeaponStats(); }
+    public override void OnEnable() {
+        base.OnEnable();
+
+        SetWeaponStats();
+        UpdateWeaponChargeBar(true); // true
+    }
     private void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
         else {
@@ -48,7 +47,7 @@ public class BowController : WeaponController
     public override void AttackStart() {
         ToggleIsAttacking(); // true
         TogglePlayerAim(IsAimConstant, weapon.maxCharge / weapon.chargeGainedRate);
-        ToggleOwnerRig(true); // true
+        //ToggleOwnerRig(true); // true
         InvokeRepeating(bowCharge, 0f, (1f / weapon.chargeGainedRate)); // Invokes the func BowCharge(), instantly once, then once every (1 sec/BowChargeRate)
     }
     public override void AttackStop() { 
@@ -62,62 +61,17 @@ public class BowController : WeaponController
             ToggleCanAttack(); // true
             ToggleIsAttacking(); // false
             TogglePlayerAim(IsAimConstant, 0.5f);
-            ToggleOwnerRig(false); // false
+            //ToggleOwnerRig(false); // false
             CreateArrow();
+            UpdateWeaponChargeBar(true);
         }
-    }
-
-    #region Charge Functions
-
-    private void BowCharge() {
-        currentBowCharge++;
-        if (currentBowCharge > weapon.maxCharge)
-            currentBowCharge = weapon.maxCharge;
-        //Debug.Log("Current bow charge: " + currentBowCharge);
-    }
-
-    #endregion
-
-    private void CreateArrow() {
-        Vector3 point0 = projectileSpawn.position;
-        Vector3 point1 = owner.mouseWorldPosition;
-        Vector3 aimDir = (point1 - point0).normalized;
-        Arrow arrow = weapon._arrowType;
-        Transform tempArrow = Instantiate(arrow.arrowModel, point0, Quaternion.LookRotation(aimDir, Vector3.up));
-
-        tempArrow.GetComponent<ArrowFunction>().Create(
-            arrow.travelSpeed * (currentBowCharge / weapon.maxCharge), // Speed of arrow (travelSpeed) * by charge value (0% - 100%)
-            arrow.damageValue + (weapon.damageValue * (currentBowCharge / weapon.maxCharge)) // Damage of arrow (Arrow Damage + [bow damage * charge value {0% - 100%}] = total damage
-            );
-
-        currentBowCharge = weapon.startingCharge;
     }
 
     #endregion
 
     #region Toggle Functions
 
-    private void ToggleIsAttacking() {
-        IsAttacking = !IsAttacking;
-        owner.IsAttacking = IsAttacking;
-    }
-    private void ToggleCanAttack() { CanAttack = !CanAttack; }
-    private void TogglePlayerAim(bool isConstantAim, float aimTime) {
-        owner.IsConstantAim = isConstantAim;
-        owner.TriggerAim(aimTime, weapon.weaponType); // Calculate Seconds to aim in
-    }
 
-    public override void ToggleOwnerRig(bool turnOn) {
-        if (turnOn) {
-            owner.Body.weight = 0.6f;
-            owner.Head.weight = 0.7f;
-            owner.RightArm.weight = 1f;
-        } else {
-            owner.Body.weight = 0f;
-            owner.Head.weight = 0.4f;
-            owner.RightArm.weight = 0f;
-        }
-    }
 
     #endregion
 }

@@ -18,17 +18,20 @@ public class PickaxeController : WeaponController
 
     #endregion
 
-    #region Start Functions
+    #region Enable Functions
 
-    private void Start() { SetWeaponStats(); }
+    public override void OnEnable() {
+        base.OnEnable();
+
+        SetWeaponStats();
+        UpdateWeaponChargeBar(false); // false
+    }
     private void SetWeaponStats() {
         if (weapon == null) Debug.Log("No Weapon Set");
         else
         {
             CanAttack = weapon.CanAttack;
             IsAttacking = weapon.IsAttacking;
-            attackingTime = weapon.attackingTime;
-            attackingCooldown = weapon.attackingCooldown;
 
             _animIDStartAttack = "Pickaxe Attack";
         }
@@ -65,15 +68,6 @@ public class PickaxeController : WeaponController
 
     #region Toggle Functions
 
-    private void ToggleIsAttacking() {
-        IsAttacking = !IsAttacking;
-        owner.IsAttacking = IsAttacking;
-    }
-    private void ToggleCanAttack() { CanAttack = !CanAttack; }
-    private void TogglePlayerAim(bool isConstantAim) {
-        owner.aimTarget = owner.mouseWorldPosition;
-        owner.IsConstantAim = isConstantAim;
-    }
     private void ToggleTrailRenderer() { trailRenderer.emitting = !trailRenderer.emitting; }
 
     #endregion
