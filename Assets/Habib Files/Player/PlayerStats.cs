@@ -3,17 +3,19 @@ using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.InputSystem.Utilities;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : Player
 {
     #region Variables
 
     [SerializeField] ThirdPersonController player;
 
     // Bars
-    private SliderBar healthBar;
+    [SerializeField] private SliderBar healthBar;
+    public SliderBar weaponChargeBar;
 
     // Min/Max Stats
     private float maxHealth = 100;
@@ -27,7 +29,7 @@ public class PlayerStats : MonoBehaviour
     #region Start/Update Functions
 
     private void Start() {
-        GrabHealthBar();
+        if (!player.IsOwner) Destroy(this.gameObject);
         SetBaseStats();
     }
 
@@ -41,12 +43,6 @@ public class PlayerStats : MonoBehaviour
 
     #region Health Bar Functions
  
-    private void GrabHealthBar() {
-        //Debug.Log("Health Bar: " + healthBar);
-        if (player.IsOwner && !healthBar)
-            healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<SliderBar>();
-    }
-
     private void SetMaxHealth(float health, bool fullHeal = false) {
         healthBar.SetMaxValue(health);
         if (fullHeal)

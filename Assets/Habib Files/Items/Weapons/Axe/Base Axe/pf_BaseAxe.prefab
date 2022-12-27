@@ -188,7 +188,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7197912442079774620
 Transform:
   m_ObjectHideFlags: 0
@@ -232,14 +232,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  ref_RightHand: {fileID: 876817227207143410}
-  ref_LeftHand: {fileID: 0}
+  hotbar: {fileID: 0}
   weapon: {fileID: 11400000, guid: e95f556e67db7494a96ca2d3e9165c56, type: 2}
   CanAttack: 1
   IsAttacking: 0
   IsHoldingAttack: 0
+  projectileSpawn: {fileID: 0}
+  weaponChargeBar: {fileID: 0}
+  beam: {fileID: 0}
+  lineRenderer: {fileID: 0}
   IsAimConstant: 0
-  attackTrigger: Axe Attack
   trailRenderer: {fileID: 5376528715498607023}
 --- !u!1001 &2221689450656342957
 PrefabInstance:

@@ -5,11 +5,13 @@ using UnityEngine.UI;
 
 public class SliderBar : MonoBehaviour
 {
-    [SerializeField] private Slider slider;
+    private Slider slider;
     private List<Image> images = new List<Image>();
 
 
     private void Awake() {
+        slider = this.GetComponent<Slider>();
+        
         foreach (Image image in this.gameObject.GetComponentsInChildren<Image>()) {
             images.Add(image);
         }

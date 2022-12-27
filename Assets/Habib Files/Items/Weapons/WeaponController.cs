@@ -10,9 +10,7 @@ public class WeaponController : MonoBehaviour
     #region Variables
 
     public ThirdPersonController owner;
-
-    public Transform ref_LeftHand;
-    public Transform ref_RightHand;
+    public HotbarController hotbar;
 
     public Weapon weapon;
 
@@ -30,7 +28,7 @@ public class WeaponController : MonoBehaviour
 
     // Ranged Specific Variables
     [SerializeField] protected Transform projectileSpawn;
-    protected SliderBar weaponChargeBar;
+    [SerializeField] protected SliderBar weaponChargeBar;
 
     // Tome Specific Variables
     protected float currentTomeCharge = 100f;
@@ -46,17 +44,24 @@ public class WeaponController : MonoBehaviour
     #endregion
 
 
-    #region (Awake, Start, Update) Functions
+    #region (Awake, OnEnable, Start, Update) Functions
 
     private void Awake() {
-        if (!weaponChargeBar) {
-            weaponChargeBar = GameObject.FindGameObjectWithTag("WeaponChargeBar").GetComponent<SliderBar>();
-            UpdateWeaponChargeBar(false); // false
-        }
+        //Debug.Log("Awake: " + this.name);
     }
 
     private void Start() {
         //Debug.Log("Start: " + this.name);
+    }
+
+    public virtual void OnEnable() {
+        if (!hotbar) {
+            hotbar = this.transform.parent.parent.GetComponent<HotbarController>();
+            owner = hotbar.player;
+            weaponChargeBar = owner.stats.weaponChargeBar;
+            UpdateWeaponChargeBar(false); // false
+            return;
+        }
     }
 
     private void Update() { 
@@ -203,7 +208,7 @@ public class WeaponController : MonoBehaviour
 
     #region Bar Functions
 
-    protected void UpdateWeaponChargeBar(bool IsActive) {
+    public void UpdateWeaponChargeBar(bool IsActive) {
         weaponChargeBar.ToggleHide(IsActive);
 
         if (IsActive) {

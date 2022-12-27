@@ -49,7 +49,7 @@ namespace StarterAssets {
 
         #endregion
         
-        #region Audio Variables
+        #region Player Audio Variables
 
         public AudioClip LandingAudioClip;
         public AudioClip[] FootstepAudioClips;
@@ -165,6 +165,8 @@ namespace StarterAssets {
         #endregion
 
         #region Player Animation Parameter Variables
+        
+        public Animator _animator; // change to private and fix errors later
 
         private int _animIDSpeed;
         private int _animIDGrounded;
@@ -198,7 +200,6 @@ namespace StarterAssets {
         #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
         #endif
-        public Animator _animator; // change to private and fix errors later
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
@@ -215,8 +216,10 @@ namespace StarterAssets {
 
         #region Additional Transforms/GameObjects/Components
 
+        public PlayerStats stats;
+
         public Transform MouseWorldTransform; // Gets the position of where the player is aiming 
-        
+
         public GameObject HotbarContoller; // Lets the editor grab the Hotbar Controller
 
         public Transform Self;
@@ -227,16 +230,16 @@ namespace StarterAssets {
 
         #region Rig Components
 
-        [Space(10)]
-        [Header("Rig Components")]
-        public MultiAimConstraint Head;
-        public MultiAimConstraint Body;
+        //[Space(10)]
+        //[Header("Rig Components")]
+        //public MultiAimConstraint Head;
+        //public MultiAimConstraint Body;
 
-        public TwoBoneIKConstraint LeftArm;
-        public MultiAimConstraint LeftHand;
+        //public TwoBoneIKConstraint LeftArm;
+        //public MultiAimConstraint LeftHand;
 
-        public TwoBoneIKConstraint RightArm;
-        public MultiAimConstraint RightHand;
+        //public TwoBoneIKConstraint RightArm;
+        //public MultiAimConstraint RightHand;
 
         #endregion
 

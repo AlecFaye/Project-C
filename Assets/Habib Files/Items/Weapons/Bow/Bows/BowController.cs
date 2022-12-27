@@ -15,7 +15,9 @@ public class BowController : WeaponController
 
     #region Enable Functions
 
-    private void OnEnable() { 
+    public override void OnEnable() {
+        base.OnEnable();
+
         SetWeaponStats();
         UpdateWeaponChargeBar(true); // true
     }

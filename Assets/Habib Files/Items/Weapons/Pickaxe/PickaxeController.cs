@@ -20,7 +20,9 @@ public class PickaxeController : WeaponController
 
     #region Enable Functions
 
-    private void OnEnable() { 
+    public override void OnEnable() {
+        base.OnEnable();
+
         SetWeaponStats();
         UpdateWeaponChargeBar(false); // false
     }
