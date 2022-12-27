@@ -6,6 +6,7 @@ using UnityEngine.AI;
 abstract public class AttackRadius : MonoBehaviour
 {
     public NavMeshAgent agent;
+    public IDamageable damager;
 
     public float damage = 10.0f;
     public float attackDelay = 0.5f;
@@ -17,6 +18,11 @@ abstract public class AttackRadius : MonoBehaviour
 
     protected List<IDamageable> damageables = new();
 
+    private void Start()
+    {
+        damager = GetComponentInParent<IDamageable>();
+    }
+
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (!other.TryGetComponent(out IDamageable damageable))
@@ -24,12 +30,8 @@ abstract public class AttackRadius : MonoBehaviour
 
         damageables.Add(damageable);
 
-        Debug.Log($"Found player at: {Time.realtimeSinceStartup}");
-
         if (attackCoroutine == null)
         {
-            Debug.Log($"Coroutine works: {Time.realtimeSinceStartup}");
-
             agent.enabled = false;
             attackCoroutine = StartCoroutine(Attack());
         }

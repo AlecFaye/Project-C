@@ -10,6 +10,7 @@ public class Projectile : PoolableObject
     public float damage = 5.0f;
 
     public Rigidbody rb;
+    public IDamageable damager;
 
     private const string DISABLE_METHOD_NAME = "Disable";
 
@@ -28,7 +29,7 @@ public class Projectile : PoolableObject
     {
         if (other.TryGetComponent(out IDamageable damageable))
         {
-            damageable.TakeDamage(damage);
+            damageable.TakeDamage(damager, damage);
         }
 
         Disable();
