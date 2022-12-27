@@ -9,6 +9,9 @@ public class BreakableObject : MonoBehaviour, IDamageable
     [SerializeField] private Weapon.WeaponType weakness = Weapon.WeaponType.None;
     [SerializeField] private Transform damagePopupSpawn;
 
+    public delegate void DestroyEvent(BreakableObject breakableObject);
+    public DestroyEvent OnDestroy;
+
     public void TakeDamage(float damageTaken, Weapon.WeaponType weaponType)
     {
         if (health <= 0)
@@ -22,7 +25,10 @@ public class BreakableObject : MonoBehaviour, IDamageable
         DamagePopup.Create(damagePopupSpawn.position, damageTaken);
 
         if (health <= 0)
+        {
+            OnDestroy?.Invoke(this);
             Destroy(this.gameObject);
+        }
     }
 
     public Transform GetTransform()

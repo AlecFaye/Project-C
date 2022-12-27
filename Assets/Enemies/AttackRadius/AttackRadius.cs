@@ -24,12 +24,8 @@ abstract public class AttackRadius : MonoBehaviour
 
         damageables.Add(damageable);
 
-        Debug.Log($"Found player at: {Time.realtimeSinceStartup}");
-
         if (attackCoroutine == null)
         {
-            Debug.Log($"Coroutine works: {Time.realtimeSinceStartup}");
-
             agent.enabled = false;
             attackCoroutine = StartCoroutine(Attack());
         }

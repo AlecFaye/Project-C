@@ -10,7 +10,6 @@ public class Enemy : PoolableObject, IDamageable
     public NavMeshAgent agent;
     public EnemyScriptableObject enemyScriptableObject;
     public AttackRadius attackRadius;
-    public EnemySpawner enemySpawner;
 
     public delegate void DeathEvent(Enemy enemy);
     public DeathEvent OnDie;
@@ -43,11 +42,6 @@ public class Enemy : PoolableObject, IDamageable
     private void Awake()
     {
         attackRadius.OnAttack += OnAttack;
-    }
-
-    private void Start()
-    {
-        enemySpawner = FindObjectOfType<EnemySpawner>();
     }
 
     public override void OnDisable()
