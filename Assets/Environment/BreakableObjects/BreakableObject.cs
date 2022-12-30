@@ -10,7 +10,7 @@ public class BreakableObject : MonoBehaviour, IDamageable
     [SerializeField] private Transform damagePopupSpawn;
 
     public delegate void DestroyEvent(BreakableObject breakableObject);
-    public DestroyEvent OnDestroy;
+    public DestroyEvent DestroyBreakableObject;
 
     public void TakeDamage(IDamageable damager, float damageTaken, Weapon.WeaponType weaponType)
     {
@@ -25,14 +25,16 @@ public class BreakableObject : MonoBehaviour, IDamageable
         DamagePopup.Create(damagePopupSpawn.position, damageTaken);
 
         if (health <= 0)
-        {
-            OnDestroy?.Invoke(this);
             Destroy(this.gameObject);
-        }
     }
 
     public Transform GetTransform()
     {
         return transform;
+    }
+
+    private void OnDestroy()
+    {
+        DestroyBreakableObject?.Invoke(this);
     }
 }
