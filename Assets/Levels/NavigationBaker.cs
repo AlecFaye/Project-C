@@ -1,16 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class NavigationBaker : MonoBehaviour
 {
-    // [SerializeField] private float updateRate = 0.1f;
     [SerializeField] private Transform breakableGameObjectTF;
 
     private NavMeshSurface[] surfaces;
-    [SerializeField] private BreakableObject[] breakableObjects;
+    private BreakableObject[] breakableObjects;
 
     private void Awake()
     {
@@ -20,23 +16,23 @@ public class NavigationBaker : MonoBehaviour
 
     private void Start()
     {
+        UpdateNavMesh();
+
         foreach (BreakableObject breakableObject in breakableObjects)
-        {
-            breakableObject.OnDestroy += BreakableObjectDestroyed;
-        }
+            breakableObject.DestroyBreakableObject += BreakableObjectDestroyed;
     }
 
-    private IEnumerator RebakeNavMesh()
+    private void UpdateNavMesh()
     {
         for (int index = 0; index < surfaces.Length; index++)
         {
-            surfaces[index].BuildNavMesh();
+            NavMeshSurface navMesh = surfaces[index];
+            navMesh.UpdateNavMesh(navMesh.navMeshData);
         }
-        yield return null;
     }
 
     private void BreakableObjectDestroyed(BreakableObject breakableObject)
     {
-        StartCoroutine(RebakeNavMesh());
+        UpdateNavMesh();
     }
 }
