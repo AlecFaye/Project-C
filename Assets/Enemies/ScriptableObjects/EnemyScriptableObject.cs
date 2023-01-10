@@ -9,7 +9,7 @@ public class EnemyScriptableObject : ScriptableObject
 {
     public Enemy enemyPrefab;
     public AttackScriptableObject attackConfiguration;
-    public ParticleSystem particleSystem;
+    public ParticleSystem hurtParticleSystem;
 
     [Range(1, 10)] public int groupingCount = 1;
 
@@ -49,7 +49,7 @@ public class EnemyScriptableObject : ScriptableObject
         scaledUpEnemy.enemyPrefab = enemyPrefab;
 
         scaledUpEnemy.attackConfiguration = attackConfiguration.ScaleUpForLevel(scaling, level);
-        scaledUpEnemy.particleSystem = particleSystem;
+        scaledUpEnemy.hurtParticleSystem = hurtParticleSystem;
 
         scaledUpEnemy.groupingCount = groupingCount;
 
