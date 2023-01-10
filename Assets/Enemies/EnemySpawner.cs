@@ -18,7 +18,8 @@ public class EnemySpawner : MonoBehaviour
     [Space]
 
     [Header("Read at Runtime")]
-    [SerializeField] private int level = 0;
+    [SerializeField] private int wave = 0;
+    [SerializeField] private int lastWave = 1;
     [SerializeField] private List<EnemyScriptableObject> scaledEnemies = new();
 
     [SerializeField] private int enemiesAlive = 0;
@@ -64,7 +65,18 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator SpawnEnemies()
     {
-        level++;
+        if (wave >= lastWave)
+        {
+            LevelManager levelManager = FindObjectOfType<LevelManager>();
+            
+            if (levelManager != null)
+            {
+                levelManager.UnlockNextLevel();
+                levelManager.LoadNextLevel();
+            }
+        }
+
+        wave++;
         spawnedEnemies = 0;
         enemiesAlive = 0;
 
@@ -153,14 +165,14 @@ public class EnemySpawner : MonoBehaviour
     {
         for (int index = 0; index < enemies.Count; index++)
         {
-            scaledEnemies[index] = enemies[index].ScaleUpForLevel(scaling, level);
+            scaledEnemies[index] = enemies[index].ScaleUpForLevel(scaling, wave);
         }
     }
 
     private void ScaleUpSpawns()
     {
-        numberOfEnemiesToSpawn = Mathf.FloorToInt(initialEnemiesToSpawn * scaling.spawnCountCurve.Evaluate(level + 1));
-        spawnDelay = initialSpawnDelay * scaling.spawnRateCurve.Evaluate(level + 1);
+        numberOfEnemiesToSpawn = Mathf.FloorToInt(initialEnemiesToSpawn * scaling.spawnCountCurve.Evaluate(wave + 1));
+        spawnDelay = initialSpawnDelay * scaling.spawnRateCurve.Evaluate(wave + 1);
     }
 
     private void HandleDeathEvent(Enemy enemy)

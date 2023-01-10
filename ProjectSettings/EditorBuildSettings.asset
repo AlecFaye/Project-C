@@ -6,13 +6,16 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Habib Files/Scenes/HabibTestScene.unity
-    guid: 0ceeaa17f5b3b5a4a83aab2e4571e906
+    path: Assets/Menu/Scenes/MainMenu.unity
+    guid: fa093e135f5139e44970fb98b0d0fc83
   - enabled: 1
-    path: Assets/Enemies/EnemyTester.unity
-    guid: b929555c478bc52438a3cfff2a4a281f
+    path: Assets/Menu/Scenes/LevelSelector.unity
+    guid: 718b1dc3a075d2447960a9c23eb242d3
   - enabled: 1
     path: Assets/Levels/Version2/Level_01/Level_01.unity
     guid: 6f48f10ed6c7b7b47a1ce2729ae5a57d
+  - enabled: 1
+    path: Assets/Levels/Version2/Level_02/Level_02.unity
+    guid: 573fcbf8dbe8599459cc3950205a79ef
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
