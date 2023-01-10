@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 6238418483416384419, guid: 62a81cb03f453a542b2cebb7244dd5e9, type: 3}
   attackConfiguration: {fileID: 11400000, guid: f8b758ef5223e0a4091d6464987e4b08, type: 2}
-  particleSystem: {fileID: 0}
+  hurtParticleSystem: {fileID: 2709161659315419438, guid: 106bacc8c74c494499fec95517f0348f, type: 3}
   groupingCount: 1
   health: 1
   armourType: 1

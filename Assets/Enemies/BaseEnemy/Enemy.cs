@@ -110,6 +110,10 @@ public class Enemy : PoolableObject, IDamageable
 
         SpawnDamagePopup(damageTaken);
 
+        Vector3 diff = (damager.GetTransform().position - this.transform.position).normalized;
+
+        Instantiate(enemyScriptableObject.hurtParticleSystem, this.transform.position, Quaternion.LookRotation(diff));
+
         currentHealth -= damageTaken;
 
         if (currentHealth <= 0)
