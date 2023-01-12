@@ -112,6 +112,36 @@ public class Enemy : PoolableObject, IDamageable
 
         currentHealth -= damageTaken;
 
+        Vector3 diff = (damager.GetTransform().position - this.transform.position).normalized;
+
+        ParticleSystem.EmissionModule hurtParticleSystem = Instantiate(enemyScriptableObject.hurtParticleSystem, this.transform.position, Quaternion.LookRotation(diff)).emission;
+        ParticleSystem.Burst burst;
+
+        switch (damageType)
+        {
+            case Weapon.WeaponType.Axe:
+                burst = new ParticleSystem.Burst(0, 15);
+                break;
+
+            case Weapon.WeaponType.Pickaxe:
+                burst = new ParticleSystem.Burst(0, 40);
+                break;
+
+            case Weapon.WeaponType.Bow:
+                burst = new ParticleSystem.Burst(0, 3);
+                break;
+
+            case Weapon.WeaponType.Tome:
+                burst = new ParticleSystem.Burst(0, 1);
+                break;
+
+            default:
+                burst = new ParticleSystem.Burst(0, 3);
+                break;
+        }
+
+        hurtParticleSystem.SetBurst(0, burst);
+
         if (currentHealth <= 0)
         {
             foreach (PlayerStats playerStats in damagersList) { playerStats.AddScore(100); }
